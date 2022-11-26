@@ -52,7 +52,7 @@ class User(AbstractUser, PermissionsMixin):
     first_name = models.CharField(max_length=150, blank=True)
     last_name = models.CharField(max_length=150, blank=True)
     date_of_birth = models.DateField(default=date.today)
-    image = models.ImageField(default='display-photos/default-dp.png', upload_to='display-photos/%Y/%m/%D/')
+    profile_photo = models.ImageField(default='profile-photos/default-dp.png', upload_to='profile-photos/%Y/%m/%D/')
 
     is_staff = models.BooleanField(default=False)
     is_active: models.BooleanField(default=False)
@@ -71,6 +71,7 @@ class Product(models.Model):
     that a User can purchase 
     '''
     product_name = models.CharField(_('name'), max_length=100)
+    product_image = models.ImageField(default='product-images/stock-image.png', upload_to='product-images/%Y/%m/%D/')
     description = models.CharField(_('description'), max_length=4096, default='')
     start_price = models.DecimalField(max_digits=10, decimal_places=2)
     is_active = models.BooleanField(default=True)
@@ -88,7 +89,7 @@ class Bid(models.Model):
     product = models.ForeignKey(Product, on_delete=models.PROTECT)
     winner = models.ForeignKey(User, on_delete=models.CASCADE)
     bid_price = models.DecimalField(max_digits=10, decimal_places=2)
-    end_of_bid = models.DateTimeField(default=date.today)
+    end_of_bid = models.DateTimeField(blank=True)
 
     def __str__(self):
         return f"Bid #{self.id}"

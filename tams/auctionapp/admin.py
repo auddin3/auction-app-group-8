@@ -19,7 +19,7 @@ class UserAdminConfig(UserAdmin):
             'fields': ('email', 'username')
         }),
         ('Personal Information', {
-            'fields': ('first_name', 'last_name', 'date_of_birth', 'image',)
+            'fields': ('first_name', 'last_name', 'date_of_birth', 'profile_photo',)
         }),
         ('Permissions', {
             'fields': ('is_active', 'is_staff')
@@ -29,12 +29,12 @@ class UserAdminConfig(UserAdmin):
 class ProductAdminConfig(admin.ModelAdmin):
     search_fields = ('product_name', 'start_price',)
     ordering = ('start_price',)
-    list_display = ('product_name', 'start_price', 'owner',)
+    list_display = ('product_name', 'start_price', 'owner', 'product_image',)
 
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('product_name', 'description', 'start_price', 'owner',)}),
+            'fields': ('product_name', 'description', 'start_price', 'owner', 'product_image',)}),
     )
 
 class BidAdminConfig(admin.ModelAdmin):
