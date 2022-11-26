@@ -65,3 +65,17 @@ class User(AbstractUser, PermissionsMixin):
     def __str__(self):
         return self.username
 
+class Product(models.Model):
+    '''
+    A Product is is an object with detailed properties
+    that a User can purchase 
+    '''
+    product_name = models.CharField(_('name'), max_length=100)
+    description = models.CharField(_('description'), max_length=4096, default='')
+    start_price = models.DecimalField(max_digits=10, decimal_places=2)
+    is_active = models.BooleanField(default=True)
+    owner = models.ForeignKey(User, on_delete=models.PROTECT)
+
+    def __str__(self):
+        return f"Product Name: {self.product_name}"
+        
