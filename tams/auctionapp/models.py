@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import AbstractUser, PermissionsMixin, UserManager
-
+from datetime import date
 class CustomAccountManager(UserManager):
 
     def create_superuser(self, email: str, username: str, first_name: str, last_name: str, password: str, **extra_fields):
@@ -51,8 +51,8 @@ class User(AbstractUser, PermissionsMixin):
     )
     first_name = models.CharField(max_length=150, blank=True)
     last_name = models.CharField(max_length=150, blank=True)
-    date_of_birth = models.DateField(auto_now=True)
-    image = models.ImageField(upload_to='images', default='default.png')
+    date_of_birth = models.DateField(default=date.today)
+    image = models.ImageField(default='display-photos/default-dp.png', upload_to='display-photos/%Y/%m/%D/')
 
     is_staff = models.BooleanField(default=False)
     is_active: models.BooleanField(default=False)
@@ -88,7 +88,7 @@ class Bid(models.Model):
     product = models.ForeignKey(Product, on_delete=models.PROTECT)
     winner = models.ForeignKey(User, on_delete=models.CASCADE)
     bid_price = models.DecimalField(max_digits=10, decimal_places=2)
-    end_of_bid = models.DateTimeField()
+    end_of_bid = models.DateTimeField(default=date.today)
 
     def __str__(self):
         return f"Bid #{self.id}"

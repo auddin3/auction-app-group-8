@@ -6,12 +6,24 @@ class UserAdminConfig(UserAdmin):
     search_fields = ('email', 'username', 'first_name', 'last_name',)
     ordering = ('-date_of_birth',)
     list_display = ('email', 'username', 'first_name', 
-    'last_name', 'is_active')
+    'last_name',)
 
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
             'fields': ('email', 'username', 'password1', 'password2',)}),
+    )
+
+    fieldsets = (
+        (None, {
+            'fields': ('email', 'username')
+        }),
+        ('Personal Information', {
+            'fields': ('first_name', 'last_name', 'date_of_birth', 'image',)
+        }),
+        ('Permissions', {
+            'fields': ('is_active', 'is_staff')
+        }),
     )
 
 class ProductAdminConfig(admin.ModelAdmin):
