@@ -77,5 +77,18 @@ class Product(models.Model):
     owner = models.ForeignKey(User, on_delete=models.PROTECT)
 
     def __str__(self):
-        return f"Product Name: {self.product_name}"
+        return self.product_name
         
+
+class Bid(models.Model):
+    '''
+    A Bid is the transactional process where a User can
+    compete to purchase an Item
+    '''
+    product = models.ForeignKey(Product, on_delete=models.PROTECT)
+    winner = models.ForeignKey(User, on_delete=models.CASCADE)
+    bid_price = models.DecimalField(max_digits=10, decimal_places=2)
+    end_of_bid = models.DateTimeField()
+
+    def __str__(self):
+        return f"Bid #{self.id}"
