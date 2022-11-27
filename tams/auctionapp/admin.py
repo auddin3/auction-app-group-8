@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import User, Product, Bid
+from .models import User, Product, Bid, FAQ
 from django.contrib.auth.admin import UserAdmin
 
 class UserAdminConfig(UserAdmin):
@@ -48,6 +48,22 @@ class BidAdminConfig(admin.ModelAdmin):
             'fields': ('product', 'end_of_bid',)}),
     )
 
+class FAQAdminConfig(admin.ModelAdmin):
+     search_fields = ('question',)
+     ordering = ('product',)
+     list_display = ('id', 'product', 'question', 'sender')
+
+     add_fieldsets = (
+        ("Basic Info", {
+            'classes': ('wide',),
+            'fields': ('product', 'sender',)}),
+        ("Question", {
+            'classes': ('wide',),
+            'fields': ('question')
+        })
+    )
+
 admin.site.register(User, UserAdminConfig)
 admin.site.register(Product, ProductAdminConfig)
 admin.site.register(Bid, BidAdminConfig)
+admin.site.register(FAQ, FAQAdminConfig)

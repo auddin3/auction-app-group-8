@@ -93,3 +93,17 @@ class Bid(models.Model):
 
     def __str__(self):
         return f"Bid #{self.id}"
+
+class FAQ(models.Model):
+    '''
+    FAQ from different Users about any Product and 
+    answered by the Owner
+    '''
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    question = models.CharField(_('question'), max_length=4096)
+    sender = models.ForeignKey(User, related_name='sender', on_delete=models.CASCADE, db_constraint=Product._meta.get_field('owner'))
+    recipient = models.ForeignKey(User, default=Product._meta.get_field('owner'), related_name='product_owner', on_delete=models.CASCADE)
+    answer = models.CharField(_('answer'), max_length=4096, blank=True)
+
+    def __str__(self):
+        return self.question
