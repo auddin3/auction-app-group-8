@@ -6,5 +6,5 @@ app_name = 'auctionapp'
 urlpatterns = [
     #path('', views.index, name='index'),
     path('', views.login, name='login'),
-    path('signup/', views.signup, name='signup'),
+    path('signup.html/', views.signup, name='signup'),
 ]
