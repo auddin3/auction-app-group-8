@@ -2,11 +2,18 @@
     <div class="navbar" :style="{ width: navbarWidth }">
         <h1>
             <span v-if="collapsed">
-                <div>A</div>
-                <div>A</div>
+                <div>TAMS</div>
             </span>
-            <span v-else>Auction App</span>
+            <span v-else>TAMS</span>
         </h1>
+
+        <NavBarLink to="/" icon="fas fa-home">Home</NavBarLink>
+        <NavBarLink to="/auctions" icon="fas fa-money-bill-trend-up">Auctions</NavBarLink>
+        <NavBarLink to="/archived" icon="fas fa-box-archive">Archived</NavBarLink>
+        <NavBarLink to="/profile" icon="fas fa-users">My Profile</NavBarLink>
+        <NavBarLink to="/help" icon="far fa-circle-question">Help</NavBarLink>
+        <NavBarLink to="/logout" icon="fas fa-right-from-bracket">Logout</NavBarLink>
+
         <span
           class="collapse-icon"
           :class="{ 'rotate-180': collapsed }"
@@ -18,10 +25,12 @@
 </template>
 
 <script lang="ts">
+import NavBarLink from '../navbar/NavBarLink.vue';
 import { collapsed, toggleNavBar, navbarWidth } from './state';
 export default {
-    // props: {},
+    props: {},
     // in props make readonly:true to not get error
+    components: { NavBarLink },
     setup() {
         return { collapsed, toggleNavBar, navbarWidth }
 
@@ -31,9 +40,9 @@ export default {
 
 <style>
 :root {
-    --navbar-bg-color: #2f855a ;
-    --navbar-item-hover: #38a169;
-    --navbar-item-active: #276749;
+    --navbar-bg-color: #C59FC9 ;
+    --navbar-item-hover: #C1E0F7;
+    --navbar-item-active: #CFBAE1;
 }
 </style>
 
@@ -54,6 +63,10 @@ export default {
 
     display: flex;
     flex-direction: column;
+}
+
+.navbar h1 {
+  height: 2.5em;
 }
 
 .collapse-icon {

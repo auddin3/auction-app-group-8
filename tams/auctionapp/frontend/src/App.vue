@@ -8,8 +8,8 @@
 
 
 <script lang="ts">
-import NavBar from './components/NavBar/NavBar.vue';
-import { navbarWidth } from './components/NavBar/state';
+import NavBar from './components/navbar/NavBar.vue';
+import { navbarWidth } from './components/navbar/state';
 export default {
   components: { NavBar },
   setup() {
