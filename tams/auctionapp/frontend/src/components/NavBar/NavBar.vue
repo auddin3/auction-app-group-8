@@ -56,7 +56,7 @@ export default {
     top: 0;
     left: 0;
     bottom: 0;
-    padding: 0.5em;
+    padding: 7.5em 0.5em;
 
     transition: 0.3s ease;
 
@@ -66,6 +66,8 @@ export default {
 
 .navbar h1 {
   height: 1.0em;
+  padding-bottom: 1.5em;
+  margin-top: -2.5em;
 }
 
 .collapse-icon {

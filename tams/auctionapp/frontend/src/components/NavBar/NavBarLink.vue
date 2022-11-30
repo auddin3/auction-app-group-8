@@ -48,9 +48,9 @@ export default {
     user-select: none;
 
     margin: 0.1em 0;
-    padding: 0.4em;
+    padding: 0.6em;
     border-radius: 0.25em;
-    height: 1.5em;
+    height: 2.0em;
 
     color: white;
     text-decoration: none;
