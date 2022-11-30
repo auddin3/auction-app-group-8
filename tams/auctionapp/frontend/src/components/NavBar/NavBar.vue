@@ -66,7 +66,7 @@ export default {
 }
 
 .navbar h1 {
-  height: 2.5em;
+  height: 1.0em;
 }
 
 .collapse-icon {
