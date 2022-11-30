@@ -29,7 +29,6 @@ import NavBarLink from '../navbar/NavBarLink.vue';
 import { collapsed, toggleNavBar, navbarWidth } from './state';
 export default {
     props: {},
-    // in props make readonly:true to not get error
     components: { NavBarLink },
     setup() {
         return { collapsed, toggleNavBar, navbarWidth }
