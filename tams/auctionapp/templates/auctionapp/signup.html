@@ -5,63 +5,75 @@
 <h2>Sign up to TAMS below!</h2>
 
 <form>
-  <label for="fullname">Name:</label><br>
-  <input type="text" id="fullname" name="fullname" placeholder="Enter name here..."><br>
-  <label for="dob">Date of birth:</label><br>
-  <input type="date" id="dob" name="dob"><br>
+  <label for="fname">First name:</label><br>
+  <input type="text" id="fname" name="fname" placeholder="Enter first name here..."><br>
+  <label for="lname">Last name:</label><br>
+  <input type="text" id="lname" name="lname" placeholder="Enter last name here..."><br>
+  <label for="username">Username:</label><br>
+  <input type="text" id="username" name="username" placeholder="Enter username here..."><br>
   <label for="email">Email address:</label><br>
   <input type="email" id="email" name="email"><br>
   <label for="password">Password:</label><br>
   <input type="password" id="password" name="password"><br>
   <label for="confirmpass">Confirm password:</label><br>
   <input type="password" id="confirmpass" name="confirmpass"><br> 
-  <input type="submit" value="Submit">
+  <input type="submit" value="Submit" id="submit">
+
+  <p>Already registered? <a href="http://localhost:8000/auctionapp/login.html">Log in here</a></p>
 </form> 
 
 </body>
 </html>
 
 <script type="text/javascript">
-    if(document.getElementById("fullname").value=="")
-  {
-      e.preventDefault();
-      alert("Some fields have not been filled. All fields are required to continue. Please fill in all fields.")
-      document.getElementById("fullname").style.backgroundColor = '#1C2340';
-  }
+    var button = document.getElementById("submit");
+    button.addEventListener("click",createUser);
 
-  if(document.getElementById("dob").value=="")
-  {
-      e.preventDefault();
-      alert("Some fields have not been filled. All fields are required to continue. Please fill in all fields.")
-      document.getElementById("dob").style.backgroundColor = "#1C2340";
-  }
+    function createUser(e)
+    {
+        if (document.getElementById("fname").value==""||document.getElementById("lname").value==""||document.getElementById("username").value==""||document.getElementById("email").value==""||document.getElementById("password").value==""||document.getElementById("confirmpass").value==""){
+            alert("Some fields have not been filled. All fields are required to continue. Please fill in all fields.");
+        }
+        if(document.getElementById("fname").value=="")
+        {
+            e.preventDefault();
+            document.getElementById("fname").style.backgroundColor = '#BBBEFE';
+        }
 
-  if(document.getElementById("email").value=="")
-  {
-      e.preventDefault();
-      alert("Some fields have not been filled. All fields are required to continue. Please fill in all fields.")
-      document.getElementById("email").style.backgroundColor = "#1C2340";
-  }
+        if(document.getElementById("lname").value=="")
+        {
+            e.preventDefault();
+            document.getElementById("lname").style.backgroundColor = '#BBBEFE';
+        }
 
-  if(document.getElementById("password").value=="")
-  {
-      e.preventDefault();
-      alert("Some fields have not been filled. All fields are required to continue. Please fill in all fields.")
-      document.getElementById("password").style.backgroundColor = "#1C2340";
-  }
+        if(document.getElementById("username").value=="")
+        {
+            e.preventDefault();
+            document.getElementById("username").style.backgroundColor = '#BBBEFE';
+        }
 
-  if(document.getElementById("confirmpass").value=="")
-  {
-      e.preventDefault();
-      alert("Some fields have not been filled. All fields are required to continue. Please fill in all fields.")
-      document.getElementById("confirmpass").style.backgroundColor = "#1C2340";
-  }
+        if(document.getElementById("email").value=="")
+        {
+            e.preventDefault();
+            document.getElementById("email").style.backgroundColor = '#BBBEFE';
+        }
 
-  if(document.getElementById("password").value != document.getElementById("confirmpass").value)
-  {
-      e.preventDefault();
-      alert("Passwords must be the same, please enter again.")
-      document.getElementById("password").style.backgroundColor = "#1C2340";
-      document.getElementById("confirmpassword").style.backgroundColor = "#1C2340";
-  }
+        if(document.getElementById("password").value=="")
+        {
+            e.preventDefault();
+            document.getElementById("password").style.backgroundColor = '#BBBEFE';
+        }
+
+        if(document.getElementById("confirmpass").value=="")
+        {
+            e.preventDefault();
+            document.getElementById("confirmpass").style.backgroundColor = '#BBBEFE';
+        }
+        if(document.getElementById("password").value != document.getElementById("confirmpass").value)
+        {
+            e.preventDefault();
+            alert("Passwords must be the same.");
+            document.getElementById("confirmpass").style.backgroundColor = '#BBBEFE';
+        }
+    }
 </script>
