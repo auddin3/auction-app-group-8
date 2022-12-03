@@ -56,7 +56,7 @@
 						<h6 class="f-w-400 text-justify title">Your Bids</h6>
 						<div class="row g-0">
 							<div>
-								<p class="m-b-10 info-text">You currently have {{bids}} bids</p>
+								<p class="m-b-10 info-text">You currently have {{ bids }} bids</p>
 							</div>
 						</div>
 					</div>
@@ -64,13 +64,13 @@
 						<h6 class="f-w-400 text-justify title">Your Items</h6>
 						<div class="row g-0">
 							<div>
-								<p class="m-b-10 info-text">You currently own {{items}} items</p>
+								<p class="m-b-10 info-text">You currently own {{ items }} items</p>
 							</div>
 						</div>
 					</div>
 				</div>
 				<div class="d-grid gap-2 m-t-40">
-					<button type="button" class="btn btn-lg f-w-600">Change profile</button>
+					<button type="button" @click="refreshData(1)" class="btn btn-lg f-w-600">Change profile</button>
 				</div>
 			</div>
 		</div>
@@ -90,16 +90,23 @@ export default {
 			email: null,
 			bids: 0,
 			items: 0,
-			dp: "https://dagertechnology.com/who-we-are/our-team/tech-male-image-coming-soon/"
 		};
 	},
-	methods: {},
-
-	async mounted() {
-		//Fetch user data
-		// let response = await fetch("http://localhost:8000/api/destinations/");
-		// let data = await response.json();
+	methods: {
+		async refreshData(userId: Number) {
+			//Fetch user data
+			let response = await fetch("http://localhost:8000/api/profile/" + userId);
+			let data = await response.json();
+			console.log(data);
+		},
 	},
+
+	// async mounted() {
+	// 	//Fetch user data
+	// 	let response = await fetch("http://localhost:8000/api/profile/" + 1);
+	// 	let data = await response.json();
+	// 	console.log(data)
+	// },
 };
 </script>
 
