@@ -26,8 +26,11 @@ class SignUpForm(ModelForm):
         }
 
 class LogInForm(ModelForm):
-    username = forms.CharField()
-    password = forms.CharField(widget=forms.PasswordInput)
+    password = forms.CharField(widget=forms.PasswordInput(attrs={'style': 'padding: 5px; margin: 10px; border-radius: 25px;'}))
     class Meta:
         model = User
         fields = ['username', 'password']
+        widgets = {
+            'username': forms.TextInput(attrs={
+            'style': 'padding: 5px; margin: 10px; border-radius: 25px;',}),    
+        }
