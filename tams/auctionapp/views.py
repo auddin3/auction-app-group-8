@@ -1,12 +1,21 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from auctionapp.forms import SignUpForm, LogInForm
+from django.contrib import messages
 
-# Create your views here.
-#def index(request):
- #   return HttpResponse("Hello, world. You're at the auction app index.")
+
 
 def login(request):
-    return render(request, 'auctionapp/login.html')
+    form = LogInForm()
+    return render(request, 'auctionapp/login.html', {'form':form})
 
 def signup(request):
-    return render(request, 'auctionapp/signup.html')
+    form = SignUpForm()
+    if request.method == "POST":
+        form = SignUpForm(request.POST)
+        if form.is_valid():
+            form.save()
+            form = SignUpForm()
+            messages.success(request, 'Account created successfully')
+
+    return render(request, 'auctionapp/signup.html', {'form': form})
