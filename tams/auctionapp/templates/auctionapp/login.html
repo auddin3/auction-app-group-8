@@ -7,7 +7,10 @@
         <form method = "POST", action="", id="form">
             <h2>Log in to TAMS below!</h2>
             {% csrf_token %}
-            {{form}}
+            <label for="username">Username:</label>
+            {{form.username}}<br>
+            <label for="password">Password:</label>
+            {{form.password}}<br>
             <input type="submit" value="Submit" id="submit"><br>
             <p>Not registered yet? <a href="http://localhost:8000/auctionapp/signup.html">Sign up here</a></p>
 
@@ -59,7 +62,7 @@
         border-radius: 25px;
     }
 
-    h2,p, a{
+    h2,p,label,a{
         font-family: Arial, Helvetica, sans-serif;
     }
 
