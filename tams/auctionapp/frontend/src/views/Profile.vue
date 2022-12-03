@@ -8,8 +8,8 @@
 					alt="User-Profile-Image"
 				/>
 			</div>
-			<h2 class="card-text text-white font-weight-bold m-t-40">Aysha Uddin</h2>
-			<p class="card-text text-muted">@auddin3</p>
+			<h2 class="card-text text-white font-weight-bold m-t-40">{{ name }}</h2>
+			<p class="card-text text-muted">{{ username }}</p>
 		</div>
 		<div class="col-md-7 bg-light">
 			<div class="card-block">
@@ -20,7 +20,7 @@
 							<p class="m-b-10 subtitle">Name</p>
 						</div>
 						<div class="col-sm-8">
-							<h6 class="datapoint">Aysha Uddin</h6>
+							<h6 class="datapoint">{{ name }}</h6>
 						</div>
 					</div>
 					<div class="row b-b-default g-0">
@@ -28,7 +28,7 @@
 							<p class="m-b-10 subtitle">Username</p>
 						</div>
 						<div class="col-sm-8">
-							<h6 class="datapoint">auddin3</h6>
+							<h6 class="datapoint">{{ username }}</h6>
 						</div>
 					</div>
 					<div class="row g-0">
@@ -36,7 +36,7 @@
 							<p class="m-b-10 subtitle">Birthday</p>
 						</div>
 						<div class="col-sm">
-							<h6 class="datapoint">5 Jun 2002</h6>
+							<h6 class="datapoint">{{ dob }}</h6>
 						</div>
 					</div>
 				</div>
@@ -47,7 +47,7 @@
 							<p class="m-b-10 subtitle">Email</p>
 						</div>
 						<div class="col-sm-8">
-							<h6 class="datapoint">anitauddin1809@gmail.com</h6>
+							<h6 class="datapoint">{{ email }}</h6>
 						</div>
 					</div>
 				</div>
@@ -56,7 +56,7 @@
 						<h6 class="f-w-400 text-justify title">Your Bids</h6>
 						<div class="row g-0">
 							<div>
-								<p class="m-b-10 info-text">You currently have 0 bids</p>
+								<p class="m-b-10 info-text">You currently have {{bids}} bids</p>
 							</div>
 						</div>
 					</div>
@@ -64,24 +64,47 @@
 						<h6 class="f-w-400 text-justify title">Your Items</h6>
 						<div class="row g-0">
 							<div>
-								<p class="m-b-10 info-text">You currently own 0 items</p>
+								<p class="m-b-10 info-text">You currently own {{items}} items</p>
 							</div>
 						</div>
 					</div>
 				</div>
 				<div class="d-grid gap-2 m-t-40">
-				  <button type="button" class="btn btn-lg f-w-600">Change profile</button>
+					<button type="button" class="btn btn-lg f-w-600">Change profile</button>
 				</div>
 			</div>
 		</div>
 	</div>
 </template>
 
-<script lang="ts"></script>
+<script lang="ts">
+export default {
+	data() {
+		let date = new Date();
+		const TODAY = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+
+		return {
+			name: null,
+			username: null,
+			dob: TODAY.toISOString().slice(0, 10),
+			email: null,
+			bids: 0,
+			items: 0,
+		};
+	},
+	methods: {},
+
+	async mounted() {
+		//Fetch user data
+		// let response = await fetch("http://localhost:8000/api/destinations/");
+		// let data = await response.json();
+	},
+};
+</script>
 
 <style>
 body {
-	background: linear-gradient(90deg, #A4DEF9, #c1e0f7, #fffffa);
+	background: linear-gradient(90deg, #a4def9, #c1e0f7, #fffffa);
 }
 
 img {
@@ -96,7 +119,7 @@ img {
 }
 
 .btn:hover {
-	background-color: #C1E0F7;
+	background-color: #c1e0f7;
 }
 
 .title {
@@ -149,7 +172,7 @@ img {
 }
 
 .header {
-	background: linear-gradient(180deg, #9795EF, #F9C5D1);
+	background: linear-gradient(180deg, #9795ef, #f9c5d1);
 }
 
 .card-block {
