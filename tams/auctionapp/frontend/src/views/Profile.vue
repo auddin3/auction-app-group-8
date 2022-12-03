@@ -1,9 +1,195 @@
 <template>
-    <div class="profile">
-      <h1>Profile</h1>
-    </div>
+	<div class="card container row g-0 p-0 item-container">
+		<div class="col-md-5 header">
+			<div>
+				<img
+					src="https://i.pinimg.com/236x/05/d1/94/05d1948a0b051439f26a835c33b79823.jpg"
+					class="img-fluid rounded-circle img-thumbnail mx-auto d-block"
+					alt="User-Profile-Image"
+				/>
+			</div>
+			<h2 class="card-text text-white font-weight-bold m-t-40">Aysha Uddin</h2>
+			<p class="card-text text-muted">@auddin3</p>
+		</div>
+		<div class="col-md-7 bg-light">
+			<div class="card-block">
+				<div class="bg-white b-b-default item-container rounded">
+					<h6 class="f-w-400 text-justify title">Basic info</h6>
+					<div class="row b-b-default g-0">
+						<div class="col-sm-4">
+							<p class="m-b-10 subtitle">Name</p>
+						</div>
+						<div class="col-sm-8">
+							<h6 class="datapoint">Aysha Uddin</h6>
+						</div>
+					</div>
+					<div class="row b-b-default g-0">
+						<div class="col-sm-4">
+							<p class="m-b-10 subtitle">Username</p>
+						</div>
+						<div class="col-sm-8">
+							<h6 class="datapoint">auddin3</h6>
+						</div>
+					</div>
+					<div class="row g-0">
+						<div class="col-sm-4">
+							<p class="m-b-10 subtitle">Birthday</p>
+						</div>
+						<div class="col-sm">
+							<h6 class="datapoint">5 Jun 2002</h6>
+						</div>
+					</div>
+				</div>
+				<div class="bg-white b-b-default item-container rounded m-t-40">
+					<h6 class="f-w-400 text-justify title">Contact info</h6>
+					<div class="row g-0">
+						<div class="col-sm-4">
+							<p class="m-b-10 subtitle">Email</p>
+						</div>
+						<div class="col-sm-8">
+							<h6 class="datapoint">anitauddin1809@gmail.com</h6>
+						</div>
+					</div>
+				</div>
+				<div class="row g-0">
+					<div class="bg-white b-b-default item-container rounded m-t-40 col-sm-5">
+						<h6 class="f-w-400 text-justify title">Your Bids</h6>
+						<div class="row g-0">
+							<div>
+								<p class="m-b-10 info-text">You currently have 0 bids</p>
+							</div>
+						</div>
+					</div>
+					<div class="bg-white b-b-default item-container m-l-auto rounded m-t-40 col-sm-5">
+						<h6 class="f-w-400 text-justify title">Your Items</h6>
+						<div class="row g-0">
+							<div>
+								<p class="m-b-10 info-text">You currently own 0 items</p>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="d-grid gap-2 m-t-40">
+				  <button type="button" class="btn btn-lg f-w-600">Change profile</button>
+				</div>
+			</div>
+		</div>
+	</div>
 </template>
 
-<script lang="ts">
+<script lang="ts"></script>
 
-</script>
+<style>
+body {
+	background: linear-gradient(90deg, #A4DEF9, #c1e0f7, #fffffa);
+}
+
+img {
+	margin-top: 100px;
+	max-height: 400px;
+	max-width: 400px;
+}
+
+.btn {
+	background-color: #c59fc9;
+	color: white;
+}
+
+.btn:hover {
+	background-color: #C1E0F7;
+}
+
+.title {
+	padding-top: 24px;
+	padding-bottom: 16px;
+	padding-left: 24px;
+	font-size: 22px;
+	text-align: start;
+}
+
+.subtitle {
+	font-size: 12px;
+	color: grey;
+	font-weight: 500;
+	text-align: start;
+	padding-left: 24px;
+	max-width: 156px;
+	padding-right: 24px;
+	margin-top: 10px;
+}
+
+.info-text {
+	font-size: 14px;
+	color: grey;
+	font-weight: 500;
+	text-align: start;
+	padding-left: 24px;
+	padding-right: 5px;
+	margin-top: 10px;
+	padding-bottom: 24px;
+}
+
+.datapoint {
+	color: black;
+	font-weight: 500;
+	text-align: start;
+	padding-right: 24px;
+	margin-top: 8px;
+}
+
+.container {
+	display: flex;
+	flex-direction: row;
+	min-height: 92vh;
+	min-width: 72vw;
+}
+
+.item-container {
+	border: 1px solid #e0e0e0;
+}
+
+.header {
+	background: linear-gradient(180deg, #9795EF, #F9C5D1);
+}
+
+.card-block {
+	padding: 1.25rem;
+}
+
+.b-b-default {
+	border-bottom: 1px solid #e0e0e0;
+}
+
+.m-b-20 {
+	margin-bottom: 20px;
+}
+
+.p-b-5 {
+	padding-bottom: 5px !important;
+}
+
+.p-x-0 {
+	padding-right: 0px;
+	padding-left: 0px;
+}
+
+.m-t-40 {
+	margin-top: 40px;
+}
+
+.m-b-10 {
+	margin-bottom: 10px;
+}
+
+.m-l-auto {
+	margin-left: auto;
+}
+
+.f-w-600 {
+	font-weight: 600;
+}
+
+.f-w-400 {
+	font-weight: 400;
+}
+</style>
