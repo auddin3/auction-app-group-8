@@ -65,6 +65,16 @@ class User(AbstractUser, PermissionsMixin):
     def __str__(self):
         return self.username
 
+    def to_dict(self):
+        return {
+            'username': self.username,
+            'email': self.email,
+            'fname': self.first_name,
+            'lname': self.last_name,
+            'dob': self.date_of_birth,
+            'dp': self.profile_photo
+        }
+
 class Product(models.Model):
     '''
     A Product is is an object with detailed properties

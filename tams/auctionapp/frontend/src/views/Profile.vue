@@ -3,8 +3,8 @@
 		<div class="col-md-5 header">
 			<div>
 				<img
-					src="https://i.pinimg.com/236x/05/d1/94/05d1948a0b051439f26a835c33b79823.jpg"
-					class="img-fluid rounded-circle img-thumbnail mx-auto d-block"
+					src="https://www.moopendentalcare.co.uk/img/team/SameerMohammed.jpg"
+					class="img rounded-circle img-thumbnail mx-auto d-block"
 					alt="User-Profile-Image"
 				/>
 			</div>
@@ -90,6 +90,7 @@ export default {
 			email: null,
 			bids: 0,
 			items: 0,
+			dp: "https://dagertechnology.com/who-we-are/our-team/tech-male-image-coming-soon/"
 		};
 	},
 	methods: {},
@@ -109,8 +110,8 @@ body {
 
 img {
 	margin-top: 100px;
-	max-height: 400px;
-	max-width: 400px;
+	max-height: 300px;
+	max-width: 300px;
 }
 
 .btn {
