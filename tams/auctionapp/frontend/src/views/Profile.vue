@@ -1,10 +1,10 @@
 <template>
 	<div class="card container row g-0 p-0 item-container">
 		<div class="col-md-5 header">
-			<div>
+			<div class="profile-photo-container">
 				<img
-					src="https://www.moopendentalcare.co.uk/img/team/SameerMohammed.jpg"
-					class="img rounded-circle img-thumbnail mx-auto d-block"
+					:src="`http://localhost:8000${imgpath}`"
+					class="rounded-circle img-thumbnail mx-auto d-block profile-photo"
 					alt="User-Profile-Image"
 				/>
 			</div>
@@ -70,9 +70,7 @@
 					</div>
 				</div>
 				<div class="d-grid gap-2 m-t-40">
-					<button type="button" @click="refreshData(1)" class="btn btn-lg f-w-600"
-						>Change profile</button
-					>
+					<button type="button" @click="" class="btn btn-lg f-w-600">Change profile</button>
 				</div>
 			</div>
 		</div>
@@ -86,38 +84,32 @@ export default {
 		const TODAY = new Date(date.getFullYear(), date.getMonth(), date.getDate());
 
 		return {
-			name: ' ',
-			username: ' ',
-			email: ' ',
+			name: " ",
+			username: " ",
+			email: " ",
 			dob: TODAY.toISOString().slice(0, 10),
 			bids: 0,
 			items: 0,
+			imgpath: "/media/profile-photos/default-dp.png",
 		};
 	},
-	methods: {
-		async refreshData(userId: Number) {
-			//Fetch user data
-			// try {
-			// 	let response = await fetch("http://localhost:8000/auctionapp/api/profile/" + userId);
-			// 	let data = await response.json();
-			// } catch (e) {
-			// 	alert(e);
-			// }
-		},
-	},
+	methods: {},
 
 	async mounted() {
 		//Fetch user data
 		try {
-				let response = await fetch("http://localhost:8000/auctionapp/api/profile/" + 1);
-				let rawData = await response.json();
-				let data = rawData.user
-				this.name = data.fname + ' ' + data.lname
-				this.username = data.username
-				this.email = data.email
-				this.dob = data.dob
-				this.bids = rawData.bids
-				this.items = rawData.items
+			let response = await fetch("http://localhost:8000/auctionapp/api/profile/" + 1);
+			let rawData = await response.json();
+			let data = rawData.user;
+			this.name = data.fname + " " + data.lname;
+			this.username = data.username;
+			this.email = data.email;
+			this.dob = data.dob;
+			this.imgpath = data.imgpath
+			
+			
+			this.bids = rawData.bids;
+			this.items = rawData.items;
 		} catch (e) {
 			alert(e);
 		}
@@ -130,10 +122,16 @@ body {
 	background: linear-gradient(90deg, #a4def9, #c1e0f7, #fffffa);
 }
 
-img {
-	margin-top: 100px;
-	max-height: 300px;
-	max-width: 300px;
+.profile-photo-container {
+	height: 40%;
+	margin-top: 85px;
+}
+
+.profile-photo {
+	height: 100%;
+	width: 70%;
+	margin-left: auto;
+	margin-right: auto;
 }
 
 .btn {
@@ -186,8 +184,9 @@ img {
 .container {
 	display: flex;
 	flex-direction: row;
-	min-height: 92vh;
-	min-width: 72vw;
+	min-height: 93vh;
+	min-width: 80vw;
+	margin-left: -35px;
 }
 
 .item-container {
