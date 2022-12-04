@@ -185,8 +185,7 @@ body {
 	display: flex;
 	flex-direction: row;
 	min-height: 93vh;
-	min-width: 80vw;
-	margin-left: -35px;
+	min-width: 72vw;
 }
 
 .item-container {
