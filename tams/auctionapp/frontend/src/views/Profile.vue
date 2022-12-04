@@ -121,7 +121,8 @@ export default {
 
 <style>
 body {
-	background: linear-gradient(90deg, #a4def9, #c1e0f7, #fffffa);
+	/* background: linear-gradient(90deg, #a4def9, #c1e0f7, #fffffa); */
+	background-color: #A4DEF9;
 }
 
 .profile-photo-container {
@@ -151,6 +152,7 @@ body {
 	padding-left: 24px;
 	font-size: 22px;
 	text-align: start;
+	color: #c59fc9;
 }
 
 .subtitle {
@@ -195,7 +197,9 @@ body {
 }
 
 .header {
-	background: linear-gradient(180deg, #9795ef, #f9c5d1);
+	/* background: linear-gradient(180deg, #9795ef, #f9c5d1); */
+	/* background-color: #A4DEF9; */
+	background: linear-gradient(to bottom, #A4DEF9, #C1E0F7);
 }
 
 .card-block {
