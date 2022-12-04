@@ -9,7 +9,7 @@
 				/>
 			</div>
 			<h2 class="card-text text-white font-weight-bold m-t-40">{{ name }}</h2>
-			<p class="card-text text-muted">{{ username }}</p>
+			<p class="card-text text-muted">@{{ username }}</p>
 		</div>
 		<div class="col-md-7 bg-light">
 			<div class="card-block">
@@ -86,10 +86,10 @@ export default {
 		const TODAY = new Date(date.getFullYear(), date.getMonth(), date.getDate());
 
 		return {
-			name: null,
-			username: null,
+			name: ' ',
+			username: ' ',
+			email: ' ',
 			dob: TODAY.toISOString().slice(0, 10),
-			email: null,
 			bids: 0,
 			items: 0,
 		};
@@ -97,22 +97,31 @@ export default {
 	methods: {
 		async refreshData(userId: Number) {
 			//Fetch user data
-			try {
-				let response = await fetch("http://localhost:8000/api/profile/" + userId);
-				let data = await response.json();
-				console.log(data);
-			} catch (e) {
-				alert(e);
-			}
+			// try {
+			// 	let response = await fetch("http://localhost:8000/auctionapp/api/profile/" + userId);
+			// 	let data = await response.json();
+			// } catch (e) {
+			// 	alert(e);
+			// }
 		},
 	},
 
-	// async mounted() {
-	// 	//Fetch user data
-	// 	let response = await fetch("http://localhost:8000/api/profile/" + 1);
-	// 	let data = await response.json();
-	// 	console.log(data)
-	// },
+	async mounted() {
+		//Fetch user data
+		try {
+				let response = await fetch("http://localhost:8000/auctionapp/api/profile/" + 1);
+				let rawData = await response.json();
+				let data = rawData.user
+				this.name = data.fname + ' ' + data.lname
+				this.username = data.username
+				this.email = data.email
+				this.dob = data.dob
+				this.bids = rawData.bids
+				this.items = rawData.items
+		} catch (e) {
+			alert(e);
+		}
+	},
 };
 </script>
 
