@@ -1,6 +1,6 @@
 <template>
 	<div class="card container row g-0 p-0 item-container">
-		<div class="col-md-5 header">
+		<div class="col-md-5 header rounded">
 			<div class="profile-photo-container">
 				<img
 					:src="`http://localhost:8000${imgpath}`"
@@ -11,7 +11,7 @@
 			<h2 class="card-text text-white font-weight-bold m-t-40">{{ name }}</h2>
 			<p class="card-text text-muted">@{{ username }}</p>
 		</div>
-		<div class="col-md-7 bg-light">
+		<div class="col-md-7 bg-light rounded">
 			<div class="card-block">
 				<div class="bg-white b-b-default item-container rounded">
 					<h6 class="f-w-400 text-justify title">Basic info</h6>
@@ -111,7 +111,7 @@ export default {
 			
 			this.bids = rawData.bids;
 			this.items = rawData.items;
-			
+
 		} catch (e) {
 			alert(e);
 		}
