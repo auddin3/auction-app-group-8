@@ -2,8 +2,9 @@ from django.shortcuts import render
 from auctionapp.forms import SignUpForm, LogInForm
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
+from auctionapp.models import User
 
-def login(request):
+def loginUser(request):
     form = LogInForm()
     if request.method == "POST":
         form = LogInForm(data=request.POST)
@@ -21,8 +22,14 @@ def signup(request):
     form = SignUpForm()
     if request.method == "POST":
         form = SignUpForm(request.POST)
+        username=request.POST.get('username')
+        email=request.POST.get('email')
+        first_name=request.POST.get('first_name')
+        last_name=request.POST.get('last_name')
+        password=request.POST.get('password')
         if form.is_valid():
-            form.save()
+            user = User.objects.create_user(username,email,first_name,last_name,password)
+            user.save()
             form = SignUpForm()
             messages.success(request, 'Account created successfully')
 
