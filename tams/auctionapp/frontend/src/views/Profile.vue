@@ -104,12 +104,14 @@ export default {
 			this.name = data.fname + " " + data.lname;
 			this.username = data.username;
 			this.email = data.email;
-			this.dob = data.dob;
-			this.imgpath = data.imgpath
+			this.dob = new Date(data.dob).toLocaleDateString('en-GB', 
+			{ day: 'numeric', year: 'numeric', month: 'long', })
 			
+			this.imgpath = data.imgpath
 			
 			this.bids = rawData.bids;
 			this.items = rawData.items;
+			
 		} catch (e) {
 			alert(e);
 		}
