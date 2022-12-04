@@ -72,7 +72,7 @@ class User(AbstractUser, PermissionsMixin):
             'fname': self.first_name,
             'lname': self.last_name,
             'dob': self.date_of_birth,
-            'dp': self.profile_photo
+            'profile_photo': self.profile_photo.url
         }
 
 class Product(models.Model):

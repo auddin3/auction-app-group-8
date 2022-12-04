@@ -70,7 +70,9 @@
 					</div>
 				</div>
 				<div class="d-grid gap-2 m-t-40">
-					<button type="button" @click="refreshData(1)" class="btn btn-lg f-w-600">Change profile</button>
+					<button type="button" @click="refreshData(1)" class="btn btn-lg f-w-600"
+						>Change profile</button
+					>
 				</div>
 			</div>
 		</div>
@@ -95,9 +97,13 @@ export default {
 	methods: {
 		async refreshData(userId: Number) {
 			//Fetch user data
-			let response = await fetch("http://localhost:8000/api/profile/" + userId);
-			let data = await response.json();
-			console.log(data);
+			try {
+				let response = await fetch("http://localhost:8000/api/profile/" + userId);
+				let data = await response.json();
+				console.log(data);
+			} catch (e) {
+				alert(e);
+			}
 		},
 	},
 
