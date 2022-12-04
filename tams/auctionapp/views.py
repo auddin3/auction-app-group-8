@@ -11,7 +11,7 @@ def profile_api(request, user_id):
 
     if request.method == 'GET':
         items = Product.objects.filter(owner=user).count()
-        bids = Bid.objects.filter(winner=user).count()
+        bids = Bid.objects.filter(bidder=user).count()
 
 
         return JsonResponse({

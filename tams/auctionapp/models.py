@@ -97,9 +97,10 @@ class Bid(models.Model):
     compete to purchase an Item
     '''
     product = models.ForeignKey(Product, on_delete=models.PROTECT)
-    winner = models.ForeignKey(User, on_delete=models.CASCADE)
+    bidder = models.ForeignKey(User, on_delete=models.CASCADE)
     bid_price = models.DecimalField(max_digits=10, decimal_places=2)
     end_of_bid = models.DateTimeField(blank=True)
+    winner = models.BooleanField(default=False)
 
     def __str__(self):
         return f"Bid #{self.id}"
