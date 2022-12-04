@@ -3,6 +3,7 @@ from auctionapp.forms import SignUpForm, LogInForm
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from auctionapp.models import User
+from django.http import HttpResponseRedirect
 
 def loginUser(request):
     form = LogInForm()
@@ -12,8 +13,8 @@ def loginUser(request):
         pword = request.POST.get('password')
         user = authenticate(request, username=uname, password=pword)
         if user is not None:
-            messages.success(request,'Log in worked')
             login(request,user)
+            return HttpResponseRedirect('http://localhost:5173')
         else:
             messages.error(request,'Login failed. Please try again')
     return render(request, 'auctionapp/login.html', {'form':form})
