@@ -1,15 +1,10 @@
-from django.shortcuts import render
 from auctionapp.forms import SignUpForm, LogInForm
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
-from auctionapp.models import User
-from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponse, HttpRequest, JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-import json
-
 from auctionapp.models import User, Product, Bid
+from django.shortcuts import render, get_object_or_404
+from django.http import HttpResponse, HttpRequest, JsonResponse, HttpResponseRedirect
+import json
 
 def loginUser(request):
     form = LogInForm()
@@ -42,7 +37,7 @@ def signup(request):
 
     return render(request, 'auctionapp/signup.html', {'form': form})
 
-    def profile_api(request, user_id):
+def profile_api(request, user_id):
 
     user = get_object_or_404(User, id=user_id)
 

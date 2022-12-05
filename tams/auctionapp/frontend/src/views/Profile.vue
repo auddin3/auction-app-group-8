@@ -98,9 +98,11 @@ export default {
 	async mounted() {
 		//Fetch user data
 		try {
-			let response = await fetch("http://localhost:8000/auctionapp/api/profile/" + 1, {
-				credentials: "include",
-			});
+			let response = await fetch("http://localhost:8000/auctionapp/api/profile/" + 1, 
+			// {
+			// 	credentials: "include",
+			// }
+			);
 			let rawData = await response.json();
 			let data = rawData.user;
 			this.name = data.fname + " " + data.lname;
