@@ -1,6 +1,7 @@
 from django.urls import path
 
 from . import views
+from auctionapp.views import profile_api
 
 app_name = 'auctionapp'
 urlpatterns = [
