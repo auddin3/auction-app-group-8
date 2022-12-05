@@ -8,11 +8,11 @@
             <h2>Log in to TAMS below!</h2>
             {% csrf_token %}
             <label for="email">Email:</label>
-            {{form.username}}<br>
+            {{form.email}}<br>
             <label for="password">Password:</label>
             {{form.password}}<br>
             <input type="submit" value="Submit" id="submit"><br>
-            <p>Not registered yet? <a href="http://localhost:8000/auctionapp/signup.html">Sign up here</a></p>
+            <p>Not registered yet? <a href="http://localhost:8000/auctionapp/signup">Sign up here</a></p>
 
             {% if messages %}
             {% for message in messages %}

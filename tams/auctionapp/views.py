@@ -9,7 +9,7 @@ def loginUser(request):
     form = LogInForm()
     if request.method == "POST":
         form = LogInForm(data=request.POST)
-        uname = request.POST.get('username')
+        uname = request.POST.get('email')
         pword = request.POST.get('password')
         user = authenticate(request, username=uname, password=pword)
         if user is not None:
@@ -23,8 +23,8 @@ def signup(request):
     form = SignUpForm()
     if request.method == "POST":
         form = SignUpForm(request.POST)
-        username=request.POST.get('username')
         email=request.POST.get('email')
+        username=request.POST.get('username')
         first_name=request.POST.get('first_name')
         last_name=request.POST.get('last_name')
         password=request.POST.get('password')
