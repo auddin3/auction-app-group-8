@@ -7,7 +7,7 @@
         <form method = "POST", action="", id="form">
             <h2>Log in to TAMS below!</h2>
             {% csrf_token %}
-            <label for="username">Username:</label>
+            <label for="email">Email:</label>
             {{form.username}}<br>
             <label for="password">Password:</label>
             {{form.password}}<br>

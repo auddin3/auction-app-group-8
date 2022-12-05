@@ -14,7 +14,7 @@ def loginUser(request):
         user = authenticate(request, username=uname, password=pword)
         if user is not None:
             login(request,user)
-            return HttpResponse('Sign Up Successful')
+            return HttpResponseRedirect('http://127.0.0.1:5173')
         else:
             messages.error(request,'Login failed. Please try again')
     return render(request, 'auctionapp/login.html', {'form':form})
@@ -29,7 +29,7 @@ def signup(request):
         last_name=request.POST.get('last_name')
         password=request.POST.get('password')
         if form.is_valid():
-            user = User.objects.create_user(username,email,first_name,last_name,password)
+            user = User.objects.create_user(email,username,first_name,last_name,password)
             user.save()
             form = SignUpForm()
             messages.success(request, 'Account created successfully')
