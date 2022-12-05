@@ -98,20 +98,24 @@ export default {
 	async mounted() {
 		//Fetch user data
 		try {
-			let response = await fetch("http://localhost:8000/auctionapp/api/profile/" + 1);
+			let response = await fetch("http://localhost:8000/auctionapp/api/profile/" + 1, {
+				credentials: "include",
+			});
 			let rawData = await response.json();
 			let data = rawData.user;
 			this.name = data.fname + " " + data.lname;
 			this.username = data.username;
 			this.email = data.email;
-			this.dob = new Date(data.dob).toLocaleDateString('en-GB', 
-			{ day: 'numeric', year: 'numeric', month: 'long', })
-			
-			this.imgpath = data.imgpath
-			
+			this.dob = new Date(data.dob).toLocaleDateString("en-GB", {
+				day: "numeric",
+				year: "numeric",
+				month: "long",
+			});
+
+			this.imgpath = data.imgpath;
+
 			this.bids = rawData.bids;
 			this.items = rawData.items;
-
 		} catch (e) {
 			alert(e);
 		}
@@ -122,7 +126,7 @@ export default {
 <style>
 body {
 	/* background: linear-gradient(90deg, #a4def9, #c1e0f7, #fffffa); */
-	background-color: #A4DEF9;
+	background-color: #a4def9;
 }
 
 .profile-photo-container {
@@ -197,9 +201,9 @@ body {
 }
 
 .header {
-	/* background: linear-gradient(180deg, #9795ef, #f9c5d1); */
+	background: linear-gradient(180deg, #9795ef, #f9c5d1);
 	/* background-color: #A4DEF9; */
-	background: linear-gradient(to bottom, #A4DEF9, #C1E0F7);
+	/* background: linear-gradient(to bottom, #A4DEF9, #C1E0F7); */
 }
 
 .card-block {

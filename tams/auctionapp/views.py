@@ -9,6 +9,8 @@ def profile_api(request, user_id):
 
     user = get_object_or_404(User, id=user_id)
 
+    # user = request.user
+
     if request.method == 'GET':
         items = Product.objects.filter(owner=user).count()
         bids = Bid.objects.filter(bidder=user).count()
