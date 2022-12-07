@@ -1,4 +1,5 @@
 from auctionapp.forms import SignUpForm, LogInForm
+from django.views.decorators.csrf import csrf_exempt
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from auctionapp.models import User, Product, Bid
@@ -15,7 +16,7 @@ def loginUser(request):
         user = authenticate(request, username=uname, password=pword)
         if user is not None:
             login(request,user)
-            return HttpResponseRedirect('http://127.0.0.1:5173')
+            return HttpResponseRedirect('http://localhost:5173')
         else:
             messages.error(request,'Login failed. Please try again')
     return render(request, 'auctionapp/login.html', {'form':form})
@@ -37,6 +38,7 @@ def signup(request):
 
     return render(request, 'auctionapp/signup.html', {'form': form})
 
+@csrf_exempt
 def profile_api(request, user_id):
 
     user = get_object_or_404(User, id=user_id)
@@ -53,3 +55,16 @@ def profile_api(request, user_id):
             'items': items,
             'bids': bids,
         }, status=200)
+
+    elif request.method == 'PUT':
+        value = json.loads(request.body.decode('utf-8'))
+
+        user.first_name=value["fname"]
+        user.last_name=value["lname"]
+        user.username=value["username"]
+        user.email=value["email"]
+        user.date_of_birth=value["dob"]
+        user.save()
+
+        
+    return JsonResponse(user.to_dict(), status=200)

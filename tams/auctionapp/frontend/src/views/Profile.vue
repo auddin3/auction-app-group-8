@@ -20,7 +20,16 @@
 							<p class="m-b-10 subtitle">Name</p>
 						</div>
 						<div class="col-sm-8">
-							<h6 class="datapoint">{{ name }}</h6>
+							<div v-if="edit" class="row gx-4 gx-lg-5">
+								<input
+									type="text"
+									class="datapoint input-box"
+									id="name"
+									name="name"
+									v-model="name"
+								/>
+							</div>
+							<h6 v-else class="datapoint">{{ name }}</h6>
 						</div>
 					</div>
 					<div class="row b-b-default g-0">
@@ -28,7 +37,16 @@
 							<p class="m-b-10 subtitle">Username</p>
 						</div>
 						<div class="col-sm-8">
-							<h6 class="datapoint">{{ username }}</h6>
+							<div v-if="edit" class="row gx-4 gx-lg-5">
+								<input
+									type="text"
+									class="datapoint input-box"
+									id="username"
+									name="username"
+									v-model="username"
+								/>
+							</div>
+							<h6 v-else class="datapoint">{{ username }}</h6>
 						</div>
 					</div>
 					<div class="row g-0">
@@ -36,7 +54,10 @@
 							<p class="m-b-10 subtitle">Birthday</p>
 						</div>
 						<div class="col-sm">
-							<h6 class="datapoint">{{ dob }}</h6>
+							<div v-if="edit" class="row gx-4 gx-lg-5">
+								<input type="text" class="datapoint input-box" id="dob" name="dob" v-model="dob" />
+							</div>
+							<h6 v-else class="datapoint">{{ dob }}</h6>
 						</div>
 					</div>
 				</div>
@@ -47,7 +68,16 @@
 							<p class="m-b-10 subtitle">Email</p>
 						</div>
 						<div class="col-sm-8">
-							<h6 class="datapoint">{{ email }}</h6>
+							<div v-if="edit" class="row gx-4 gx-lg-5">
+								<input
+									type="text"
+									class="datapoint input-box"
+									id="email"
+									name="email"
+									v-model="email"
+								/>
+							</div>
+							<h6 v-else class="datapoint">{{ email }}</h6>
 						</div>
 					</div>
 				</div>
@@ -70,7 +100,10 @@
 					</div>
 				</div>
 				<div class="d-grid gap-2 m-t-40">
-					<button type="button" @click="" class="btn btn-lg f-w-600">Change profile</button>
+					<button v-if="edit" type="button" class="btn btn-lg f-w-600" v-on:click="editOff()">Submit profile</button>
+					<button v-else type="button" v-on:click="editOn()" class="btn btn-lg f-w-600"
+						>Change profile</button
+					>
 				</div>
 			</div>
 		</div>
@@ -91,18 +124,64 @@ export default {
 			bids: 0,
 			items: 0,
 			imgpath: "/media/profile-photos/default-dp.png",
+			edit: false,
 		};
 	},
-	methods: {},
+	methods: {
+		async editOff() {
+			const fullname = this.name.split(" ");
+
+			await fetch("http://localhost:8000/auctionapp/api/profile/" + 1 +"/", {
+				method: "POST",
+				body: JSON.stringify({
+					fname: fullname[0],
+					lname: fullname[1],
+					username: this.username,
+					email: this.email,
+					dob: this.dob,
+				}),
+			}).then((response) => {
+				response.json();
+				this.refreshData();
+			}).catch((e) => {
+				alert(e)
+			});
+			this.edit = false
+			this.refreshData()
+		},
+
+		async editOn() {
+			this.edit = true
+		},
+
+		async refreshData() {
+			try {
+				let response = await fetch("http://localhost:8000/auctionapp/api/profile/" + 1);
+				let rawData = await response.json();
+				let data = rawData.user;
+				this.name = data.fname + " " + data.lname;
+				this.username = data.username;
+				this.email = data.email;
+				this.dob = new Date(data.dob).toLocaleDateString("en-GB", {
+					day: "numeric",
+					year: "numeric",
+					month: "long",
+				});
+
+				this.imgpath = data.imgpath;
+
+				this.bids = rawData.bids;
+				this.items = rawData.items;
+			} catch (e) {
+				alert(e);
+			}
+		},
+	},
 
 	async mounted() {
 		//Fetch user data
 		try {
-			let response = await fetch("http://localhost:8000/auctionapp/api/profile/" + 1, 
-			// {
-			// 	credentials: "include",
-			// }
-			);
+			let response = await fetch("http://localhost:8000/auctionapp/api/profile/" + 1);
 			let rawData = await response.json();
 			let data = rawData.user;
 			this.name = data.fname + " " + data.lname;
@@ -170,6 +249,15 @@ body {
 	max-width: 156px;
 	padding-right: 24px;
 	margin-top: 10px;
+}
+
+.input-box {
+	width: 88%;
+	margin-bottom: 3px;
+}
+
+.input-box:hover {
+	background-color: #e8e8e8;
 }
 
 .info-text {
