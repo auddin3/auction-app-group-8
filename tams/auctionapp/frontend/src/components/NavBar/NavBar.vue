@@ -28,7 +28,7 @@
 import NavBarLink from '../navbar/NavBarLink.vue';
 import { collapsed, toggleNavBar, navbarWidth } from './state';
 export default {
-    props: {},
+    // props: {},
     components: { NavBarLink },
     setup() {
         return { collapsed, toggleNavBar, navbarWidth }
