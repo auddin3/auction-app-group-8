@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from auctionapp.models import User, Product, Bid
 from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponse, HttpRequest, JsonResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpRequest, JsonResponse, HttpResponseRedirect, HttpResponseNotAllowed
 import json
 
 def loginUser(request):
@@ -57,14 +57,23 @@ def profile_api(request, user_id):
         }, status=200)
 
     elif request.method == 'PUT':
-        value = json.loads(request.body.decode('utf-8'))
+        payload = json.loads(request.body)
 
-        user.first_name=value["fname"]
-        user.last_name=value["lname"]
-        user.username=value["username"]
-        user.email=value["email"]
-        user.date_of_birth=value["dob"]
+        user.first_name=payload["fname"]
+        user.last_name=payload["lname"]
+        user.email=payload["email"]
+        user.date_of_birth=payload["dob"]
+
         user.save()
 
-        
-    return JsonResponse(user.to_dict(), status=200)
+        if payload["username"] != user.username:
+            try :
+                username_exists = User.objects.get(username=payload["username"])
+                if username_exists:
+                    return HttpResponseNotAllowed("no")
+            except User.DoesNotExist:
+                user.username=payload["username"]
+                user.save()
+       
+      
+        return JsonResponse(user.to_dict(), status=200)

@@ -129,25 +129,26 @@ export default {
 	},
 	methods: {
 		async editOff() {
-			const fullname = this.name.split(" ");
-
+			let fullname = this.name.split(' ');
+			if (fullname.length == 1){
+				fullname.push("")
+			}
+			
 			await fetch("http://localhost:8000/auctionapp/api/profile/" + 1 +"/", {
-				method: "POST",
+				method: "PUT",
 				body: JSON.stringify({
 					fname: fullname[0],
 					lname: fullname[1],
 					username: this.username,
 					email: this.email,
-					dob: this.dob,
+					dob: new Date(this.dob).toLocaleDateString('fr-CA'),
 				}),
 			}).then((response) => {
-				response.json();
 				this.refreshData();
 			}).catch((e) => {
 				alert(e)
 			});
 			this.edit = false
-			this.refreshData()
 		},
 
 		async editOn() {
@@ -253,7 +254,9 @@ body {
 
 .input-box {
 	width: 88%;
-	margin-bottom: 3px;
+	border: 1px solid #e0e0e0;
+	margin-top: 3.5px !important;
+	margin-left: -1px;
 }
 
 .input-box:hover {
