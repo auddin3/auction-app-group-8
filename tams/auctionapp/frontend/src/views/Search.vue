@@ -30,11 +30,11 @@
 
         <div
           v-for="product in products"
-          :key="product.id"
+          :key="product['id']"
           class="notification mt-2"
         >
-          <h4 class="is-size-4">{{ product.product_name }}</h4>
-          <p>{{ product.description }}</p>
+          <h4 class="is-size-4">{{ product['product_name'] }}</h4>
+          <p>{{ product['description'] }}</p>
 
           <!-- <a :href="product.url">View Product</a> -->
 

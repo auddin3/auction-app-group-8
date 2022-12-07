@@ -15,7 +15,6 @@ def loginUser(request):
         user = authenticate(request, username=uname, password=pword)
         if user is not None:
             login(request,user)
-            ## return HttpResponseRedirect('http://127.0.0.1:5173')
             return HttpResponseRedirect('http://localhost:5173')
         else:
             messages.error(request,'Login failed. Please try again')
@@ -46,6 +45,3 @@ def fetch_products(request):
                 for product in Product.objects.all()
             ]
         })
-
-def search(request):
-    return render(request, 'auctions')
