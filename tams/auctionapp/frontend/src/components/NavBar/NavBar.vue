@@ -9,6 +9,7 @@
 
         <NavBarLink to="/" icon="fas fa-home">Home</NavBarLink>
         <NavBarLink to="/auctions" icon="fas fa-money-bill-trend-up">Auctions</NavBarLink>
+        <NavBarLink to="/search" icon="fas fa-right-from-bracket">Search</NavBarLink>
         <NavBarLink to="/archived" icon="fas fa-box-archive">Archived</NavBarLink>
         <NavBarLink to="/profile" icon="fas fa-users">My Profile</NavBarLink>
         <NavBarLink to="/help" icon="far fa-circle-question">Help</NavBarLink>
