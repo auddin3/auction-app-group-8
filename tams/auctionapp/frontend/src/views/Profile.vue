@@ -8,7 +8,7 @@
 					alt="User-Profile-Image"
 				/>
 			</div>
-			<h2 class="card-text text-white font-weight-bold m-t-40">{{ name }}</h2>
+			<h2 class="card-text text-white font-weight-bold m-t-40">{{ fullname }}</h2>
 			<p class="card-text text-muted">@{{ username }}</p>
 		</div>
 		<div class="col-md-7 bg-light rounded">
@@ -17,7 +17,8 @@
 					<h6 class="f-w-400 text-justify title">Basic info</h6>
 					<div class="row b-b-default g-0">
 						<div class="col-sm-4">
-							<p class="m-b-10 subtitle">Name</p>
+							<p v-if="edit" class="m-b-10 subtitle">First name</p>
+							<p v-else class="m-b-10 subtitle">Name</p>
 						</div>
 						<div class="col-sm-8">
 							<div v-if="edit" class="row gx-4 gx-lg-5">
@@ -26,10 +27,27 @@
 									class="datapoint input-box"
 									id="name"
 									name="name"
-									v-model="name"
+									v-model="fname"
 								/>
 							</div>
-							<h6 v-else class="datapoint">{{ name }}</h6>
+							<h6 v-else class="datapoint">{{ fullname }}</h6>
+						</div>
+					</div>
+					<div v-if="edit" class="row b-b-default g-0">
+						<div class="col-sm-4">
+							<p class="m-b-10 subtitle">Last name</p>
+						</div>
+						<div class="col-sm-8">
+							<div v-if="edit" class="row gx-4 gx-lg-5">
+								<input
+									type="text"
+									class="datapoint input-box"
+									id="name"
+									name="name"
+									v-model="lname"
+								/>
+							</div>
+							<h6 v-else class="datapoint">{{ fullname }}</h6>
 						</div>
 					</div>
 					<div class="row b-b-default g-0">
@@ -119,7 +137,7 @@ export default {
 		const TODAY = new Date(date.getFullYear(), date.getMonth(), date.getDate());
 
 		return {
-			name: " ",
+			fullname: " ",
 			username: " ",
 			email: " ",
 			dob: TODAY.toISOString().slice(0, 10),
@@ -127,20 +145,17 @@ export default {
 			items: 0,
 			imgpath: "/media/profile-photos/default-dp.png",
 			edit: false,
+			fname: "admin",
+			lname: " ",
 		};
 	},
 	methods: {
 		async editOff() {
-			let fullname = this.name.split(" ");
-			if (fullname.length == 1) {
-				fullname.push("");
-			}
-
 			await fetch("http://localhost:8000/auctionapp/api/profile/" + 1 + "/", {
 				method: "PUT",
 				body: JSON.stringify({
-					fname: fullname[0],
-					lname: fullname[1],
+					fname: this.fname,
+					lname: this.lname,
 					username: this.username,
 					email: this.email,
 					dob: new Date(this.dob).toLocaleDateString("fr-CA"),
@@ -164,7 +179,9 @@ export default {
 				let response = await fetch("http://localhost:8000/auctionapp/api/profile/" + 1);
 				let rawData = await response.json();
 				let data = rawData.user;
-				this.name = data.fname + " " + data.lname;
+				this.fullname = data.fname + " " + data.lname;
+				this.fname = data.fname
+				this.lname = data.lname
 				this.username = data.username;
 				this.email = data.email;
 				this.dob = new Date(data.dob).toLocaleDateString("en-GB", {
@@ -189,7 +206,7 @@ export default {
 			let response = await fetch("http://localhost:8000/auctionapp/api/profile/" + 1);
 			let rawData = await response.json();
 			let data = rawData.user;
-			this.name = data.fname + " " + data.lname;
+			this.fullname = data.fname + " " + data.lname;
 			this.username = data.username;
 			this.email = data.email;
 			this.dob = new Date(data.dob).toLocaleDateString("en-GB", {
