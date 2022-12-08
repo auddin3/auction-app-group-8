@@ -4,8 +4,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from auctionapp.models import User, Product, Bid
 from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponse, HttpRequest, JsonResponse, HttpResponseRedirect, JsonResponse
-from auctionapp.models import Product, Bid, HttpResponseNotAllowed
+from django.http import JsonResponse, HttpResponseRedirect, JsonResponse, HttpResponseNotAllowed
 import json
 
 def loginUser(request):
