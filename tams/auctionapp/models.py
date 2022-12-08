@@ -74,7 +74,7 @@ class Product(models.Model):
     product_image = models.ImageField(default='product-images/stock-image.png', upload_to='product-images/%Y/%m/%D/')
     description = models.CharField(_('description'), max_length=4096, default='')
     start_price = models.DecimalField(max_digits=10, decimal_places=2)
-    is_active = models.BooleanField(default=True)
+    end_of_bid = models.DateTimeField(blank=True, default=date.today)
     owner = models.ForeignKey(User, on_delete=models.PROTECT)
 
     def __str__(self):
@@ -98,9 +98,9 @@ class Bid(models.Model):
     compete to purchase an Item
     '''
     product = models.ForeignKey(Product, on_delete=models.PROTECT)
-    winner = models.ForeignKey(User, on_delete=models.CASCADE)
+    bidder = models.ForeignKey(User, on_delete=models.CASCADE)
     bid_price = models.DecimalField(max_digits=10, decimal_places=2)
-    end_of_bid = models.DateTimeField(blank=True)
+    winner = models.BooleanField(default=False)
 
     def __str__(self):
         return f"Bid #{self.id}"
