@@ -8,7 +8,8 @@
 					alt="User-Profile-Image"
 				/>
 				<div v-if="edit">
-					<button type="button" class="profile-pic-button btn-lg">
+					<input v-on:change="selectFile" type="file" id="upload-file" name="upload-file" accept="image/gif, image/jpeg, image/png" hidden/>
+					<label type="button" for="upload-file" refs="upload-file" class="profile-pic-button btn-lg">
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
 							xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -43,7 +44,7 @@
 							</g>
 						</svg>
 						<p class="d-inline btn-text">Add profile picture</p>
-					</button>
+					</label>
 				</div>
 			</div>
 			<h2 class="card-text text-white font-weight-bold m-t-40 name">{{ fullname }}</h2>
@@ -236,6 +237,10 @@ export default {
 				alert(e);
 			}
 		},
+
+		async selectFile(e: any) {
+			const file = e.target.files[0]
+		} 
 	},
 
 	async mounted() {
@@ -290,6 +295,7 @@ body {
 	border: 1px solid #e0e0e0;
 	color: white;
 	margin-top: 20px;
+	padding: 8px 0;
 }
 
 .name {
