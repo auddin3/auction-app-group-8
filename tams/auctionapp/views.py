@@ -19,9 +19,11 @@ def loginUser(request):
             messages.error(request,'Login failed. Please try again')
     return render(request, 'auctionapp/login.html', {'form':form})
 
-def session_api(request):
+def session_api(request,session):
     if request.method == "GET":
-        pass
+        sessionData = request.session.get()
+        return HttpResponse(sessionData)
+        
 
 def signup(request):
     form = SignUpForm()
