@@ -7,11 +7,10 @@
             <span v-else>TAMS</span>
         </h1>
 
-        <NavBarLink to="/" icon="fas fa-home">Home</NavBarLink>
-        <NavBarLink to="/auctions" icon="fas fa-money-bill-trend-up">Auctions</NavBarLink>
-        <NavBarLink to="/archived" icon="fas fa-box-archive">Archived</NavBarLink>
+        <NavBarLink to="/" icon="fas fa-money-bill-trend-up">Auctions</NavBarLink>
+        <NavBarLink to="/search" icon="fas fa-magnifying-glass">Search</NavBarLink>
+        <NavBarLink to="/items" icon="fas fa-box-archive">Items</NavBarLink>
         <NavBarLink to="/profile" icon="fas fa-users">My Profile</NavBarLink>
-        <NavBarLink to="/help" icon="far fa-circle-question">Help</NavBarLink>
         <NavBarLink to="/logout" icon="fas fa-right-from-bracket">Logout</NavBarLink>
 
         <span
@@ -28,7 +27,7 @@
 import NavBarLink from '../navbar/NavBarLink.vue';
 import { collapsed, toggleNavBar, navbarWidth } from './state';
 export default {
-    props: {},
+    // props: {},
     components: { NavBarLink },
     setup() {
         return { collapsed, toggleNavBar, navbarWidth }

@@ -90,6 +90,16 @@ class Product(models.Model):
 
     def __str__(self):
         return self.product_name
+
+    def to_dict(self):
+        return {
+            'product_name': self.product_name,
+            ## 'product_image': self.product_image,
+            'description': self.description,
+            'start_price': self.start_price,
+            'is_active': self.is_active,
+            'owner': self.owner.username,
+        }
         
 
 class Bid(models.Model):
@@ -105,6 +115,14 @@ class Bid(models.Model):
 
     def __str__(self):
         return f"Bid #{self.id}"
+
+    def to_dict(self):
+        return {
+            'product': self.product,
+            'winner': self.winner,
+            'bid_price': self.bid_price,
+            'end_of_bid': self.end_of_bid,
+        }
 
 class FAQ(models.Model):
     '''

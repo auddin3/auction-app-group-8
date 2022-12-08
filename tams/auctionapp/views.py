@@ -4,7 +4,8 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from auctionapp.models import User, Product, Bid
 from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponse, HttpRequest, JsonResponse, HttpResponseRedirect, HttpResponseNotAllowed
+from django.http import HttpResponse, HttpRequest, JsonResponse, HttpResponseRedirect, JsonResponse
+from auctionapp.models import Product, Bid, HttpResponseNotAllowed
 import json
 
 def loginUser(request):
@@ -77,3 +78,12 @@ def profile_api(request, user_id):
        
       
         return JsonResponse(user.to_dict(), status=200)
+
+def fetch_products(request):
+    if request.method == 'GET':
+        return JsonResponse({
+            'products': [
+                product.to_dict()
+                for product in Product.objects.all()
+            ]
+        })
