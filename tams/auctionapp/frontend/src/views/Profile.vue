@@ -100,7 +100,9 @@
 					</div>
 				</div>
 				<div class="d-grid gap-2 m-t-40">
-					<button v-if="edit" type="button" class="btn btn-lg f-w-600" v-on:click="editOff()">Submit profile</button>
+					<button v-if="edit" type="button" class="btn btn-lg f-w-600" v-on:click="editOff()"
+						>Submit profile</button
+					>
 					<button v-else type="button" v-on:click="editOn()" class="btn btn-lg f-w-600"
 						>Change profile</button
 					>
@@ -129,30 +131,32 @@ export default {
 	},
 	methods: {
 		async editOff() {
-			let fullname = this.name.split(' ');
-			if (fullname.length == 1){
-				fullname.push("")
+			let fullname = this.name.split(" ");
+			if (fullname.length == 1) {
+				fullname.push("");
 			}
-			
-			await fetch("http://localhost:8000/auctionapp/api/profile/" + 1 +"/", {
+
+			await fetch("http://localhost:8000/auctionapp/api/profile/" + 1 + "/", {
 				method: "PUT",
 				body: JSON.stringify({
 					fname: fullname[0],
 					lname: fullname[1],
 					username: this.username,
 					email: this.email,
-					dob: new Date(this.dob).toLocaleDateString('fr-CA'),
+					dob: new Date(this.dob).toLocaleDateString("fr-CA"),
 				}),
-			}).then((response) => {
-				this.refreshData();
-			}).catch((e) => {
-				alert(e)
-			});
-			this.edit = false
+			})
+				.then((response) => {
+					this.refreshData();
+				})
+				.catch((e) => {
+					alert(e);
+				});
+			this.edit = false;
 		},
 
 		async editOn() {
-			this.edit = true
+			this.edit = true;
 		},
 
 		async refreshData() {
