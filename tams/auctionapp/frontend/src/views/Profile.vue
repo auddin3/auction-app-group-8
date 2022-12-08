@@ -99,7 +99,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="row g-0">
+				<div v-if="!edit" class="row g-0">
 					<div class="bg-white b-b-default item-container rounded m-t-40 col-sm-5">
 						<h6 class="f-w-400 text-justify title">Your Bids</h6>
 						<div class="row g-0">
@@ -145,7 +145,7 @@ export default {
 			items: 0,
 			imgpath: "/media/profile-photos/default-dp.png",
 			edit: false,
-			fname: "admin",
+			fname: " ",
 			lname: " ",
 		};
 	},
@@ -180,8 +180,8 @@ export default {
 				let rawData = await response.json();
 				let data = rawData.user;
 				this.fullname = data.fname + " " + data.lname;
-				this.fname = data.fname
-				this.lname = data.lname
+				this.fname = data.fname;
+				this.lname = data.lname;
 				this.username = data.username;
 				this.email = data.email;
 				this.dob = new Date(data.dob).toLocaleDateString("en-GB", {
@@ -207,6 +207,8 @@ export default {
 			let rawData = await response.json();
 			let data = rawData.user;
 			this.fullname = data.fname + " " + data.lname;
+			this.fname = data.fname;
+			this.lname = data.lname;
 			this.username = data.username;
 			this.email = data.email;
 			this.dob = new Date(data.dob).toLocaleDateString("en-GB", {
