@@ -3,7 +3,8 @@ from auctionapp.forms import SignUpForm, LogInForm
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from auctionapp.models import User
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
+from auctionapp.models import Product, Bid
 
 def loginUser(request):
     form = LogInForm()
@@ -14,7 +15,7 @@ def loginUser(request):
         user = authenticate(request, username=uname, password=pword)
         if user is not None:
             login(request,user)
-            return HttpResponseRedirect('http://127.0.0.1:5173')
+            return HttpResponseRedirect('http://localhost:5173')
         else:
             messages.error(request,'Login failed. Please try again')
     return render(request, 'auctionapp/login.html', {'form':form})
@@ -35,3 +36,12 @@ def signup(request):
             messages.success(request, 'Account created successfully')
 
     return render(request, 'auctionapp/signup.html', {'form': form})
+
+def fetch_products(request):
+    if request.method == 'GET':
+        return JsonResponse({
+            'products': [
+                product.to_dict()
+                for product in Product.objects.all()
+            ]
+        })
