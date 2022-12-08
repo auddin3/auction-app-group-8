@@ -82,6 +82,7 @@ class Product(models.Model):
 
     def to_dict(self):
         return {
+            'id': self.id,
             'product_name': self.product_name,
             ## 'product_image': self.product_image,
             'description': self.description,
@@ -106,6 +107,7 @@ class Bid(models.Model):
 
     def to_dict(self):
         return {
+            'id': self.id,
             'product': self.product,
             'winner': self.winner,
             'bid_price': self.bid_price,

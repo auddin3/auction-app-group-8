@@ -5,6 +5,8 @@ from django.contrib.auth import authenticate, login
 from auctionapp.models import User
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from auctionapp.models import Product, Bid
+from django.shortcuts import get_object_or_404
+from django.http import HttpRequest
 
 def loginUser(request):
     form = LogInForm()
@@ -15,6 +17,7 @@ def loginUser(request):
         user = authenticate(request, username=uname, password=pword)
         if user is not None:
             login(request,user)
+            ## return HttpResponseRedirect('http://127.0.0.1:5173')
             return HttpResponseRedirect('http://localhost:5173')
         else:
             messages.error(request,'Login failed. Please try again')
@@ -45,3 +48,14 @@ def fetch_products(request):
                 for product in Product.objects.all()
             ]
         })
+
+def fetch_products_id(request: HttpRequest, product_id: int) -> HttpResponse:
+    product = get_object_or_404(Product, id=product_id)
+    if request.method == 'GET':
+        return JsonResponse(product.to_dict())
+
+def product_details(request: HttpRequest, product_id: int) -> HttpResponse:
+    return 
+
+# def search(request):
+#     return render(request, 'auctions')
