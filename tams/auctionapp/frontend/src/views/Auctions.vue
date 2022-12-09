@@ -9,15 +9,9 @@
       <h3 class="" style="color:white">Search</h3>
       <input type="text" v-model="search" class="" style="background-color: white; color: black;" />
     </div>
-    <div class="">
-      <div v-for="product in filteredProducts" :key="product.id" class="mt-4">
-        <Product :product="product"></Product>
-
-      </div>
-    </div>
   </div>
 
-  <div v-for="product in products">
+  <div v-for="product in filteredProducts">
     <div class="card-group">
       <div class="card mt-4" style="width: 10rem;">
         <img class="card-img-top" src="../assets/vue.svg" style="height: 200px; width: 200px; margin:auto;"
@@ -45,9 +39,6 @@ import router from '../router';
 import Product from './Product.vue';
 
 export default {
-  mounted() {
-    this.fetch_products()
-  },
   data() {
     return {
       products: [],
@@ -69,17 +60,19 @@ export default {
   },
   computed: {
     filteredProducts() {
-      return this.products2.filter(product =>
-        product.body.toLowerCase().includes(this.search.toLowerCase())
+      const filteredProducts = JSON.parse(JSON.stringify(this.products))
+      return filteredProducts.filter((obj: { product_name: string, description: string }) =>
+        obj.product_name.toLowerCase().includes(this.search.toLowerCase()) 
+        || obj.description.toLowerCase().includes(this.search.toLowerCase()) 
       );
     }
   },
   methods: {
-    async fetch_products() {
-      let response = await fetch("http://127.0.0.1:8000/auctionapp/api/products/");
-      let data = await response.json();
-      this.products = data.products;
-    },
+    // async fetch_products() {
+    //   let response = await fetch("http://127.0.0.1:8000/auctionapp/api/products/");
+    //   let data = await response.json();
+    //   this.products = data.products;
+    // },
     view_item_details(product: any) {
       try {
         this.$router.push({ name: 'Items', path: '/items/:pid', params: { pid: product.id } })
@@ -87,6 +80,12 @@ export default {
         console.log(e)
       }
     },
+  },
+
+  async mounted() {
+    let response = await fetch("http://127.0.0.1:8000/auctionapp/api/products/");
+    let data = await response.json();
+    this.products = JSON.parse(JSON.stringify(data.products));
   },
   components: {
     Product

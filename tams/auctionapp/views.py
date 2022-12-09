@@ -85,8 +85,8 @@ def fetch_products(request):
             'products': [
                 product.to_dict()
                 for product in Product.objects.all()
-            ]
-        })
+            ],
+        }, status=200)
 
 def product_details(request, product_id):
     return
