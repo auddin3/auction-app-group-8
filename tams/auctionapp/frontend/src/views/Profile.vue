@@ -110,6 +110,7 @@
 			</div>
 		</div>
 	</div>
+	<p>Hi, this is the user id:{{user_id}}</p>
 </template>
 
 <script lang="ts">
@@ -137,7 +138,7 @@ export default {
 				fullname.push("");
 			}
 
-			await fetch("http://localhost:8000/auctionapp/api/profile/" + 1 + "/", {
+			await fetch("http://localhost:8000/auctionapp/api/profile/" + 3 + "/", {
 				method: "PUT",
 				body: JSON.stringify({
 					fname: fullname[0],
@@ -162,7 +163,7 @@ export default {
 
 		async refreshData() {
 			try {
-				let response = await fetch("http://localhost:8000/auctionapp/api/profile/" + 1);
+				let response = await fetch("http://localhost:8000/auctionapp/api/profile/" + 3);
 				let rawData = await response.json();
 				let data = rawData.user;
 				this.name = data.fname + " " + data.lname;
@@ -187,7 +188,7 @@ export default {
 	async mounted() {
 		//Fetch user data
 		try {
-			let response = await fetch("http://localhost:8000/auctionapp/api/profile/" + 1);
+			let response = await fetch("http://localhost:8000/auctionapp/api/profile/" + 3);
 			let rawData = await response.json();
 			let data = rawData.user;
 			this.name = data.fname + " " + data.lname;
@@ -203,6 +204,7 @@ export default {
 
 			this.bids = rawData.bids;
 			this.items = rawData.items;
+			console.log("props",this.user_id)
 		} catch (e) {
 			alert(e);
 		}
