@@ -35,9 +35,6 @@ export default {
       let data = await response.json()
       this.user = data.user
       this.user_id = data.user_id
-      console.log(data.user_id)
-      console.log("this",this.user_id)
-
     }
   }
 }
