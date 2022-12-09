@@ -1,62 +1,48 @@
 <template>
-  <div class="auctions">
-    <h1>Products</h1>
+  <div class="auctions"
+    style="background-color:#C59FC9; padding: 10px; border-radius: 10px; width: 100%; margin:auto; color:white;">
+    <h1 class="">Auctions</h1>
   </div>
 
-    <div id="search-products">
-      <h3 style="text-align:left;">Search Products</h3>
-
-      <form @submit.prevent="performSearch()" style="text-align:left;">
-        <div class="columns">
-          <div class="column is-4">
-            <div class="field">
-              <label>Query</label>
-              <div class="control">
-                <input type="text" name="query" class="input" v-model="query">
-              </div>
-            </div>
-
-            <div class="field">
-              <div class="control">
-                <button class="button is-secondary">Search</button>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </form>
+  <div id="search" style="">
+    <div style="background-color: #CFBAE1; width: 60%; margin: auto; border-radius: 10px;" class="p-4 mt-4">
+      <h3 class="" style="color:white">Search</h3>
+      <input type="text" v-model="search" class="" style="background-color: white; color: black;" />
     </div>
+    <div class="">
+      <div v-for="product in filteredProducts" :key="product.id" class="mt-4">
+        <Product :product="product"></Product>
 
-  <table class="table table-striped mt-4 mb-4">
-    <thead class="table-secondary">
-      <tr>
-        <!-- <th>ID</th> -->
-        <th>Product Image</th>
-        <th>Product Name</th>
-        <th></th>
-        <th>Description</th>
-        <th>Start Price(£)</th>
-        <th>Active?</th>
-        <th>Owner</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-for="product in products">
-        <!-- <td>{{ product['id'] }}</td> -->
-        <td>{{ product['product_image'] }}</td>
-        <td>{{ product['product_name'] }}</td>
-        <td><button @click=view_item_details(product)>View Item Details</button></td>
-        <td>{{ product['description'] }}</td>
-        <td>{{ product['start_price'] }}</td>
-        <td>{{ product['is_active'] }}</td>
-        <td>{{ product['owner'] }}</td>
-      </tr>
-    </tbody>
-  </table>
+      </div>
+    </div>
+  </div>
+
+  <div v-for="product in products">
+    <div class="card-group">
+      <div class="card mt-4" style="width: 10rem;">
+        <img class="card-img-top" src="../assets/vue.svg" style="height: 200px; width: 200px; margin:auto;"
+          alt="Item image" />
+      </div>
+      <div class="card mt-4" style="width: 60rem;">
+        <div class="card-body">
+          <h4 class="card-title" style="">{{ product['product_name'] }}</h4>
+          <p class="card-text">{{ product['description'] }}</p>
+          <p class="card-text" style="color:#7354B5"><strong>Start Price: £{{ product['start_price'] }}</strong></p>
+          <p class="card-text">End of Bid: {{ product['end_of_bid'] }}</p>
+          <p class="card-text">Owner: {{ product['owner'] }}</p>
+          <button @click=view_item_details(product) class="btn btn-secondary">View Item Details</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
 </template>
 
 <script lang="ts">
 import router from '../router';
+import Product from './Product.vue';
 
 export default {
   mounted() {
@@ -66,9 +52,28 @@ export default {
     return {
       products: [],
       query: '',
+      search: "",
+      products2: [
+        {
+          id: 1,
+          title: "iphone",
+          body: "iphone"
+        },
+        {
+          id: 2,
+          title: "laptop",
+          body: "hp"
+        }
+      ]
     };
   },
-  delimiters: ['[[', ']]'],
+  computed: {
+    filteredProducts() {
+      return this.products2.filter(product =>
+        product.body.toLowerCase().includes(this.search.toLowerCase())
+      );
+    }
+  },
   methods: {
     async fetch_products() {
       let response = await fetch("http://127.0.0.1:8000/auctionapp/api/products/");
@@ -76,39 +81,15 @@ export default {
       this.products = data.products;
     },
     view_item_details(product: any) {
-      // this.$router.push({ path: '/items' });
       try {
-        this.$router.push( {name: 'Items', path: '/items/:pid', params: { pid: product.id }})
+        this.$router.push({ name: 'Items', path: '/items/:pid', params: { pid: product.id } })
       } catch (e) {
         console.log(e)
       }
     },
-    performSearch() {
-      var data = {
-        'query': this.query,
-      }
-      fetch('/auctionapp/api/search/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          //  no csrf token line
-          // 'X-CSRFToken': {{ csrf_token }}
-        },
-        body: JSON.stringify(data)
-      })
-      .then((response) => {
-        console.log(data)
-        return response.json()
-      })
-      .then((result) => {
-        console.log(result.products)
-        this.products = result.products
-      })
-      .catch((error) => {
-        console.log('Error', error)
-      })
-    },
   },
-  components: {}
+  components: {
+    Product
+  }
 }
 </script>
