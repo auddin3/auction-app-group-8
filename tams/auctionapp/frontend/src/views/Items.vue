@@ -1,5 +1,6 @@
 <template>
   <div>Hi</div>
+  <button class="btn btn-lg" v-on:click="goBack">Go back</button>
 </template>
   
 <script lang="ts">
@@ -12,6 +13,10 @@ export default {
     //   let data = await response.json();
     //   this.products = data.products;
     // },
+
+    async goBack() {
+      this.$router.push( {name: 'Auctions'})
+    }
   },
 }
 </script>
