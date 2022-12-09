@@ -1,7 +1,7 @@
 <template>
   <NavBar />
-  <div :style="{ 'margin-left': navbarWidth }">
-    <router-view this.user="user" this.user_id="user_id" />
+  <div :style="{ 'margin-left': navbarWidth }" this.user="user" this.user_id="user_id">
+    <router-view />
 />
   </div>
 </template>
@@ -37,6 +37,7 @@ export default {
       this.user = data.user
       this.user_id = data.user_id
       console.log(data.user_id)
+      console.log(this.user_id)
 
     }
   }

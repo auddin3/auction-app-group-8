@@ -137,7 +137,7 @@ export default {
 				fullname.push("");
 			}
 
-			await fetch("http://localhost:8000/auctionapp/api/profile/" + this.user_id + "/", {
+			await fetch("http://localhost:8000/auctionapp/api/profile/" + 1 + "/", {
 				method: "PUT",
 				body: JSON.stringify({
 					fname: fullname[0],
