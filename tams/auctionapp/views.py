@@ -3,7 +3,7 @@ from auctionapp.forms import SignUpForm, LogInForm
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from auctionapp.models import User
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, HttpRequest, JsonResponse
 
 def loginUser(request):
     form = LogInForm()
@@ -19,10 +19,9 @@ def loginUser(request):
             messages.error(request,'Login failed. Please try again')
     return render(request, 'auctionapp/login.html', {'form':form})
 
-def session_api(request,session):
+def session_api(request : HttpRequest) -> JsonResponse:
     if request.method == "GET":
-        sessionData = request.session.get()
-        return HttpResponse(sessionData)
+        return JsonResponse( { 'user_id' : request.session.__getitem__("_auth_user_id") } , safe=False )
         
 
 def signup(request):
