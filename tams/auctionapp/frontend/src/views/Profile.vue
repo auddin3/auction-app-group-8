@@ -114,6 +114,7 @@
 
 <script lang="ts">
 export default {
+	props: ['user','user_id'],
 	data() {
 		let date = new Date();
 		const TODAY = new Date(date.getFullYear(), date.getMonth(), date.getDate());
@@ -136,7 +137,7 @@ export default {
 				fullname.push("");
 			}
 
-			await fetch("http://localhost:8000/auctionapp/api/profile/" + 1 + "/", {
+			await fetch("http://localhost:8000/auctionapp/api/profile/" + this.user_id + "/", {
 				method: "PUT",
 				body: JSON.stringify({
 					fname: fullname[0],

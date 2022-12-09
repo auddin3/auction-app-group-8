@@ -1,8 +1,8 @@
 <template>
   <NavBar />
   <div :style="{ 'margin-left': navbarWidth }">
-    <router-view />
-    <p></p>
+    <router-view this.user="user" this.user_id="user_id" />
+/>
   </div>
 </template>
 
@@ -18,6 +18,7 @@ export default {
   data() {
     return {
       user: null,
+      user_id: null,
     }
   },
   setup() {
@@ -33,6 +34,8 @@ export default {
         method: "GET"
       });
       let data = await response.json()
+      this.user = data.user
+      this.user_id = data.user_id
       console.log(data.user_id)
 
     }
