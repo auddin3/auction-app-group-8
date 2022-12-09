@@ -52,7 +52,8 @@ class User(AbstractUser, PermissionsMixin):
     first_name = models.CharField(max_length=150, blank=True)
     last_name = models.CharField(max_length=150, blank=True)
     date_of_birth = models.DateField(default=date.today)
-    profile_photo = models.ImageField(default='profile-photos/default-dp.png', upload_to='profile-photos/%Y/%m/%D/')
+    profile_photo = models.ImageField(default='profile-photos/default-dp.png', 
+    upload_to='profile-photos/%Y/%m/%D/')
 
     is_staff = models.BooleanField(default=False)
     is_active: models.BooleanField(default=False)
@@ -64,6 +65,16 @@ class User(AbstractUser, PermissionsMixin):
 
     def __str__(self):
         return self.username
+
+    def to_dict(self):
+        return {
+            'username': self.username,
+            'email': self.email,
+            'fname': self.first_name,
+            'lname': self.last_name,
+            'dob': self.date_of_birth,
+            'imgpath': self.profile_photo.url
+        }
 
 class Product(models.Model):
     '''
@@ -79,6 +90,16 @@ class Product(models.Model):
 
     def __str__(self):
         return self.product_name
+
+    def to_dict(self):
+        return {
+            'product_name': self.product_name,
+            ## 'product_image': self.product_image,
+            'description': self.description,
+            'start_price': self.start_price,
+            'is_active': self.is_active,
+            'owner': self.owner.username,
+        }
         
 
 class Bid(models.Model):
@@ -87,12 +108,21 @@ class Bid(models.Model):
     compete to purchase an Item
     '''
     product = models.ForeignKey(Product, on_delete=models.PROTECT)
-    winner = models.ForeignKey(User, on_delete=models.CASCADE)
+    bidder = models.ForeignKey(User, on_delete=models.CASCADE)
     bid_price = models.DecimalField(max_digits=10, decimal_places=2)
     end_of_bid = models.DateTimeField(blank=True)
+    winner = models.BooleanField(default=False)
 
     def __str__(self):
         return f"Bid #{self.id}"
+
+    def to_dict(self):
+        return {
+            'product': self.product,
+            'winner': self.winner,
+            'bid_price': self.bid_price,
+            'end_of_bid': self.end_of_bid,
+        }
 
 class FAQ(models.Model):
     '''
