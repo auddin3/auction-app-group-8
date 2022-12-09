@@ -87,3 +87,6 @@ def fetch_products(request):
                 for product in Product.objects.all()
             ]
         })
+
+def product_details(request, product_id):
+    return
