@@ -49,9 +49,13 @@ export default {
       let data = await response.json();
       this.products = data.products;
     },
-    view_item_details(product) {
+    view_item_details(product: any) {
       // this.$router.push({ path: '/items' });
-      this.$router.push( {name: 'items', params: { product }})
+      try {
+        this.$router.push( {name: 'Items', path: '/items/:pid', params: { pid: product.id }})
+      } catch (e) {
+        console.log(e)
+      }
     },
   },
   components: {}

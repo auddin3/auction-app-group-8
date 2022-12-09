@@ -17,9 +17,10 @@ const routes = [
       component: () => import('../views/Search.vue')
     },
     {
-      path: '/items',
+      path: '/items/:pid',
       name: 'Items',
-      component: () => import('../views/Items.vue')
+      component: () => import('../views/Items.vue'),
+      props: true 
     },
     {
       path: '/profile',
