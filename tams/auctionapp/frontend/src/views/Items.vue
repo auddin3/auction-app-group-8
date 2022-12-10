@@ -56,8 +56,8 @@
 			<div class="card-group">
 				<div class="card mt-4 bg-light" style="width: 60rem">
 					<div class="d-flex justify-start">
-              <small class="text-muted"> Commenting as </small>
-              <h4 class="card-title username">&nbsp @{{ loggedUsername }}</h4>
+              <small class="text-muted"> Comment as </small>
+              <h4 class="card-title username">&nbsp {{ loggedUsername }}</h4>
 					</div>
 			
 					<div class="card-text question-reply">
@@ -88,6 +88,7 @@ export default {
       start_price: "",
       owner: "",
       endOfBid: "",
+      period: 0,
       imgpath: "/media/product-images/stock-image.png",
 		};
 	},
