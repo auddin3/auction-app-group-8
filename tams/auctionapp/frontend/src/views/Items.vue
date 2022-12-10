@@ -30,7 +30,7 @@
 											type="text"
 											v-model="comment.answer"
 											placeholder="Reply"
-											class="w-full rounded"
+											class="w-full rounded p-2"
 										/>
 									</div>
 									<div class="d-flex flex-row-reverse">
@@ -61,7 +61,7 @@
 					</div>
 			
 					<div class="card-text question-reply">
-            <textarea v-model="newComment" type="text" placeholder="Add a comment..." class="w-full rounded" rows="5"></textarea>
+            <textarea v-model="newComment" type="text" placeholder="Add a comment..." class="w-full rounded p-3" rows="5"></textarea>
           </div>
 					<div class="d-flex flex-row-reverse">
 						<button class="btn btn-primary comment-btn" v-on:click="addComment()">Comment</button>
