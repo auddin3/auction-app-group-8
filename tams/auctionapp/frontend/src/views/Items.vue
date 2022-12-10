@@ -45,9 +45,14 @@
 					<div class="d-flex justify-start">
 						<h4 class="card-title comment-as">Commenting as</h4>
 					</div>
-          <div>
-            
-          </div>
+					<div class="p-l-1">
+						<div class="d-flex justify-start"> 
+						{{loggedUserFullName}}
+						</div>
+						<div class="d-flex justify-start"> 
+							<small class="text-muted"> @{{ loggedUsername }} </small>
+						</div>
+					</div>
 					<div class="card-text question-reply">
 						<input type="text" placeholder="Add a comment..." class="w-full" />
 					</div>
@@ -66,6 +71,8 @@ export default {
 	data() {
 		return {
 			comments: [],
+			loggedUsername: "",
+			loggedUserFullName: "",
 		};
 	},
 	computed: {
@@ -81,6 +88,24 @@ export default {
 		//   this.products = data.products;
 		// },
 
+		async getLoggedInUser() {
+			let response = await fetch("http://localhost:8000/auctionapp/user",
+			{
+				credentials: "include",
+				mode: "cors",
+				referrerPolicy: "no-referrer",
+				method: "GET"
+			});
+			let data = await response.json()
+			const userId = data.user_id
+
+			response = await fetch("http://localhost:8000/auctionapp/api/profile/" + userId);
+			let rawData = await response.json();
+			let userData = rawData.user;
+			this.loggedUsername = userData.username;
+			this.loggedUserFullName = userData.fname + " " + userData.lname;
+		},
+
 		async getItemComments() {
 			try {
 				let response = await fetch("http://localhost:8000/auctionapp/api/comments/" + this.pid);
@@ -95,6 +120,7 @@ export default {
 	},
 	async mounted() {
 		this.getItemComments();
+		this.getLoggedInUser();
 	},
 };
 </script>
@@ -114,12 +140,16 @@ body {
 	font-weight: 700;
 	border-radius: 80px;
 	padding: 8px 15px;
-  background-color: #c59fc9;
+	background-color: #c59fc9;
 	color: white;
 }
 
 .w-full {
 	width: 100%;
+}
+
+.p-l-1 {
+	padding-left: 10px;
 }
 
 .p-r-4 {
