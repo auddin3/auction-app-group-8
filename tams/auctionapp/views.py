@@ -105,3 +105,23 @@ def comment_api(request, product_id):
                 for question in FAQ.objects.filter(product=product_id)
             ],
         }, status=200)
+
+    if request.method == 'POST':
+        comment_details = json.loads(request.body)
+
+        newProduct = Product.objects.get(id = product_id)
+        newSender = User.objects.get(id=comment_details["sender"])
+        # defaultRecipient = User.objects.get(id=newProduct.owner.id)
+
+        new_entry = FAQ.objects.create()
+
+        new_entry.product = newProduct
+        new_entry.question = comment_details["question"]
+        new_entry.answer = comment_details["answer"]
+        new_entry.sender = newSender
+        # new_entry.recipient = defaultRecipient
+        new_entry.save()
+
+        return JsonResponse({
+            new_entry.to_dict(),
+        }, status=200)

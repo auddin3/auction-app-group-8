@@ -46,18 +46,18 @@
 						<h4 class="card-title comment-as">Commenting as</h4>
 					</div>
 					<div class="p-l-1">
-						<div class="d-flex justify-start"> 
-						{{loggedUserFullName}}
+						<div class="d-flex justify-start">
+							{{ loggedUserFullName }}
 						</div>
-						<div class="d-flex justify-start"> 
+						<div class="d-flex justify-start">
 							<small class="text-muted"> @{{ loggedUsername }} </small>
 						</div>
 					</div>
 					<div class="card-text question-reply">
-						<input type="text" placeholder="Add a comment..." class="w-full" />
+						<input v-model="newComment" type="text" placeholder="Add a comment..." class="w-full" />
 					</div>
 					<div class="d-flex flex-row-reverse">
-						<button class="btn btn-primary comment-btn">Comment</button>
+						<button class="btn btn-primary comment-btn" v-on:click="addComment()">Comment</button>
 					</div>
 				</div>
 			</div>
@@ -73,6 +73,8 @@ export default {
 			comments: [],
 			loggedUsername: "",
 			loggedUserFullName: "",
+			loggedUserId: 0,
+			newComment: "",
 		};
 	},
 	computed: {
@@ -89,15 +91,15 @@ export default {
 		// },
 
 		async getLoggedInUser() {
-			let response = await fetch("http://localhost:8000/auctionapp/user",
-			{
+			let response = await fetch("http://localhost:8000/auctionapp/user", {
 				credentials: "include",
 				mode: "cors",
 				referrerPolicy: "no-referrer",
-				method: "GET"
+				method: "GET",
 			});
-			let data = await response.json()
-			const userId = data.user_id
+			let data = await response.json();
+			const userId = data.user_id;
+			this.loggedUserId = userId
 
 			response = await fetch("http://localhost:8000/auctionapp/api/profile/" + userId);
 			let rawData = await response.json();
@@ -116,6 +118,23 @@ export default {
 			} catch (e) {
 				alert(e);
 			}
+		},
+
+		async addComment() {
+			await fetch("http://localhost:8000/auctionapp/api/comments/" + this.pid, {
+				method: "POST",
+				body: JSON.stringify({
+					question: this.newComment,
+					sender: this.loggedUserId,
+					answer: "",
+				}),
+			})
+				.then((response) => {
+					this.getItemComments();
+				})
+				.catch((e) => {
+					alert(e);
+				});
 		},
 	},
 	async mounted() {
