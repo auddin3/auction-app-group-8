@@ -85,7 +85,7 @@ class Product(models.Model):
     product_image = models.ImageField(default='product-images/stock-image.png', upload_to='product-images/%Y/%m/%D/')
     description = models.CharField(_('description'), max_length=4096, default='')
     start_price = models.DecimalField(max_digits=10, decimal_places=2)
-    is_active = models.BooleanField(default=True)
+    end_of_bid = models.DateTimeField(blank=True, default=date.today)
     owner = models.ForeignKey(User, on_delete=models.PROTECT)
 
     def __str__(self):
@@ -93,11 +93,12 @@ class Product(models.Model):
 
     def to_dict(self):
         return {
+            'id': self.id,
             'product_name': self.product_name,
             ## 'product_image': self.product_image,
             'description': self.description,
             'start_price': self.start_price,
-            'is_active': self.is_active,
+            'end_of_bid': self.end_of_bid,
             'owner': self.owner.username,
         }
         
@@ -118,10 +119,11 @@ class Bid(models.Model):
 
     def to_dict(self):
         return {
+            'id': self.id,
             'product': self.product,
+            'bidder': self.bidder,
             'winner': self.winner,
             'bid_price': self.bid_price,
-            'end_of_bid': self.end_of_bid,
         }
 
 class FAQ(models.Model):

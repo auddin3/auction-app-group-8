@@ -8,8 +8,7 @@
         </h1>
 
         <NavBarLink to="/" icon="fas fa-money-bill-trend-up">Auctions</NavBarLink>
-        <NavBarLink to="/search" icon="fas fa-magnifying-glass">Search</NavBarLink>
-        <NavBarLink to="/items" icon="fas fa-box-archive">Items</NavBarLink>
+        <NavBarLink to="/search" icon="fas fa-box-archive">Inventory</NavBarLink>
         <NavBarLink to="/profile" icon="fas fa-users">My Profile</NavBarLink>
         <button class="btn btn-light btn-md" icon="fas fa-right-from-bracket" @click.prevent="handleLogout">
             <span class="fas fa-right-from-bracket" aria-hidden="true"></span>
