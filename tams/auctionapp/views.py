@@ -96,11 +96,10 @@ def fetch_products(request):
 @csrf_exempt
 def product_details(request, product_id):
     if request.method == 'GET':
+        reqProduct = Product.objects.get(id=product_id)
+
         return JsonResponse({
-            'products': [
-                product.to_dict()
-                for product in Product.objects.filter(product=product_id)
-            ],
+            'product': reqProduct.to_dict()
         }, status=200)
 
 @csrf_exempt 

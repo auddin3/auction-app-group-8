@@ -1,21 +1,20 @@
 <template>
 	<div class="card item-page-container row g-0">
-    <!-- item -->
+    <!-- item section-->
     <div class="d-flex">
-      <p>{{pid}}</p>
+      <p>{{product_name}}</p>
+      <p>{{start_price}}</p>
+      <p>{{description}}</p>
+        <img :src="`http://localhost:8000${imgpath}`" alt="item-image">
     </div>
-		<!-- comment -->
+		<!-- comment section-->
 		<div class="">
 			<div>
 				<h5 class="question-header">Comments</h5>
 			</div>
-
 			<div v-if="comments.length > 0">
 				<div v-for="comment in filteredComments">
 					<div class="card-group">
-						<!-- <div class="card mt-4">
-              <img class="" src="../assets/vue.svg" alt="profile picture" />
-            </div> -->
 						<div class="card mt-4 bg-light" style="width: 60rem">
 							<div class="card-body">
 								<div class="d-flex justify-start">
@@ -89,6 +88,13 @@ export default {
 			loggedUserFullName: "",
 			loggedUserId: 0,
 			newComment: "",
+
+      product_name: "",
+      description: "",
+      start_price: "",
+      owner: "",
+      endOfBid: "",
+      imgpath: "/media/product-images/stock-image.png",
 		};
 	},
 	computed: {
@@ -163,14 +169,20 @@ export default {
 		},
     async getProductData(){
       let response = await fetch("http://localhost:8000/auctionapp/api/items/" + this.pid);
-      let rawData = await response.json()
-      let data = rawData.product
-      
+      let data = await response.json()
+      let product = data.product
+      this.product_name = product.product_name
+      this.description = product.description
+      this.start_price = product.start_price
+      this.owner = product.owner
+      this.endOfBid = product.end_of_bid
+      this.imgpath = product.product_image
     },
 	},
 	async mounted() {
 		this.getItemComments();
 		this.getLoggedInUser();
+    this.getProductData();
 	},
 };
 </script>
