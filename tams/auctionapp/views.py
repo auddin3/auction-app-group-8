@@ -125,3 +125,16 @@ def comment_api(request, product_id):
         return JsonResponse({
             "comment": new_entry.to_dict(),
         }, status=200)
+
+    if request.method == "PUT":
+        comment_details = json.loads(request.body)
+
+        comment = FAQ.objects.get(question = comment_details["question"])
+        recip = User.objects.get(id = comment_details["recipient"])
+        comment.answer = comment_details["answer"]
+        comment.recipient = recip
+        comment.save()
+        
+        return JsonResponse({
+            "comment": comment.to_dict()
+        }, status=200)
