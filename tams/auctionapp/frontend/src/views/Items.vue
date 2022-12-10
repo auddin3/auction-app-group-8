@@ -16,14 +16,24 @@
 							<div class="card-body">
 								<div class="d-flex justify-start">
 									<h4 class="card-title username">{{ comment.sender }}</h4>
-									<small class="text-muted"> asked about {{ comment.product }} </small>
+									<small class="text-muted"> asked about {{ comment.product.slice(0, 55) }} </small>
 								</div>
 								<div>
 									<p class="card-text question-text">{{ comment.question }}</p>
 								</div>
 								<div v-if="comment.answer.length < 1">
 									<div class="card-text question-reply">
-										<input type="text" placeholder="Reply" class="w-full" />
+										<input
+											type="text"
+											v-model="comment.answer"
+											placeholder="Reply"
+											class="w-full"
+										/>
+									</div>
+									<div class="d-flex flex-row-reverse">
+										<button class="btn btn-primary comment-btn" v-on:click="replyComment(comment)"
+											>Reply</button
+										>
 									</div>
 								</div>
 								<div v-else class="p-r-4">
@@ -99,7 +109,7 @@ export default {
 			});
 			let data = await response.json();
 			const userId = data.user_id;
-			this.loggedUserId = userId
+			this.loggedUserId = userId;
 
 			response = await fetch("http://localhost:8000/auctionapp/api/profile/" + userId);
 			let rawData = await response.json();
@@ -127,6 +137,23 @@ export default {
 					question: this.newComment,
 					sender: this.loggedUserId,
 					answer: "",
+				}),
+			})
+				.then((response) => {
+					this.getItemComments();
+				})
+				.catch((e) => {
+					alert(e);
+				});
+		},
+
+		async replyComment(comment: { answer: string; question: string; }) {
+			await fetch("http://localhost:8000/auctionapp/api/comments/" + this.pid, {
+				method: "PUT",
+				body: JSON.stringify({
+					answer: comment.answer,
+					recipient: this.loggedUserId,
+					question: comment.question,
 				}),
 			})
 				.then((response) => {

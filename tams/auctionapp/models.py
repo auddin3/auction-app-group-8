@@ -19,7 +19,7 @@ class CustomAccountManager(UserManager):
             )
 
         return self.create_user(email, username, first_name, last_name, password, **extra_fields)
-    
+
     def create_user(self, email: str, username: str, first_name: str, last_name: str, password: str, **extra_fields):
         if not email:
             raise ValueError(_('You must provide an email address'))
@@ -52,14 +52,14 @@ class User(AbstractUser, PermissionsMixin):
     first_name = models.CharField(max_length=150, blank=True)
     last_name = models.CharField(max_length=150, blank=True)
     date_of_birth = models.DateField(default=date.today)
-    profile_photo = models.ImageField(default='profile-photos/default-dp.png', 
+    profile_photo = models.ImageField(default='profile-photos/default-dp.png',
     upload_to='profile-photos/%Y/%m/%D/')
 
     is_staff = models.BooleanField(default=False)
     is_active: models.BooleanField(default=False)
 
     objects = CustomAccountManager()
-    
+
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username', 'first_name', 'last_name']
 
@@ -79,7 +79,7 @@ class User(AbstractUser, PermissionsMixin):
 class Product(models.Model):
     '''
     A Product is is an object with detailed properties
-    that a User can purchase 
+    that a User can purchase
     '''
     product_name = models.CharField(_('name'), max_length=100)
     product_image = models.ImageField(default='product-images/stock-image.png', upload_to='product-images/%Y/%m/%D/')
@@ -101,7 +101,7 @@ class Product(models.Model):
             'end_of_bid': self.end_of_bid,
             'owner': self.owner.username,
         }
-        
+
 
 class Bid(models.Model):
     '''
@@ -111,6 +111,7 @@ class Bid(models.Model):
     product = models.ForeignKey(Product, on_delete=models.PROTECT)
     bidder = models.ForeignKey(User, on_delete=models.CASCADE)
     bid_price = models.DecimalField(max_digits=10, decimal_places=2)
+    end_of_bid = models.DateTimeField(blank=True, default=date.today),
     winner = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
 
@@ -128,12 +129,12 @@ class Bid(models.Model):
 
 class FAQ(models.Model):
     '''
-    FAQ from different Users about any Product and 
+    FAQ from different Users about any Product and
     answered by the Owner
     '''
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     question = models.CharField(_('question'), max_length=4096)
-    sender = models.ForeignKey(User, related_name='sender', on_delete=models.CASCADE, db_constraint=Product._meta.get_field('owner'))
+    sender = models.ForeignKey(User, blank=True, related_name='sender', on_delete=models.CASCADE)
     recipient = models.ForeignKey(User, blank=True, related_name='product_owner', on_delete=models.CASCADE)
     answer = models.CharField(_('answer'), max_length=4096, blank=True)
 
