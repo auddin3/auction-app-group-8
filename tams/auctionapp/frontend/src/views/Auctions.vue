@@ -12,8 +12,13 @@
 
   <div v-for="product in filteredProducts">
     <div class="card-group">
-      <div class="card mt-4" style="width: 10rem;">
-        <img class="card-img-top product-image" src="../assets/vue.svg" alt="Item image" />
+      <div class="card mt-4">
+        <div v-if="product.product_image.length > 0" class="img-div">
+           <img class="card-img-top product-image" :src="`http://localhost:8000${product.product_image}`" alt="Item image" />
+        </div>
+        <div v-else class="img-div">
+            <img class="card-img-top product-image" :src="`http://localhost:8000${imgpath}`" alt="Item image" />
+        </div>
       </div>
       <div class="card mt-4" style="width: 60rem;">
         <div class="card-body">
@@ -42,6 +47,7 @@ export default {
       products: [],
       query: '',
       search: "",
+      imgpath: "/media/product-images/stock-image.png",
     };
   },
   computed: {
@@ -71,7 +77,7 @@ export default {
   async mounted() {
     let response = await fetch("http://127.0.0.1:8000/auctionapp/api/products/");
     let data = await response.json();
-    this.products = JSON.parse(JSON.stringify(data.products));
+    this.products = data.products;
   },
   components: {
     Product
@@ -123,9 +129,7 @@ body {
 }
 
 .product-image {
-  height: 200px;
-  width: 200px;
-  margin:auto;
+  margin: auto 0;
 }
 
 .price-colour {
