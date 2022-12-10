@@ -15,7 +15,7 @@
 			<div v-if="comments.length > 0">
 				<div v-for="comment in filteredComments">
 					<div class="card-group">
-						<div class="card mt-4 bg-light" style="width: 60rem">
+						<div class="card mt-4 rounded" style="width: 60rem">
 							<div class="card-body">
 								<div class="d-flex justify-start">
 									<h4 class="card-title username">{{ comment.sender }}</h4>
@@ -30,7 +30,7 @@
 											type="text"
 											v-model="comment.answer"
 											placeholder="Reply"
-											class="w-full"
+											class="w-full rounded"
 										/>
 									</div>
 									<div class="d-flex flex-row-reverse">
@@ -56,19 +56,13 @@
 			<div class="card-group">
 				<div class="card mt-4 bg-light" style="width: 60rem">
 					<div class="d-flex justify-start">
-						<h4 class="card-title comment-as">Commenting as</h4>
+              <small class="text-muted"> Commenting as </small>
+              <h4 class="card-title username">&nbsp @{{ loggedUsername }}</h4>
 					</div>
-					<div class="p-l-1">
-						<div class="d-flex justify-start">
-							{{ loggedUserFullName }}
-						</div>
-						<div class="d-flex justify-start">
-							<small class="text-muted"> @{{ loggedUsername }} </small>
-						</div>
-					</div>
+			
 					<div class="card-text question-reply">
-						<input v-model="newComment" type="text" placeholder="Add a comment..." class="w-full" />
-					</div>
+            <textarea v-model="newComment" type="text" placeholder="Add a comment..." class="w-full rounded" rows="5"></textarea>
+          </div>
 					<div class="d-flex flex-row-reverse">
 						<button class="btn btn-primary comment-btn" v-on:click="addComment()">Comment</button>
 					</div>
@@ -145,6 +139,7 @@ export default {
 			})
 				.then((response) => {
 					this.getItemComments();
+          this.newComment = ""
 				})
 				.catch((e) => {
 					alert(e);
