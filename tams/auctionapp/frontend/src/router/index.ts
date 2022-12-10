@@ -14,12 +14,13 @@ const routes = [
     {
       path: '/search',
       name: 'Search',
-      component: () => import('../views/Search.vue')
+      component: () => import('../views/Inventory.vue')
     },
     {
-      path: '/items',
+      path: '/items/:pid',
       name: 'Items',
-      component: () => import('../views/Items.vue')
+      component: () => import('../views/Items.vue'),
+      props: true 
     },
     {
       path: '/profile',
