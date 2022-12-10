@@ -139,3 +139,11 @@ class FAQ(models.Model):
 
     def __str__(self):
         return self.question
+
+    def to_dict(self):
+        return {
+            'product': self.product.id,
+            'question': self.question,
+            'sender': self.sender.username,
+            'answer': self.answer,
+        }

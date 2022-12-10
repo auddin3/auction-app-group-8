@@ -2,7 +2,7 @@ from auctionapp.forms import SignUpForm, LogInForm
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
-from auctionapp.models import User, Product, Bid
+from auctionapp.models import User, Product, Bid, FAQ
 from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse, HttpResponseRedirect, JsonResponse, HttpResponseNotAllowed
 import json
@@ -90,3 +90,13 @@ def fetch_products(request):
 
 def product_details(request, product_id):
     return
+
+@csrf_exempt 
+def comment_api(request, product_id):
+    if request.method == 'GET':
+        return JsonResponse({
+            'comments': [
+                question.to_dict()
+                for question in FAQ.objects.filter(product=product_id)
+            ],
+        }, status=200)

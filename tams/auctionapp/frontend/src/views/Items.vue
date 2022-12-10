@@ -14,7 +14,9 @@
 export default {
   props: ['pid'],
   data() {
-
+    return {
+      comments: []
+    }
   },
   methods: {
     // async fetch_products() {
@@ -23,10 +25,20 @@ export default {
     //   this.products = data.products;
     // },
 
-  },
-  // async mounted () {
+    async getItemComments() {
+      try {
+        let response = await fetch("http://localhost:8000/auctionapp/api/comments/" + this.pid);
+        let rawData = await response.json();
+      
+      } catch (e) {
+        alert(e);
+      }
+    }
 
-  // }
+  },
+  async mounted () {
+    this.getItemComments()
+  }
 }
 </script>
 
