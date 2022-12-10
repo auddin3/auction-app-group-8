@@ -6,6 +6,7 @@ from auctionapp.views import profile_api
 app_name = 'auctionapp'
 urlpatterns = [
     path('', views.loginUser, name='login'),
+    path('user', views.session_api, name="get_userid"),
     path('signup', views.signup, name='signup'),
     path('api/profile/<int:user_id>/', profile_api, name="profile api"),
     path('api/products/', views.fetch_products, name='fetch_products'),

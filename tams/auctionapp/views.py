@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from auctionapp.models import User, Product, Bid, FAQ
 from django.shortcuts import render, get_object_or_404
-from django.http import JsonResponse, HttpResponseRedirect, JsonResponse, HttpResponseNotAllowed
+from django.http import JsonResponse, HttpResponseRedirect, JsonResponse, HttpResponseNotAllowed, HttpRequest
 import json
 
 def loginUser(request):
@@ -21,6 +21,11 @@ def loginUser(request):
         else:
             messages.error(request,'Login failed. Please try again')
     return render(request, 'auctionapp/login.html', {'form':form})
+
+def session_api(request : HttpRequest) -> JsonResponse:
+    if request.method == "GET":
+        return JsonResponse( { 'user_id' : request.session.__getitem__("_auth_user_id") } , safe=False )
+
 
 def signup(request):
     form = SignUpForm()
@@ -75,8 +80,8 @@ def profile_api(request, user_id):
             except User.DoesNotExist:
                 user.username=payload["username"]
                 user.save()
-       
-      
+
+
         return JsonResponse(user.to_dict(), status=200)
 
 def fetch_products(request):
@@ -106,4 +111,37 @@ def comment_api(request, product_id):
                 question.to_dict()
                 for question in FAQ.objects.filter(product=product_id)
             ],
+        }, status=200)
+
+    if request.method == 'POST':
+        comment_details = json.loads(request.body)
+
+        newProduct = Product.objects.get(id = product_id)
+        newSender = User.objects.get(id=comment_details["sender"])
+        defaultRecipient = User.objects.get(id=newProduct.owner.id)
+
+        new_entry = FAQ.objects.create(product=newProduct, 
+        recipient = defaultRecipient,
+        sender = newSender,
+        )
+
+        new_entry.question = comment_details["question"]
+        new_entry.answer = comment_details["answer"]
+        new_entry.save()
+
+        return JsonResponse({
+            "comment": new_entry.to_dict(),
+        }, status=200)
+
+    if request.method == "PUT":
+        comment_details = json.loads(request.body)
+
+        comment = FAQ.objects.get(question = comment_details["question"])
+        recip = User.objects.get(id = comment_details["recipient"])
+        comment.answer = comment_details["answer"]
+        comment.recipient = recip
+        comment.save()
+        
+        return JsonResponse({
+            "comment": comment.to_dict()
         }, status=200)

@@ -1,111 +1,253 @@
 <template>
-  <div class="card item-page-container row g-0">
-   
-    <!-- comment -->
+	<div class="card item-page-container row g-0">
+    <!-- item -->
     <div class="d-flex">
       <p>{{pid}}</p>
-      <p>{{product_name}}</p>
-      <p>{{product_description}}</p>
-      <p>{{start_price}}</p>
-      <p>{{end_of_bid}}</p>
-      <p>{{owner}}</p>
     </div>
+		<!-- comment -->
+		<div class="">
+			<div>
+				<h5 class="question-header">Comments</h5>
+			</div>
 
-  </div>
+			<div v-if="comments.length > 0">
+				<div v-for="comment in filteredComments">
+					<div class="card-group">
+						<!-- <div class="card mt-4">
+              <img class="" src="../assets/vue.svg" alt="profile picture" />
+            </div> -->
+						<div class="card mt-4 bg-light" style="width: 60rem">
+							<div class="card-body">
+								<div class="d-flex justify-start">
+									<h4 class="card-title username">{{ comment.sender }}</h4>
+									<small class="text-muted"> asked about {{ comment.product.slice(0, 55) }} </small>
+								</div>
+								<div>
+									<p class="card-text question-text">{{ comment.question }}</p>
+								</div>
+								<div v-if="comment.answer.length < 1">
+									<div class="card-text question-reply">
+										<input
+											type="text"
+											v-model="comment.answer"
+											placeholder="Reply"
+											class="w-full"
+										/>
+									</div>
+									<div class="d-flex flex-row-reverse">
+										<button class="btn btn-primary comment-btn" v-on:click="replyComment(comment)"
+											>Reply</button
+										>
+									</div>
+								</div>
+								<div v-else class="p-r-4">
+									<div class="d-flex justify-start question-reply">
+										<h4 class="card-title username">{{ comment.recipient }}</h4>
+										<small class="text-muted"> replied to {{ comment.sender }} </small>
+									</div>
+									<div class="d-flex justify start">
+										<p class="card-text question-text">{{ comment.answer }}</p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="card-group">
+				<div class="card mt-4 bg-light" style="width: 60rem">
+					<div class="d-flex justify-start">
+						<h4 class="card-title comment-as">Commenting as</h4>
+					</div>
+					<div class="p-l-1">
+						<div class="d-flex justify-start">
+							{{ loggedUserFullName }}
+						</div>
+						<div class="d-flex justify-start">
+							<small class="text-muted"> @{{ loggedUsername }} </small>
+						</div>
+					</div>
+					<div class="card-text question-reply">
+						<input v-model="newComment" type="text" placeholder="Add a comment..." class="w-full" />
+					</div>
+					<div class="d-flex flex-row-reverse">
+						<button class="btn btn-primary comment-btn" v-on:click="addComment()">Comment</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </template>
-  
+
 <script lang="ts">
-
 export default {
-  props: ['pid'],
-  data() {
-    return {
-      product_name: null,
-      product_description: null,
-      start_price: null,
-      bid: null,
-      end_of_bid: null,
-      owner: null,
-      comments: []
-    }
-  },
-  computed: {
-    filteredComments() {
-      const filteredComments = JSON.parse(JSON.stringify(this.comments))
-      return filteredComments
-    }
-  },
-  methods: {
-    // async fetch_products() {
-    //   let response = await fetch("http://127.0.0.1:8000/auctionapp/api/products/");
-    //   let data = await response.json();
-    //   this.products = data.products;
-    // },
+	props: ["pid"],
+	data() {
+		return {
+			comments: [],
+			loggedUsername: "",
+			loggedUserFullName: "",
+			loggedUserId: 0,
+			newComment: "",
+		};
+	},
+	computed: {
+		filteredComments() {
+			const filteredComments = JSON.parse(JSON.stringify(this.comments));
+			return filteredComments;
+		},
+	},
+	methods: {
+		async getLoggedInUser() {
+			let response = await fetch("http://localhost:8000/auctionapp/user", {
+				credentials: "include",
+				mode: "cors",
+				referrerPolicy: "no-referrer",
+				method: "GET",
+			});
+			let data = await response.json();
+			const userId = data.user_id;
+			this.loggedUserId = userId;
 
-    async getItemComments() {
-      try {
-        let response = await fetch("http://localhost:8000/auctionapp/api/comments/" + this.pid);
-        let data = await response.json();
-        const rawComments = data.comments
-        const filteredComments = JSON.parse(JSON.stringify(rawComments))
-        this.comments = filteredComments
-      } catch (e) {
-        alert(e);
-      }
-    },
+			response = await fetch("http://localhost:8000/auctionapp/api/profile/" + userId);
+			let rawData = await response.json();
+			let userData = rawData.user;
+			this.loggedUsername = userData.username;
+			this.loggedUserFullName = userData.fname + " " + userData.lname;
+		},
 
+		async getItemComments() {
+			try {
+				let response = await fetch("http://localhost:8000/auctionapp/api/comments/" + this.pid);
+				let data = await response.json();
+				const rawComments = data.comments;
+				const filteredComments = JSON.parse(JSON.stringify(rawComments));
+				this.comments = filteredComments;
+			} catch (e) {
+				alert(e);
+			}
+		},
+
+		async addComment() {
+			await fetch("http://localhost:8000/auctionapp/api/comments/" + this.pid, {
+				method: "POST",
+				body: JSON.stringify({
+					question: this.newComment,
+					sender: this.loggedUserId,
+					answer: "",
+				}),
+			})
+				.then((response) => {
+					this.getItemComments();
+				})
+				.catch((e) => {
+					alert(e);
+				});
+		},
+
+		async replyComment(comment: { answer: string; question: string; }) {
+			await fetch("http://localhost:8000/auctionapp/api/comments/" + this.pid, {
+				method: "PUT",
+				body: JSON.stringify({
+					answer: comment.answer,
+					recipient: this.loggedUserId,
+					question: comment.question,
+				}),
+			})
+				.then((response) => {
+					this.getItemComments();
+				})
+				.catch((e) => {
+					alert(e);
+				});
+		},
     async getProductData(){
       let response = await fetch("http://localhost:8000/auctionapp/api/items/" + this.pid);
       let rawData = await response.json()
       let data = rawData.product
-      this.product_name = data.product_name
-      this.product_description = data.product_description
-      this.start_price = data.start_price
-      this.bid = data.bid
-      this.end_of_bid = data.end_of_bid
-      this.owner = data.owner
-
-    }
-
-    
-
-  },
-  async mounted () {
-    this.getProductData()
-    this.getItemComments()
-  }
-}
+      
+    },
+	},
+	async mounted() {
+		this.getItemComments();
+		this.getLoggedInUser();
+	},
+};
 </script>
 
 <style>
+body {
+	/* background: linear-gradient(90deg, #a4def9, #c1e0f7, #fffffa); */
+	background-color: #a4def9;
+}
 
-  body {
-    /* background: linear-gradient(90deg, #a4def9, #c1e0f7, #fffffa); */
-    background-color: #a4def9;
-  }
+.comment-as {
+	font-size: 14px;
+}
 
-  .question-header {
-    color: #c59fc9;
-  }
+.comment-btn {
+	margin-top: 20px;
+	font-weight: 700;
+	border-radius: 80px;
+	padding: 8px 15px;
+	background-color: #c59fc9;
+	color: white;
+}
 
-  .item-btn {
-    background-color: #c59fc9;
-    color: white;
-    display: inline;
-    float: left;
-  }
+.w-full {
+	width: 100%;
+}
 
-  .item-btn:hover {
-    background-color: #c1e0f7;
-  }
+.p-l-1 {
+	padding-left: 10px;
+}
 
-  .item-page-container {
-    margin: 0 auto !important;
-    display: flex;
-    flex-direction: row;
-    min-height: 93vh;
-    width: 60vw;
-    padding: 60px;
-  }
+.p-r-4 {
+	padding-left: 32px;
+}
 
+.question-text {
+	margin: 10px 0;
+	display: flex;
+	justify-content: start;
+	font-size: 14px;
+}
+
+.question-reply {
+	padding-top: 20px;
+	display: flex;
+	justify-content: start;
+	font-size: 16px;
+}
+
+.username {
+	font-size: 16px;
+	padding-right: 5px;
+}
+
+.question-header {
+	color: #c59fc9;
+	display: flex;
+	justify-content: start;
+}
+
+.item-btn {
+	background-color: #c59fc9;
+	color: white;
+	display: inline;
+	float: left;
+}
+
+.item-btn:hover {
+	background-color: #c1e0f7;
+}
+
+.item-page-container {
+	margin: 0 auto !important;
+	display: flex;
+	flex-direction: row;
+	min-height: 93vh;
+	width: 60vw;
+	padding: 60px;
+}
 </style>
