@@ -86,3 +86,14 @@ def fetch_products(request):
                 for product in Product.objects.all()
             ]
         })
+
+@csrf_exempt
+def picture_api(request, user_id):
+    if request.method == "POST":
+        files = request.FILES  # multivalued dict
+        image = files.get("image")
+        name = request.POST.get("name")
+
+        user = get_object_or_404(User, id=user_id)
+    
+        return JsonResponse({name: name}, safe=False)

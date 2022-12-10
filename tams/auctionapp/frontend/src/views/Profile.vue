@@ -8,8 +8,20 @@
 					alt="User-Profile-Image"
 				/>
 				<div v-if="edit">
-					<input v-on:change="selectFile" type="file" id="upload-file" name="upload-file" accept="image/gif, image/jpeg, image/png" hidden/>
-					<label type="button" for="upload-file" refs="upload-file" class="profile-pic-button btn-lg">
+					<input
+						v-on:change="onFileSelected"
+						type="file"
+						id="upload-file"
+						name="upload-file"
+						accept="image/gif, image/jpeg, image/png"
+						hidden
+					/>
+					<label
+						type="button"
+						for="upload-file"
+						refs="upload-file"
+						class="profile-pic-button btn-lg"
+					>
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
 							xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -238,9 +250,24 @@ export default {
 			}
 		},
 
-		async selectFile(e: any) {
-			const file = e.target.files[0]
-		} 
+		async onFileSelected(e: any) {
+			const selectedFile = e.target.files[0];
+			const fd = new FormData();
+
+			fd.append("image", selectedFile)
+			fd.append("name", selectedFile.name)
+
+			await fetch("http://localhost:8000/auctionapp/api/picture/" + 1 + "/", {
+				method: "POST",
+				body: fd,
+			})
+				.then((response) => {
+					this.refreshData();
+				})
+				.catch((e) => {
+					alert(e);
+				});
+		},
 	},
 
 	async mounted() {
