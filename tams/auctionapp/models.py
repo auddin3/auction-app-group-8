@@ -111,7 +111,7 @@ class Bid(models.Model):
     product = models.ForeignKey(Product, on_delete=models.PROTECT)
     bidder = models.ForeignKey(User, on_delete=models.CASCADE)
     bid_price = models.DecimalField(max_digits=10, decimal_places=2)
-    end_of_bid = models.DateTimeField(blank=True)
+    end_of_bid = models.DateTimeField(blank=True, default=date.today), 
     winner = models.BooleanField(default=False)
 
     def __str__(self):
@@ -133,8 +133,8 @@ class FAQ(models.Model):
     '''
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     question = models.CharField(_('question'), max_length=4096)
-    sender = models.ForeignKey(User, related_name='sender', on_delete=models.CASCADE, db_constraint=Product._meta.get_field('owner'))
-    recipient = models.ForeignKey(User, default=Product._meta.get_field('owner'), related_name='product_owner', on_delete=models.CASCADE)
+    sender = models.ForeignKey(User, blank=True, related_name='sender', on_delete=models.CASCADE)
+    recipient = models.ForeignKey(User, blank=True, related_name='product_owner', on_delete=models.CASCADE)
     answer = models.CharField(_('answer'), max_length=4096, blank=True)
 
     def __str__(self):
