@@ -88,8 +88,15 @@ def fetch_products(request):
             ],
         }, status=200)
 
+@csrf_exempt
 def product_details(request, product_id):
-    return
+    if request.method == 'GET':
+        return JsonResponse({
+            'products': [
+                product.to_dict()
+                for product in Product.objects.filter(product=product_id)
+            ],
+        }, status=200)
 
 @csrf_exempt 
 def comment_api(request, product_id):

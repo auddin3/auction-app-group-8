@@ -3,21 +3,12 @@
    
     <!-- comment -->
     <div class="d-flex">
-      <h5 class="question-header">Questions</h5>
-      <div v-if="comments.length > 0">
-        <div v-for="comment in filteredComments">
-          <div>Q) {{ comment.question }}</div>
-          <div v-if="comment.answer.length > 1">
-            <div>A) {{ comment.answer }}</div>
-          </div>
-          <div v-else>
-            <div>No answer</div>
-          </div>
-        </div>
-      </div>
-      <div v-else>
-        <div>No commments available</div>
-      </div>
+      <p>{{pid}}</p>
+      <p>{{product_name}}</p>
+      <p>{{product_description}}</p>
+      <p>{{start_price}}</p>
+      <p>{{end_of_bid}}</p>
+      <p>{{owner}}</p>
     </div>
 
   </div>
@@ -29,6 +20,12 @@ export default {
   props: ['pid'],
   data() {
     return {
+      product_name: null,
+      product_description: null,
+      start_price: null,
+      bid: null,
+      end_of_bid: null,
+      owner: null,
       comments: []
     }
   },
@@ -55,10 +52,26 @@ export default {
       } catch (e) {
         alert(e);
       }
+    },
+
+    async getProductData(){
+      let response = await fetch("http://localhost:8000/auctionapp/api/items/" + this.pid);
+      let rawData = await response.json()
+      let data = rawData.product
+      this.product_name = data.product_name
+      this.product_description = data.product_description
+      this.start_price = data.start_price
+      this.bid = data.bid
+      this.end_of_bid = data.end_of_bid
+      this.owner = data.owner
+
     }
+
+    
 
   },
   async mounted () {
+    this.getProductData()
     this.getItemComments()
   }
 }
