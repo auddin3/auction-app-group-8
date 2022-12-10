@@ -1,5 +1,5 @@
 <template>
-	<div class="card container row g-0 p-0 item-container">
+	<div class="card profile-container row g-0 p-0 item-container">
 		<div class="col-md-5 header rounded">
 			<div class="profile-photo-container">
 				<img
@@ -286,11 +286,11 @@ body {
 	margin-top: 8px;
 }
 
-.container {
+.profile-container {
+	margin: 0 auto !important;
 	display: flex;
 	flex-direction: row;
 	min-height: 93vh;
-	min-width: 72vw;
 }
 
 .item-container {
