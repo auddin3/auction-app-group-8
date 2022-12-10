@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from auctionapp.models import User, Product, Bid
 from django.shortcuts import render, get_object_or_404
-from django.http import JsonResponse, HttpResponseRedirect, JsonResponse, HttpResponseNotAllowed
+from django.http import JsonResponse, HttpResponseRedirect, JsonResponse, HttpResponseNotAllowed, HttpRequest
 import json
 
 def loginUser(request):
@@ -21,6 +21,11 @@ def loginUser(request):
         else:
             messages.error(request,'Login failed. Please try again')
     return render(request, 'auctionapp/login.html', {'form':form})
+
+def session_api(request : HttpRequest) -> JsonResponse:
+    if request.method == "GET":
+        return JsonResponse( { 'user_id' : request.session.__getitem__("_auth_user_id") } , safe=False )
+
 
 def signup(request):
     form = SignUpForm()
@@ -75,8 +80,8 @@ def profile_api(request, user_id):
             except User.DoesNotExist:
                 user.username=payload["username"]
                 user.save()
-       
-      
+
+
         return JsonResponse(user.to_dict(), status=200)
 
 def fetch_products(request):

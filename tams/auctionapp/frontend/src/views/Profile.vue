@@ -119,6 +119,7 @@ export default {
 		const TODAY = new Date(date.getFullYear(), date.getMonth(), date.getDate());
 
 		return {
+			userId: 0,
 			name: " ",
 			username: " ",
 			email: " ",
@@ -136,7 +137,7 @@ export default {
 				fullname.push("");
 			}
 
-			await fetch("http://localhost:8000/auctionapp/api/profile/" + 1 + "/", {
+			await fetch("http://localhost:8000/auctionapp/api/profile/" + this.userId + "/", {
 				method: "PUT",
 				body: JSON.stringify({
 					fname: fullname[0],
@@ -161,7 +162,7 @@ export default {
 
 		async refreshData() {
 			try {
-				let response = await fetch("http://localhost:8000/auctionapp/api/profile/" + 1);
+				let response = await fetch("http://localhost:8000/auctionapp/api/profile/" + this.userId);
 				let rawData = await response.json();
 				let data = rawData.user;
 				this.name = data.fname + " " + data.lname;
@@ -185,8 +186,18 @@ export default {
 
 	async mounted() {
 		//Fetch user data
+		let response = await fetch("http://localhost:8000/auctionapp/user",
+			{
+				credentials: "include",
+				mode: "cors",
+				referrerPolicy: "no-referrer",
+				method: "GET"
+			});
+		let data = await response.json()
+		this.userId = data.user_id
+
 		try {
-			let response = await fetch("http://localhost:8000/auctionapp/api/profile/" + 1);
+			let response = await fetch("http://localhost:8000/auctionapp/api/profile/" + this.userId);
 			let rawData = await response.json();
 			let data = rawData.user;
 			this.name = data.fname + " " + data.lname;
