@@ -114,6 +114,8 @@ body {
 	font-weight: 700;
 	border-radius: 80px;
 	padding: 8px 15px;
+  background-color: #c59fc9;
+	color: white;
 }
 
 .w-full {
