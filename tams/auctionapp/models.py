@@ -142,8 +142,9 @@ class FAQ(models.Model):
 
     def to_dict(self):
         return {
-            'product': self.product.id,
+            'product': self.product.product_name,
             'question': self.question,
             'sender': self.sender.username,
             'answer': self.answer,
+            'recipient': self.recipient.username,
         }
