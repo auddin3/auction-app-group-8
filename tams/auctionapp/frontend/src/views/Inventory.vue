@@ -1,5 +1,5 @@
 <template>
-    <div class="auctions">
+    <div>
       <h1>My Inventory</h1>
     </div>
 
