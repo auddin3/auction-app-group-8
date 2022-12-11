@@ -15,4 +15,5 @@ urlpatterns = [
     ## path('api/search/', api.api_search, name='api_search'),
     path('api/comments/<int:product_id>', views.comment_api),
     path('api/bids/<int:product_id>', views.bid_api),
+    path('api/bidCount/<int:product_id>', views.bidCount),
 ]

@@ -11,10 +11,10 @@
 		<div class="row g-0 bid-container p-4">
 			<div class="col-sm-6">
 				<div class="row g-1">
-					<h6 class="col-sm-5">Starting bid: </h6>
+					<h6 class="col-sm-5">Winning bid: </h6>
 					<div class="col-sm-1"></div>
 					<div class="col-sm-6 d-flex flex-column align-items-start">
-						<h3>£{{ start_price }}</h3>
+						<h3>£{{ win_price }}</h3>
 						<input
 							type="number"
 							placeholder="Bid amount"
@@ -27,7 +27,7 @@
 			</div>
 			<div class="col-sm-6 d-flex flex-column align-items-end">
 				<small class="text-muted">[{{ bid_total }} bids]</small>
-				<button class="btn btn-primary bid-btn" v-on:click="addBid">Submit Bid</button>
+				<button class="btn btn-primary bid-btn" v-on:click="addBid" min="{{ start_price }}">Submit Bid</button>
 			</div>
 		</div>
 		<!-- comment section-->
@@ -122,6 +122,7 @@ export default {
 
 			bid_entry: 0,
 			bid_total: 0,
+			win_price: 0,
 		};
 	},
 	computed: {
@@ -208,6 +209,13 @@ export default {
 			this.imgpath = product.product_image;
 		},
 
+		async getBidCount() {
+			let response = await fetch("http://localhost:8000/auctionapp/api/bidCount/" + this.pid);
+			let data = await response.json();
+			this.bid_total = data.total
+			this.win_price = data.win
+		},
+
 		async addBid() {
 			let response = await fetch("http://localhost:8000/auctionapp/api/bids/" + this.pid, {
 				method: "POST",
@@ -218,6 +226,7 @@ export default {
 			})
 				.then((response) => {
 					this.bid_entry = 0;
+					this.getBidCount();
 				})
 				.catch((e) => {
 					alert(e);
@@ -228,6 +237,7 @@ export default {
 		this.getItemComments();
 		this.getLoggedInUser();
 		this.getProductData();
+		this.getBidCount();
 	},
 };
 </script>

@@ -178,5 +178,14 @@ def bid_api(request, product_id):
 
         return JsonResponse({
             "Bid": new_entry.to_dict(),
-            "total": Bid.objects.all().count()
         }, status=200)
+
+def bidCount(request, product_id):
+    if request.method == "GET":
+         newProduct = Product.objects.get(id=product_id)
+         winner = Bid.objects.get(winner=True)
+
+    return JsonResponse({
+        "total": Bid.objects.filter(product=newProduct).count(),
+        "win": winner.bid_price,
+    }, status=200)
