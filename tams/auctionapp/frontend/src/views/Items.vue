@@ -3,9 +3,9 @@
     <!-- item section-->
     <div class="d-flex">
 		<div class="card mt-4" style="width: 10rem;">
-        	<img class="card-img-top product-image" :src="`http://localhost:8000${imgpath}`" alt="Item image" />
+        	<img class=".img-fluid. max-width: 100%; height: auto;" :src="`http://localhost:8000${imgpath}`" alt="Item image" />
       	</div>
-		<div class="card mt-4" style="width: 60rem;">
+		<div class="card mt-4" style="width: 40rem;">
 			<div class="card-body">
 			<h4 class="card-title">{{ product_name}}</h4>
 			<p class="card-text">{{description}}</p>
