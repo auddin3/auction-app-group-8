@@ -144,3 +144,57 @@ def comment_api(request, product_id):
         return JsonResponse({
             "comment": comment.to_dict()
         }, status=200)
+
+@csrf_exempt 
+def bid_api(request, product_id):
+    if request.method == 'POST':
+        bid_details = json.loads(request.body)
+
+        newProduct = Product.objects.get(id=product_id)
+        newBidder = User.objects.get(id=bid_details["bidder"])
+
+        new_entry = Bid.objects.create(bid_price = bid_details["bid_price"],
+        product = newProduct,
+        bidder = newBidder,)
+    
+        new_entry.end_of_bid = newProduct.end_of_bid
+        new_entry.is_active = True
+        
+        new_entry.save()
+
+        try:
+            if Bid.objects.filter(product = newProduct).count() > 0:
+                currentWinningBid = Bid.objects.filter(product=newProduct).get(winner=True)
+                if float(currentWinningBid.bid_price) < float(new_entry.bid_price):
+                    currentWinningBid.winner = False
+                    new_entry.winner = True
+                    new_entry.save()
+                    currentWinningBid.save()
+                else:
+                    currentWinningBid.winner = True
+                    new_entry.winner = False
+                    new_entry.save()
+                    currentWinningBid.save()
+        except:
+            new_entry.winner = True
+            new_entry.save()
+
+        return JsonResponse({
+            "Bid": new_entry.to_dict(),
+        }, status=200)
+
+def bidCount(request, product_id):
+    if request.method == "GET":
+        newProduct = Product.objects.get(id=product_id)
+        try:
+            winner = Bid.objects.filter(product=newProduct).get(winner=True)
+        except:
+            return JsonResponse({
+                "total": Bid.objects.filter(product=newProduct).count(),
+                "win": 0,
+            }, status=200)
+
+        return JsonResponse({
+            "total": Bid.objects.filter(product=newProduct).count(),
+            "win": winner.bid_price,
+        }, status=200)
