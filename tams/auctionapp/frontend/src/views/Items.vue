@@ -224,7 +224,12 @@ export default {
 			let data = await response.json();
 			this.bid_total = data.total
 			this.win_price = data.win
-			this.bid_entry = data.win
+			if (data.win == 0){
+				this.bid_entry = this.start_price
+			}
+			else {
+				this.bid_entry = data.win
+			}
 		},
 
 		async addBid() {
