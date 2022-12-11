@@ -182,10 +182,16 @@ def bid_api(request, product_id):
 
 def bidCount(request, product_id):
     if request.method == "GET":
-         newProduct = Product.objects.get(id=product_id)
-         winner = Bid.objects.get(winner=True)
+        newProduct = Product.objects.get(id=product_id)
+        try:
+            winner = Bid.objects.filter(product=newProduct).get(winner=True)
+        except:
+            return JsonResponse({
+                "total": Bid.objects.filter(product=newProduct).count(),
+                "win": 0,
+            }, status=200)
 
-    return JsonResponse({
-        "total": Bid.objects.filter(product=newProduct).count(),
-        "win": winner.bid_price,
-    }, status=200)
+        return JsonResponse({
+            "total": Bid.objects.filter(product=newProduct).count(),
+            "win": winner.bid_price,
+        }, status=200)
