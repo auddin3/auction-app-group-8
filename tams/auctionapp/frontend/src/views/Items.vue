@@ -2,10 +2,10 @@
 	<div class="card item-page-container row g-0">
     <!-- item section-->
     <div class="d-flex">
-		<div class="card mt-4 border-0" style="width: 40rem; ">
+		<div class="card mt-4 border: 1px solid #e0e0e0" style="width: 40rem; ">
         	<img class="card-img-top product-image" :src="`http://localhost:8000${imgpath}`" alt="Item image" />
       	</div>
-		<div class="card mt-4 border-0" style="width: 60rem;">
+		<div class="card mt-4 border: 1px solid #e0e0e0" style="width: 60rem;">
 			<div class="card-body">
 			<h4 class="card-title">{{ product_name}}</h4>
 			<p class="card-text">{{description}}</p>
@@ -262,6 +262,10 @@ export default {
 body {
 	/* background: linear-gradient(90deg, #a4def9, #c1e0f7, #fffffa); */
 	background-color: #a4def9;
+}
+
+.card-title{
+	color: #c59fc9;
 }
 
 .bid-container {
