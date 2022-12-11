@@ -2,11 +2,20 @@
 	<div class="card item-page-container row g-0">
     <!-- item section-->
     <div class="d-flex">
-      <p>{{product_name}}</p>
-      <p>{{start_price}}</p>
-      <p>{{description}}</p>
-        <img :src="`http://localhost:8000${imgpath}`" alt="item-image">
+		<div class="card mt-4" style="width: 10rem;">
+        	<img class="card-img-top product-image" :src="`http://localhost:8000${imgpath}`" alt="Item image" />
+      	</div>
+		<div class="card mt-4" style="width: 60rem;">
+			<div class="card-body">
+			<h4 class="card-title">{{ product_name}}</h4>
+			<p class="card-text">{{description}}</p>
+			<p class="card-text price-colour"><strong>Start Price: £{{start_price }}</strong></p>
+			<p class="card-text">End of Bid: {{endOfBid}}</p>
+			<p class="card-text">Owner: {{owner}}</p>
+			</div>
+      	</div>
     </div>
+	<button class="btn comment-btn">Add Bid</button>
 		<!-- comment section-->
 		<div class="">
 			<div>
