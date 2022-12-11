@@ -1,14 +1,32 @@
 <template>
 	<div class="card item-page-container row g-0">
-    <!-- item section-->
-    <div class="d-flex">
-      <p>{{product_name}}</p>
-      <p>{{start_price}}</p>
-      <p>{{description}}</p>
-        <img :src="`http://localhost:8000${imgpath}`" alt="item-image">
-    </div>
+		<!-- item section-->
+		<div class="d-flex">
+			<p>{{ product_name }}</p>
+			<p>{{ start_price }}</p>
+			<p>{{ description }}</p>
+			<img :src="`http://localhost:8000${imgpath}`" alt="item-image" />
+		</div>
+		<!-- bid section (copy into item) -->
+		<div class="row g-0 bid-container p-4">
+			<div class="col-sm-6">
+				<div class="row g-1">
+					<h6 class="col-sm-5">Starting bid: </h6>
+					<div class="col-sm-1"></div>
+					<div class="col-sm-6 d-flex flex-column align-items-start">
+						<h3>£{{ start_price }}</h3>
+						<input type="number" placeholder="Bid amount" class="bid-input p-2"/>
+						<small class="text-muted">Enter £{{ start_price }} or more</small>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-6 d-flex flex-column align-items-end">
+				<small class="text-muted">[0 bids]</small>
+				<button class="btn btn-primary bid-btn">Submit Bid</button>
+			</div>
+		</div>
 		<!-- comment section-->
-		<div class="">
+		<div class="m-t-40">
 			<div>
 				<h5 class="question-header">Comments</h5>
 			</div>
@@ -56,13 +74,19 @@
 			<div class="card-group">
 				<div class="card mt-4 bg-light" style="width: 60rem">
 					<div class="d-flex justify-start">
-              <small class="text-muted"> Comment as </small>
-              <h4 class="card-title username">&nbsp {{ loggedUsername }}</h4>
+						<small class="text-muted"> Comment as </small>
+						<h4 class="card-title username">&nbsp {{ loggedUsername }}</h4>
 					</div>
-			
+
 					<div class="card-text question-reply">
-            <textarea v-model="newComment" type="text" placeholder="Add a comment..." class="w-full rounded p-3" rows="5"></textarea>
-          </div>
+						<textarea
+							v-model="newComment"
+							type="text"
+							placeholder="Add a comment..."
+							class="w-full rounded p-3"
+							rows="5"
+						></textarea>
+					</div>
 					<div class="d-flex flex-row-reverse">
 						<button class="btn btn-primary comment-btn" v-on:click="addComment()">Comment</button>
 					</div>
@@ -83,13 +107,13 @@ export default {
 			loggedUserId: 0,
 			newComment: "",
 
-      product_name: "",
-      description: "",
-      start_price: "",
-      owner: "",
-      endOfBid: "",
-      period: 0,
-      imgpath: "/media/product-images/stock-image.png",
+			product_name: "",
+			description: "",
+			start_price: "",
+			owner: "",
+			endOfBid: "",
+			period: 0,
+			imgpath: "/media/product-images/stock-image.png",
 		};
 	},
 	computed: {
@@ -140,14 +164,14 @@ export default {
 			})
 				.then((response) => {
 					this.getItemComments();
-          this.newComment = ""
+					this.newComment = "";
 				})
 				.catch((e) => {
 					alert(e);
 				});
 		},
 
-		async replyComment(comment: { answer: string; question: string; }) {
+		async replyComment(comment: { answer: string; question: string }) {
 			await fetch("http://localhost:8000/auctionapp/api/comments/" + this.pid, {
 				method: "PUT",
 				body: JSON.stringify({
@@ -163,22 +187,22 @@ export default {
 					alert(e);
 				});
 		},
-    async getProductData(){
-      let response = await fetch("http://localhost:8000/auctionapp/api/items/" + this.pid);
-      let data = await response.json()
-      let product = data.product
-      this.product_name = product.product_name
-      this.description = product.description
-      this.start_price = product.start_price
-      this.owner = product.owner
-      this.endOfBid = product.end_of_bid
-      this.imgpath = product.product_image
-    },
+		async getProductData() {
+			let response = await fetch("http://localhost:8000/auctionapp/api/items/" + this.pid);
+			let data = await response.json();
+			let product = data.product;
+			this.product_name = product.product_name;
+			this.description = product.description;
+			this.start_price = product.start_price;
+			this.owner = product.owner;
+			this.endOfBid = product.end_of_bid;
+			this.imgpath = product.product_image;
+		},
 	},
 	async mounted() {
 		this.getItemComments();
 		this.getLoggedInUser();
-    this.getProductData();
+		this.getProductData();
 	},
 };
 </script>
@@ -189,8 +213,22 @@ body {
 	background-color: #a4def9;
 }
 
+.bid-container {
+	border-bottom: 1px solid #e0e0e0;
+	border-top: 1px solid #e0e0e0;
+}
+
+.bid-input {
+	width: 150px;
+	margin-bottom: 5px;
+}
+
 .comment-as {
 	font-size: 14px;
+}
+
+.m-t-40 {
+	margin-top: 50px;
 }
 
 .comment-btn {
@@ -200,6 +238,16 @@ body {
 	padding: 8px 15px;
 	background-color: #c59fc9;
 	color: white;
+}
+
+.bid-btn {
+	margin-top: 15px;
+	font-weight: 700;
+	border-radius: 80px;
+	padding: 8px 15px;
+	background-color: #c59fc9;
+	color: white;
+	width: 70%;
 }
 
 .w-full {
