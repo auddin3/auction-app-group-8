@@ -148,7 +148,35 @@ def comment_api(request, product_id):
 @csrf_exempt 
 def bid_api(request, product_id):
     if request.method == 'POST':
+        bid_details = json.loads(request.body)
+
+        newProduct = Product.objects.get(id=product_id)
+        newBidder = User.objects.get(id=bid_details["bidder"])
+
+        new_entry = Bid.objects.create(bid_price = bid_details["bid_price"],
+        product = newProduct,
+        bidder = newBidder,
+        winner = False,
+        )
+    
+        new_entry.end_of_bid = newProduct.end_of_bid
+        new_entry.is_active = True
+        
+        new_entry.save()
+
+        try: 
+            if Bid.objects.filter(product = newProduct).count() > 0:
+                currentWinningBid = Bid.objects.get(winner=True)
+                if currentWinningBid.bid_price < new_entry.bid_price:
+                    currentWinningBid.winner = False
+                    new_entry.winner = True
+                    new_entry.save()
+                    currentWinningBid.save()
+        except:
+            new_entry.winner = True
+            new_entry.save()
 
         return JsonResponse({
-            "test": product_id
+            "Bid": new_entry.to_dict(),
+            "total": Bid.objects.all().count()
         }, status=200)
