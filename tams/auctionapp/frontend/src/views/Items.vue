@@ -11,7 +11,7 @@
 		<div class="row g-0 bid-container p-4">
 			<div class="col-sm-6">
 				<div class="row g-1">
-					<h6 class="col-sm-5">Winning bid: </h6>
+					<h4 class="col-sm-5">Best offer: </h4>
 					<div class="col-sm-1"></div>
 					<div class="col-sm-6 d-flex flex-column align-items-start">
 						<h3>£{{ win_price }}</h3>
@@ -114,7 +114,7 @@ export default {
 
 			product_name: "",
 			description: "",
-			start_price: "",
+			start_price: 0,
 			owner: "",
 			endOfBid: "",
 			period: 0,
@@ -214,6 +214,7 @@ export default {
 			let data = await response.json();
 			this.bid_total = data.total
 			this.win_price = data.win
+			this.bid_entry = this.start_price
 		},
 
 		async addBid() {
@@ -225,7 +226,7 @@ export default {
 				}),
 			})
 				.then((response) => {
-					this.bid_entry = 0;
+					this.bid_entry = this.start_price;
 					this.getBidCount();
 				})
 				.catch((e) => {
