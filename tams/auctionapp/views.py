@@ -155,21 +155,24 @@ def bid_api(request, product_id):
 
         new_entry = Bid.objects.create(bid_price = bid_details["bid_price"],
         product = newProduct,
-        bidder = newBidder,
-        winner = False,
-        )
+        bidder = newBidder,)
     
         new_entry.end_of_bid = newProduct.end_of_bid
         new_entry.is_active = True
         
         new_entry.save()
 
-        try: 
+        try:
             if Bid.objects.filter(product = newProduct).count() > 0:
-                currentWinningBid = Bid.objects.get(winner=True)
-                if currentWinningBid.bid_price < new_entry.bid_price:
+                currentWinningBid = Bid.objects.filter(product=newProduct).get(winner=True)
+                if float(currentWinningBid.bid_price) < float(new_entry.bid_price):
                     currentWinningBid.winner = False
                     new_entry.winner = True
+                    new_entry.save()
+                    currentWinningBid.save()
+                else:
+                    currentWinningBid.winner = True
+                    new_entry.winner = False
                     new_entry.save()
                     currentWinningBid.save()
         except:
