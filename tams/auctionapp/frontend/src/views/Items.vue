@@ -11,7 +11,7 @@
 		<div class="row g-0 bid-container p-4">
 			<div class="col-sm-6">
 				<div class="row g-1">
-					<h4 class="col-sm-5">Best offer: </h4>
+					<h5 class="col-sm-5">Best offer: </h5>
 					<div class="col-sm-1"></div>
 					<div class="col-sm-6 d-flex flex-column align-items-start">
 						<h3>£{{ win_price }}</h3>
