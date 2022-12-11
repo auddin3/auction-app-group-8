@@ -15,14 +15,14 @@
 					<div class="col-sm-1"></div>
 					<div class="col-sm-6 d-flex flex-column align-items-start">
 						<h3>£{{ start_price }}</h3>
-						<input type="number" placeholder="Bid amount" class="bid-input p-2"/>
+						<input type="number" placeholder="Bid amount" class="bid-input p-2" v-model="bid_entry"/>
 						<small class="text-muted">Enter £{{ start_price }} or more</small>
 					</div>
 				</div>
 			</div>
 			<div class="col-sm-6 d-flex flex-column align-items-end">
 				<small class="text-muted">[0 bids]</small>
-				<button class="btn btn-primary bid-btn">Submit Bid</button>
+				<button class="btn btn-primary bid-btn" v-on:click="addBid">Submit Bid</button>
 			</div>
 		</div>
 		<!-- comment section-->
@@ -114,6 +114,8 @@ export default {
 			endOfBid: "",
 			period: 0,
 			imgpath: "/media/product-images/stock-image.png",
+
+			bid_entry: 0,
 		};
 	},
 	computed: {
@@ -187,6 +189,7 @@ export default {
 					alert(e);
 				});
 		},
+
 		async getProductData() {
 			let response = await fetch("http://localhost:8000/auctionapp/api/items/" + this.pid);
 			let data = await response.json();
@@ -198,6 +201,22 @@ export default {
 			this.endOfBid = product.end_of_bid;
 			this.imgpath = product.product_image;
 		},
+
+		async addBid(){
+			await fetch("http://localhost:8000/auctionapp/api/bids/" + this.pid, {
+				method: "POST",
+				body: JSON.stringify({
+					bidder: this.loggedUserId,
+					bid_price: this.bid_entry
+				}),
+			})
+				.then((response) => {
+					this.getItemComments();
+				})
+				.catch((e) => {
+					alert(e);
+				});
+		}
 	},
 	async mounted() {
 		this.getItemComments();

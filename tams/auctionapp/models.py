@@ -121,8 +121,8 @@ class Bid(models.Model):
     def to_dict(self):
         return {
             'id': self.id,
-            'product': self.product,
-            'bidder': self.bidder,
+            'product': self.product.product_name,
+            'bidder': self.bidder.username,
             'winner': self.winner,
             'bid_price': self.bid_price,
         }

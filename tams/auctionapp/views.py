@@ -144,3 +144,11 @@ def comment_api(request, product_id):
         return JsonResponse({
             "comment": comment.to_dict()
         }, status=200)
+
+@csrf_exempt 
+def bid_api(request, product_id):
+    if request.method == 'POST':
+
+        return JsonResponse({
+            "test": product_id
+        }, status=200)
