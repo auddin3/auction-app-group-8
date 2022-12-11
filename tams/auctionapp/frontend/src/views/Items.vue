@@ -20,6 +20,7 @@
 							placeholder="Bid amount"
 							class="bid-input p-2"
 							v-model="bid_entry"
+							step="0.01"
 						/>
 						<small class="text-muted">Enter £{{ start_price }} or more</small>
 					</div>
