@@ -10,7 +10,7 @@
 			<h4 class="card-title">{{ product_name}}</h4>
 			<p class="card-text">{{description}}</p>
 			<p class="card-text price-colour"><strong>Start Price: £{{start_price }}</strong></p>
-			<p class="card-text">End of Bid: {{endOfBid}}</p>
+			<p class="card-text">End of Bid: {{endOfBidFormatted}}</p>
 			<p class="card-text">Owner: {{owner}}</p>
 			</div>
       	</div>
@@ -127,6 +127,8 @@ export default {
 			start_price: 0,
 			owner: "",
 			endOfBid: "",
+			noOfSecsLeft: 0,
+			endOfBidFormatted: "",
 			period: 0,
 			imgpath: "/media/product-images/stock-image.png",
 
@@ -217,6 +219,12 @@ export default {
 			this.owner = product.owner;
 			this.endOfBid = product.end_of_bid;
 			this.imgpath = product.product_image;
+
+			var date = new Date();
+			var endDateTime = new Date(this.endOfBid)
+			this.noOfSecsLeft = (endDateTime.valueOf()-date.valueOf())/1000; //should return milliseconds left
+			console.log("no of secs left ",this.noOfSecsLeft,"s")
+
 		},
 
 		async getBidCount() {
@@ -248,12 +256,53 @@ export default {
 					alert(e);
 				});
 		},
+
+		//async getTimeLeft(){
+			//var date = new Date(); //gives current date time??
+			//var todayDate = date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate();
+			//var nowTime = date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+			//var todayDataTime = new Date(todayDate+' '+nowTime)
+			//You can update date & time with setTimeout() method every second (from online)
+			//var endDateTime = new Date(this.endOfBid)
+			//var timeLeft = date.valueOf()-endDateTime.valueOf(); //should return milliseconds left
+			//https://stackoverflow.com/questions/19700283/how-to-convert-time-in-milliseconds-to-hours-min-sec-format-in-javascript
+			//link above to convert from milliseconds to 00:00:00 format
+			//problem - endOfBid not working?? need to make into date type
+			//console.log("time",this.endOfBid)
+
+			//var date = new Date();
+			//var endDateTime = new Date(this.endOfBid)
+			//var timeLeft = date.valueOf()-endDateTime.valueOf(); //should return milliseconds left
+			//console.log("time",this.endOfBid)
+
+
+
+		//},
+
+		async formatTime(){
+			let res = await this.getProductData()
+			//let minutes = Math.floor((this.noOfSecsLeft/1000) / 60);
+  			//let hours = Math.floor(minutes / 60);
+			//let hoursformat = (hours < 10) ? "0" + hours : hours;
+  			//let minutesformat = (minutes < 10) ? "0" + minutes : minutes;
+			//this.endOfBidFormatted = hoursformat + ":" + minutesformat;
+			//console.log("formatted",this.endOfBidFormatted)
+			let seconds = this.noOfSecsLeft
+			let days = Math.floor(seconds/(24*3600))
+			seconds = seconds % (24*3600)
+			let hours = Math.floor(seconds/3600)
+			seconds = seconds % 3600
+			let minutes = Math.floor(seconds/60)
+			this.endOfBidFormatted = (days+' Days '+hours+' Hours '+minutes+' Minutes ')
+		}
 	},
 	async mounted() {
 		this.getItemComments();
 		this.getLoggedInUser();
 		this.getProductData();
 		this.getBidCount();
+		//this.getTimeLeft();
+		this.formatTime();
 	},
 };
 </script>
