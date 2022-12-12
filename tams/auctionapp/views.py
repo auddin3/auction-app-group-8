@@ -24,13 +24,14 @@ def loginUser(request):
             messages.error(request,'Login failed. Please try again')
     return render(request, 'auctionapp/login.html', {'form':form})
 
-def logoutUser(request, user_id):
+def logoutUser(request: HttpRequest, user_id: int) -> JsonResponse:
      user = get_object_or_404(User, id=user_id)
 
      if request.method == "GET":
         if user is not None:
             logout(request)
             # return HttpResponseRedirect('http://localhost:8000/auctionapp')
+            request.session.clear
             return JsonResponse({"path": 'http://localhost:8000/auctionapp'})
 
 

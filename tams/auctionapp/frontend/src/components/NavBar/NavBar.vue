@@ -24,7 +24,7 @@
 <script lang="ts">
 import NavBarLink from "../navbar/NavBarLink.vue";
 import { collapsed, toggleNavBar, navbarWidth } from "./state";
-import router from '../../router';
+import router from "../../router";
 export default {
 	// props: {},
 	components: { NavBarLink },
@@ -38,10 +38,15 @@ export default {
 	},
 	methods: {
 		async handleLogout() {
-			await fetch("http://localhost:8000/auctionapp/api/logout/" + this.userId)
+			await fetch("http://localhost:8000/auctionapp/api/logout/" + this.userId, {
+				credentials: "include",
+				mode: "cors",
+				referrerPolicy: "no-referrer",
+				method: "GET",
+			})
 				.then((response) => {
-					const data = response.json()
-                    window.location.href = "http://localhost:8000/auctionapp"
+					const data = response.json();
+					window.location.href = "http://localhost:8000/auctionapp";
 				})
 				.catch((e) => {
 					alert(e);
