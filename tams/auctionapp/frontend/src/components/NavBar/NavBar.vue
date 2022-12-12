@@ -29,14 +29,39 @@
 import NavBarLink from '../navbar/NavBarLink.vue';
 import { collapsed, toggleNavBar, navbarWidth } from './state';
 export default {
+    created(){
+        this.fetchUserData
+    },
+    data(){
+        return{
+            userId: 0,
+        }
+    },
     // props: {},
     components: { NavBarLink },
     setup() {
         return { collapsed, toggleNavBar, navbarWidth }
     },
     methods: {
+        async fetchUserData() {
+		//Fetch user data
+            let response = await fetch("http://localhost:8000/auctionapp/user",
+                {
+                    credentials: "include",
+                    mode: "cors",
+                    referrerPolicy: "no-referrer",
+                    method: "GET"
+                });
+            let data = await response.json()
+            this.userId = data.user_id
+        },
+
         async handleLogout() {
             console.log('write code')
+            console.log(this.userId)
+            let response = await fetch("http://localhost:8000/auctionapp/logout_user/"+ this.userId + "/")
+            let data = await response.json()
+            
         },
     },
 }

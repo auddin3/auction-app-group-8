@@ -14,4 +14,5 @@ urlpatterns = [
     path('items/<int:product_id>', views.product_details, name='product_details'),
     ## path('api/search/', api.api_search, name='api_search'),
     path('api/comments/<int:product_id>', views.comment_api),
+    path('logout_user/<int:user_id>', views.logoutUser, name='logout')
 ]
