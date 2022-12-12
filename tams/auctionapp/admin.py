@@ -29,23 +29,22 @@ class UserAdminConfig(UserAdmin):
 class ProductAdminConfig(admin.ModelAdmin):
     search_fields = ('product_name', 'start_price',)
     ordering = ('start_price',)
-    list_display = ('product_name', 'start_price', 'owner', 'product_image',)
+    list_display = ('product_name', 'start_price', 'owner', 'product_image', 'end_of_bid')
 
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('product_name', 'description', 'start_price', 'owner', 'product_image',)}),
+            'fields': ('product_name', 'description', 'start_price', 'owner', 'product_image', 'end_of_bid')}),
     )
 
 class BidAdminConfig(admin.ModelAdmin):
     search_fields = ('id', 'product',)
-    ordering = ('end_of_bid',)
-    list_display = ('id', 'product', 'end_of_bid',)
+    list_display = ('id', 'product',)
 
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('product', 'end_of_bid',)}),
+            'fields': ('product',)}),
     )
 
 class FAQAdminConfig(admin.ModelAdmin):

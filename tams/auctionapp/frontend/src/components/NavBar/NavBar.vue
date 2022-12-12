@@ -8,10 +8,12 @@
         </h1>
 
         <NavBarLink to="/" icon="fas fa-money-bill-trend-up">Auctions</NavBarLink>
-        <NavBarLink to="/search" icon="fas fa-magnifying-glass">Search</NavBarLink>
-        <NavBarLink to="/items" icon="fas fa-box-archive">Items</NavBarLink>
+        <NavBarLink to="/search" icon="fas fa-box-archive">Inventory</NavBarLink>
         <NavBarLink to="/profile" icon="fas fa-users">My Profile</NavBarLink>
-        <NavBarLink to="/logout" icon="fas fa-right-from-bracket">Logout</NavBarLink>
+        <button class="btn btn-light btn-md" icon="fas fa-right-from-bracket" @click.prevent="handleLogout">
+            <span class="fas fa-right-from-bracket" aria-hidden="true"></span>
+            <div class="d-inline p-l-2" v-if="!collapsed">Logout</div>
+        </button>
 
         <span
           class="collapse-icon"
@@ -31,8 +33,12 @@ export default {
     components: { NavBarLink },
     setup() {
         return { collapsed, toggleNavBar, navbarWidth }
-
-    }
+    },
+    methods: {
+        async handleLogout() {
+            console.log('write code')
+        },
+    },
 }
 </script>
 
@@ -82,5 +88,9 @@ export default {
 .rotate-180 {
     transform: rotate(180deg);
     transition: 0.2s linear;
+}
+
+.p-l-2 {
+    padding-left: 10px;
 }
 </style>
