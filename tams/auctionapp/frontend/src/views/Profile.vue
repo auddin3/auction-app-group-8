@@ -265,7 +265,7 @@ export default {
 			fd.append("image", selectedFile)
 			fd.append("name", selectedFile.name)
 
-			await fetch("http://localhost:8000/auctionapp/api/picture/" + 1 + "/", {
+			await fetch("http://localhost:8000/auctionapp/api/picture/" + this.userId + "/", {
 				method: "POST",
 				body: fd,
 			})
