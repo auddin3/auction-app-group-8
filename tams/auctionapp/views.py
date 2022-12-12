@@ -1,7 +1,7 @@
 from auctionapp.forms import SignUpForm, LogInForm
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib import messages
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from auctionapp.models import User, Product, Bid, FAQ
 from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse, HttpResponseRedirect, JsonResponse, HttpResponseNotAllowed, HttpRequest
@@ -23,6 +23,16 @@ def loginUser(request):
         else:
             messages.error(request,'Login failed. Please try again')
     return render(request, 'auctionapp/login.html', {'form':form})
+
+def logoutUser(request, user_id):
+     user = get_object_or_404(User, id=user_id)
+
+     if request.method == "GET":
+        if user is not None:
+            logout(request)
+            # return HttpResponseRedirect('http://localhost:8000/auctionapp')
+            return JsonResponse({"path": 'http://localhost:8000/auctionapp'})
+
 
 def session_api(request : HttpRequest) -> JsonResponse:
     if request.method == "GET":
