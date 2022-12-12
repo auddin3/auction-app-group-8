@@ -6,6 +6,8 @@ from auctionapp.models import User, Product, Bid, FAQ
 from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse, HttpResponseRedirect, JsonResponse, HttpResponseNotAllowed, HttpRequest
 import json
+from django.core.files.storage import FileSystemStorage
+from datetime import datetime
 
 def loginUser(request):
     form = LogInForm()
@@ -207,3 +209,24 @@ def bidCount(request, product_id):
             "total": Bid.objects.filter(product=newProduct).count(),
             "win": winner.bid_price,
         }, status=200)
+
+@csrf_exempt
+def picture_api(request, user_id):
+    if request.method == "POST":
+        files = request.FILES  # multivalued dict
+        image = files.get("image")
+        name = request.POST.get("name")
+
+        user = get_object_or_404(User, id=user_id)
+        day = datetime.today().day
+        month = datetime.today().month
+        year = datetime.today().year
+        combinedPath = "/" + str(year) + "/" + str(month) + "/" + str(day) + ""
+        
+        fss = FileSystemStorage(location="auctionapp/media/profile-photos" + combinedPath)
+        file = fss.save(name, image)
+
+        user.profile_photo = "/profile-photos" + combinedPath + "/" + file
+        user.save()
+    
+        return JsonResponse({"user": user.to_dict()}, safe=False)
