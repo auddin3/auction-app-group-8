@@ -13,6 +13,7 @@
 						type="file"
 						id="upload-file"
 						name="upload-file"
+						ref="myFileInput"
 						accept="image/gif, image/jpeg, image/png"
 						hidden
 					/>
@@ -263,6 +264,7 @@ export default {
 			})
 				.then((response) => {
 					this.refreshData();
+					(this.$refs['myFileInput'] as any).value = '';
 				})
 				.catch((e) => {
 					alert(e);

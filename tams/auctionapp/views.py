@@ -6,6 +6,8 @@ from auctionapp.models import User, Product, Bid
 from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse, HttpResponseRedirect, JsonResponse, HttpResponseNotAllowed
 import json
+from django.core.files.storage import FileSystemStorage
+from datetime import datetime
 
 def loginUser(request):
     form = LogInForm()
@@ -95,5 +97,15 @@ def picture_api(request, user_id):
         name = request.POST.get("name")
 
         user = get_object_or_404(User, id=user_id)
+        day = datetime.today().day
+        month = datetime.today().month
+        year = datetime.today().year
+        combinedPath = "/" + str(year) + "/" + str(month) + "/" + str(day) + ""
+        
+        fss = FileSystemStorage(location="auctionapp/media/profile-photos" + combinedPath)
+        file = fss.save(name, image)
+
+        user.profile_photo = "/profile-photos" + combinedPath + "/" + file
+        user.save()
     
-        return JsonResponse({name: name}, safe=False)
+        return JsonResponse({"user": user.to_dict()}, safe=False)
