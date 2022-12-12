@@ -32,7 +32,7 @@ def logoutUser(request: HttpRequest, user_id: int) -> JsonResponse:
             logout(request)
             # return HttpResponseRedirect('http://localhost:8000/auctionapp')
             request.session.clear
-            return JsonResponse({"path": 'http://localhost:8000/auctionapp'})
+            return JsonResponse({"success": 'OK'})
 
 
 def session_api(request : HttpRequest) -> JsonResponse:
