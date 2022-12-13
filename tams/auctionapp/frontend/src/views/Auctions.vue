@@ -25,8 +25,10 @@
           <h4 class="card-title">{{ product['product_name'] }}</h4>
           <p class="card-text">{{ product['description'] }}</p>
           <p class="card-text price-colour"><strong>Start Price: £{{ product['start_price'] }}</strong></p>
-          <p class="card-text">End of Bid: {{ product['end_of_bid'] }}</p>
-          <p class="card-text">Owner: {{ product['owner'] }}</p>
+          <!-- <p class="card-text">End of Bid: {{ product['end_of_bid'] }}</p> -->
+          <button @click=formatTime(product.end_of_bid) class="btn">Click to view End of Bid deadline</button>
+          <p v-if='endOfBidFormatted != ""'><strong>{{ endOfBidFormatted }} Left</strong></p>
+          <p class="card-text mt-4"><strong>Owner:</strong> {{ product['owner'] }}</p>
           <button @click=view_item_details(product) class="btn btn-secondary">View Item Details</button>
         </div>
       </div>
@@ -48,6 +50,8 @@ export default {
       query: '',
       search: "",
       imgpath: "/media/product-images/stock-image.png",
+      endOfBidFormatted: "",
+      noOfSecsLeft: 0,
     };
   },
   computed: {
@@ -72,6 +76,20 @@ export default {
         console.log(e)
       }
     },
+    async formatTime(end_of_bid: any){
+      let date = new Date();
+			let endDateTime = new Date(end_of_bid)
+			let noOfSecsLeft = (endDateTime.valueOf()-date.valueOf())/1000; //should return milliseconds left
+			// console.log("no of secs left ",noOfSecsLeft,"s")
+
+      let seconds = noOfSecsLeft
+			let days = Math.floor(seconds/(24*3600))
+			seconds = seconds % (24*3600)
+			let hours = Math.floor(seconds/3600)
+			seconds = seconds % 3600
+			let minutes = Math.floor(seconds/60)
+			this.endOfBidFormatted = (days+' Days '+hours+' Hours '+minutes+' Minutes ')
+		}
   },
 
   async mounted() {
