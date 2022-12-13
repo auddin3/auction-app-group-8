@@ -1,11 +1,13 @@
 from auctionapp.forms import SignUpForm, LogInForm
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib import messages
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from auctionapp.models import User, Product, Bid, FAQ
 from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse, HttpResponseRedirect, JsonResponse, HttpResponseNotAllowed, HttpRequest
 import json
+from django.core.files.storage import FileSystemStorage
+from datetime import datetime
 
 def loginUser(request):
     form = LogInForm()
@@ -21,6 +23,17 @@ def loginUser(request):
         else:
             messages.error(request,'Login failed. Please try again')
     return render(request, 'auctionapp/login.html', {'form':form})
+
+def logoutUser(request: HttpRequest, user_id: int) -> JsonResponse:
+     user = get_object_or_404(User, id=user_id)
+
+     if request.method == "GET":
+        if user is not None:
+            logout(request)
+            # return HttpResponseRedirect('http://localhost:8000/auctionapp')
+            request.session.clear
+            return JsonResponse({"success": 'OK'})
+
 
 def session_api(request : HttpRequest) -> JsonResponse:
     if request.method == "GET":
@@ -93,8 +106,14 @@ def fetch_products(request):
             ],
         }, status=200)
 
+@csrf_exempt
 def product_details(request, product_id):
-    return
+    if request.method == 'GET':
+        reqProduct = Product.objects.get(id=product_id)
+
+        return JsonResponse({
+            'product': reqProduct.to_dict()
+        }, status=200)
 
 @csrf_exempt 
 def comment_api(request, product_id):
@@ -138,3 +157,87 @@ def comment_api(request, product_id):
         return JsonResponse({
             "comment": comment.to_dict()
         }, status=200)
+
+@csrf_exempt 
+def bid_api(request, product_id):
+    if request.method == 'POST':
+        bid_details = json.loads(request.body)
+        newProduct = Product.objects.get(id=product_id)
+        newBidder = User.objects.get(id=bid_details["bidder"])
+
+        try:
+            currBids = Bid.objects.filter(product=newProduct)
+            existingBid = currBids.get(bidder=newBidder)
+            existingBid.bid_price = bid_details["bid_price"]
+            existingBid.save()
+            return JsonResponse({
+                "Bid": existingBid.to_dict(),
+            }, status=200)
+        except:
+        
+            new_entry = Bid.objects.create(bid_price = bid_details["bid_price"],
+            product = newProduct,
+            bidder = newBidder,)
+        
+            new_entry.end_of_bid = newProduct.end_of_bid
+            new_entry.is_active = True
+            
+            new_entry.save()
+
+            try:
+                if Bid.objects.filter(product = newProduct).count() > 0:
+                    currentWinningBid = Bid.objects.filter(product=newProduct).get(winner=True)
+                    if float(currentWinningBid.bid_price) < float(new_entry.bid_price):
+                        currentWinningBid.winner = False
+                        new_entry.winner = True
+                        new_entry.save()
+                        currentWinningBid.save()
+                    else:
+                        currentWinningBid.winner = True
+                        new_entry.winner = False
+                        new_entry.save()
+                        currentWinningBid.save()
+            except:
+                new_entry.winner = True
+                new_entry.save()
+
+            return JsonResponse({
+                "Bid": new_entry.to_dict(),
+            }, status=200)
+
+def bidCount(request, product_id):
+    if request.method == "GET":
+        newProduct = Product.objects.get(id=product_id)
+        try:
+            winner = Bid.objects.filter(product=newProduct).get(winner=True)
+        except:
+            return JsonResponse({
+                "total": Bid.objects.filter(product=newProduct).count(),
+                "win": 0,
+            }, status=200)
+
+        return JsonResponse({
+            "total": Bid.objects.filter(product=newProduct).count(),
+            "win": winner.bid_price,
+        }, status=200)
+
+@csrf_exempt
+def picture_api(request, user_id):
+    if request.method == "POST":
+        files = request.FILES  # multivalued dict
+        image = files.get("image")
+        name = request.POST.get("name")
+
+        user = get_object_or_404(User, id=user_id)
+        day = datetime.today().day
+        month = datetime.today().month
+        year = datetime.today().year
+        combinedPath = "/" + str(year) + "/" + str(month) + "/" + str(day) + ""
+        
+        fss = FileSystemStorage(location="auctionapp/media/profile-photos" + combinedPath)
+        file = fss.save(name, image)
+
+        user.profile_photo = "/profile-photos" + combinedPath + "/" + file
+        user.save()
+    
+        return JsonResponse({"user": user.to_dict()}, safe=False)
