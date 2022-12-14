@@ -194,10 +194,12 @@ def bid_api(request, product_id):
 
 def getWinner(request,proudct_id):
     if request.method == "GET":
-        winningBid = Bid.objects.filter(id=proudct_id).get(winner=True)
-        user = get_object_or_404(User, id=winningBid['bidder_id'])
+        winningBid = Bid.objects.filter(id=proudct_id).get(winner=True) #filters the bids where id=product id, then gets the
+        #one where winner is true
+        user = winningBid.bidder #gets the user from that winning bid
+        useremail = user.email #gets the users email
         return JsonResponse({
-            'user_email':user.email,
+            'user_email':useremail,
         },status=200)
 
 
