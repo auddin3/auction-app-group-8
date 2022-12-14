@@ -145,12 +145,13 @@ def product_details(request, user_id):
         
         add_item = Product.objects.create(
             product_name = bodyload['product_name'],
-            # product_image = form['product_image'],
             description = bodyload['description'],
             start_price = bodyload['start_price'],
             end_of_bid = bodyload['end_of_bid'],
             owner = newOwner
         )
+
+        add_item.product_image = bodyload["product_image"]
 
         add_item.save() 
         messages.success(request, 'Item added successfully')
@@ -314,3 +315,20 @@ def picture_api(request, user_id):
         user.save()
     
         return JsonResponse({"user": user.to_dict()}, safe=False)
+
+@csrf_exempt
+def productPicture(request):
+    if request.method == "POST":
+        files = request.FILES  # multivalued dict
+        image = files.get("image")
+        name = request.POST.get("name")
+
+        day = datetime.today().day
+        month = datetime.today().month
+        year = datetime.today().year
+        combinedPath = "/" + str(year) + "/" + str(month) + "/" + str(day) + "/"
+        
+        fss = FileSystemStorage(location="auctionapp/media/product-images" + combinedPath)
+        file = fss.save(name, image)
+    
+        return JsonResponse({"path": "/product-images" + combinedPath + file}, safe=False)
