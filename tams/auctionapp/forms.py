@@ -34,9 +34,3 @@ class LogInForm(ModelForm):
             'email': forms.TextInput(attrs={
             'style': 'padding: 5px; margin: 10px; border-radius: 25px;',}),    
         }
-
-
-class ProductForm(ModelForm):
-    class Meta:
-        model = Product
-        fields = '__all__'

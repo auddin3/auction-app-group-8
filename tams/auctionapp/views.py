@@ -1,4 +1,4 @@
-from auctionapp.forms import SignUpForm, LogInForm, ProductForm
+from auctionapp.forms import SignUpForm, LogInForm
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout

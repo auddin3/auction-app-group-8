@@ -1,8 +1,5 @@
 <template>
 	<div class="card-group">
-		<!-- <div class="card mt-4" style="width: 12rem">
-        <img class="card-img-top product-image" src="/media/product-images" alt="MyItems" />
-      </div> -->
 		<div v-if="filteredItems.length > 0">
 			<div v-for="item in filteredItems">
 				<div class="card mt-4" style="width: 50rem">
@@ -11,6 +8,22 @@
 					</div>
 					<div v-else class="card-title">
 						{{ item.product_name }}
+					</div>
+					<div class="card mt-4" style="width: 12rem">
+						<div v-if="item.product_image.length < 0">
+							<img
+								class="card-img-top product-image"
+								:src="`http://localhost:8000${product_image}`"
+								alt="MyItems"
+							/>
+						</div>
+            <div v-else>
+              <img
+								class="card-img-top product-image"
+								:src="`http://localhost:8000${item.product_image}`"
+								alt="MyItems"
+							/>
+            </div>
 					</div>
 				</div>
 			</div>
@@ -82,8 +95,8 @@
 					<input type="text" id="product_name" class="form-control" v-model="product_name" />
 				</div>
 
-				<div class="item-photo-container">
-					<!-- <div>
+				<!-- <div class="item-photo-container">
+					<div>
 					<input
 						v-on:change="onFileSelected"
 						type="file"
@@ -134,8 +147,8 @@
 						</svg>
 						<p class="d-inline btn-text">Add item's picture</p>
 					</label>
-				</div> -->
 				</div>
+				</div> -->
 
 				<div>
 					<label for="description"><b>Item Description</b></label>
@@ -189,7 +202,7 @@ export default {
 			items: [],
 			user_id: 0,
 			product_name: "",
-			// product_image: "/media/product-images",
+			product_image: "/media/product-images/stock-image.png",
 			description: "",
 			start_price: 0,
 			end_of_bid: TODAY.toISOString().slice(0, 10),
@@ -216,7 +229,7 @@ export default {
 		},
 
 		async saveNewItem() {
-			let response = await fetch("http://localhost:8000/auctionapp/api/items/" + + this.user_id, {
+			let response = await fetch("http://localhost:8000/auctionapp/api/items/" + +this.user_id, {
 				headers: {
 					"Content-Type": "application/json",
 				},
@@ -227,7 +240,6 @@ export default {
 					description: this.description,
 					start_price: this.start_price,
 					end_of_bid: this.end_of_bid,
-					// owner: this.owner,
 				}),
 			});
 
