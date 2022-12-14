@@ -56,7 +56,7 @@ class User(AbstractUser, PermissionsMixin):
     upload_to='profile-photos/%Y/%m/%D/')
 
     is_staff = models.BooleanField(default=False)
-    is_active: models.BooleanField(default=False)
+    is_active = models.BooleanField(default=False)
 
     objects = CustomAccountManager()
 
