@@ -127,7 +127,7 @@ export default {
 			start_price: 0,
 			owner: "",
 			endOfBid: "",
-			noOfSecsLeft: 0,
+			noOfSecsLeft: 5,
 			endOfBidFormatted: "",
 			period: 0,
 			imgpath: "/media/product-images/stock-image.png",
@@ -135,7 +135,8 @@ export default {
 			bid_entry: 0,
 			bid_total: 0,
 			win_price: 0,
-			userEmail: "",
+			user_id: 0,
+			user_email: "",
 		};
 	},
 	computed: {
@@ -273,9 +274,17 @@ export default {
 		async getWinner(){
 			let response = await fetch("http://localhost:8000/auctionapp/api/getWinner/"+this.pid)
 			let data = await response.json()
-			this.userEmail = data.user_email
-			console.log("email",this.userEmail)
+			this.user_id = data.user_id
+			this.user_email = data.user_email
+			console.log("email",this.user_email,this.user_id)
 		},
+
+		async emailWinner(){
+			await this.getWinner()
+			let response = await fetch("http://localhost:8000/auctionapp/api/emailWinner/"+this.user_id+"/"+this.pid)
+			let data = await response.json()
+			console.log("email sent to",data.useremail)
+		}
 
 
 		//async getWinner(){
@@ -308,6 +317,8 @@ export default {
 		this.getBidCount();
 		this.formatTime();
 		this.getWinner();
+		this.emailWinner();
+
 	},
 };
 </script>

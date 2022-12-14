@@ -16,5 +16,6 @@ urlpatterns = [
     path('api/comments/<int:product_id>', views.comment_api),
     path('api/bids/<int:product_id>', views.bid_api),
     path('api/bidCount/<int:product_id>', views.bidCount),
-    path('api/getWinner/<int:product_id>',views.getWinner)
+    path('api/getWinner/<int:product_id>',views.getWinner),
+    path('api/emailWinner/<int:user_id>/<int:product_id>',views.emailWinner),
 ]

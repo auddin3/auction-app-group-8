@@ -201,10 +201,25 @@ def getWinner(request,product_id):
         user = winningBid.bidder #gets the user from that winning bid
         useremail = user.email #gets the users email
         return JsonResponse({
+            'user_id': user.id,
             'user_email':useremail,
         },status=200)
 
-
+def emailWinner(request,user_id,product_id):
+    user = get_object_or_404(User, id=user_id)
+    product = get_object_or_404(Product, id=product_id)
+    useremail = user.email
+    productname = product.product_name
+    productowner = product.owner.email
+    send_mail(
+    'Bid Winner',
+    ('Hi, you have won '+productname+". Please contact "+productowner+" for more information."),
+    'tams2022group8@gmail.com',
+    [useremail],
+    fail_silently=False,)
+    return JsonResponse({
+        'useremail':useremail
+    })
 
 def bidCount(request, product_id):
     if request.method == "GET":
