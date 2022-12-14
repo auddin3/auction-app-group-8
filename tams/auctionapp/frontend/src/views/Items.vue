@@ -272,7 +272,7 @@ export default {
 		},
 
 		async getWinner(){
-			let response = await fetch("http://localhost:8000/auctionapp/api/getWinner/"+this.pid)
+			let response = await fetch("http://localhost:8000/auctionapp/api/getWinner/"+this.pid+"/"+this.noOfSecsLeft)
 			let data = await response.json()
 			this.user_id = data.user_id
 			this.user_email = data.user_email
@@ -281,7 +281,7 @@ export default {
 
 		async emailWinner(){
 			await this.getWinner()
-			let response = await fetch("http://localhost:8000/auctionapp/api/emailWinner/"+this.user_id+"/"+this.pid)
+			let response = await fetch("http://localhost:8000/auctionapp/api/emailWinner/"+this.user_id+"/"+this.pid+"/"+this.noOfSecsLeft)
 			let data = await response.json()
 			console.log("email sent to",data.useremail)
 		}

@@ -41,6 +41,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'auctionapp',
     'corsheaders',
+    'django_crontab',
+
+]
+
+CRONJOBS = [
+    ('*****','auctionapp.cron.my_cron_job')
 ]
 
 CORS_ORIGIN_ALLOW_ALL = True
