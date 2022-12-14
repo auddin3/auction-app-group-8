@@ -192,6 +192,16 @@ def bid_api(request, product_id):
                 "Bid": new_entry.to_dict(),
             }, status=200)
 
+def getWinner(request,proudct_id):
+    if request.method == "GET":
+        winningBid = Bid.objects.filter(id=proudct_id).get(winner=True)
+        user = get_object_or_404(User, id=winningBid['bidder_id'])
+        return JsonResponse({
+            'user_email':user.email,
+        },status=200)
+
+
+
 def bidCount(request, product_id):
     if request.method == "GET":
         newProduct = Product.objects.get(id=product_id)
