@@ -287,28 +287,7 @@ export default {
 		}
 
 
-		//async getWinner(){
-			//if (this.noOfSecsLeft == 0){
-				//set winner = true for highest bid - done by aysha
-				//get bidderid where winner = true
-				//let response = await fetch("http://localhost:8000/auctionapp/api/bidCount/" + this.pid);
-				//let data = await response.json();
-				//if (this.win_price > this.start_price) {
-					//this.bidderid = data.bidderid
-				//}
-				// get user email from that id
-				//send user email
-				// delete product
 
-			
-			//}
-
-		//},
-
-		//async emailWinner(){
-		//	await this.getWinner()
-		//	let response = await fetch()
-		//}
 	},
 	async mounted() {
 		this.getItemComments();
@@ -318,8 +297,8 @@ export default {
 		this.formatTime();
 		this.getWinner();
 		this.emailWinner();
-
 	},
+
 };
 </script>
 
