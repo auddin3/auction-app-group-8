@@ -9,13 +9,13 @@
 ## Tasks Completed
 Each team member completed all tasks assigned to them. <br>
 - **Aysha Anita Uddin** <br>
-Database, Profile Page, Comments
+Database, Profile Page, Comments, Place Bids
 - **Tazmena Hussain** <br>
 Sign Up/Login User Authentication Framework, Item Display, Email Winner, Sessions
 - **Syeda Sadia Taznim** <br>
 Routing/Navbar, View Bids, Search Bar
 - **Sadia Muna Abedin** <br>
-Add Bids
+Add Bids, Logout, Inventory
 
 ## Deployment URL
 
