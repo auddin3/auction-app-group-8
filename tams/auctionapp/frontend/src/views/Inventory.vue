@@ -73,19 +73,17 @@
 		</div>
 	</div>
 
-	<!-- 
-  <h2>Add your item!</h2>
-  <div>
-    <form @submit.prevent="saveNewItem">
-      <fieldset>
-        <div>
-          <label for="product_name"><b>Item Name</b></label>
-          <input type="text" id="product_name" class="form-control" v-model="product_name"/>
-        </div>
-
-        <div class="item-photo-container" >
-
+	<h2>Add your item!</h2>
+	<div>
+		<form @submit.prevent="saveNewItem">
+			<fieldset>
 				<div>
+					<label for="product_name"><b>Item Name</b></label>
+					<input type="text" id="product_name" class="form-control" v-model="product_name" />
+				</div>
+
+				<div class="item-photo-container">
+					<!-- <div>
 					<input
 						v-on:change="onFileSelected"
 						type="file"
@@ -136,37 +134,41 @@
 						</svg>
 						<p class="d-inline btn-text">Add item's picture</p>
 					</label>
+				</div> -->
 				</div>
-			</div>
 
-        <div>
-          <label for="description"><b>Item Description</b></label>
-          <input type="text" id="description" class="form-control" v-model="description"/>
-        </div>
+				<div>
+					<label for="description"><b>Item Description</b></label>
+					<input type="text" id="description" class="form-control" v-model="description" />
+				</div>
 
-        <div>
-          <label for="start_price"><b>Starting Price</b></label>
-          <input type="number" step="0.01" min="0.01" id="start_price" class="form-control" v-model="start_price"/>
-        </div>
+				<div>
+					<label for="start_price"><b>Starting Price</b></label>
+					<input
+						type="number"
+						step="0.01"
+						id="start_price"
+						class="form-control"
+						v-model="start_price"
+					/>
+				</div>
 
-        <div>
-          <label for="end_of_bid"><b>End of Bid</b></label>
-          <input type="date" id="end_of_bid" class="form-control" v-model="end_of_bid"/>
-        </div>
+				<div>
+					<label for="end_of_bid"><b>End of Bid</b></label>
+					<input type="date" id="end_of_bid" class="form-control" v-model="end_of_bid" />
+				</div>
 
-        <div>
-          <label for="owner"><b>Owner</b></label>
-          <input type="text" id="owner" class="form-control" v-model="owner"/>
-        </div>
-        <br>
-        <div>
-          <button type="submit"><b>Submit</b></button>
-        </div>
-
-      </fieldset>
-
-    </form>
-  </div> -->
+				<div>
+					<label for="owner"><b>Owner</b></label>
+					<input type="text" id="owner" class="form-control" v-model="owner" />
+				</div>
+				<br />
+				<div>
+					<button type="submit"><b>Submit</b></button>
+				</div>
+			</fieldset>
+		</form>
+	</div>
 
 	<!-- <SavedBids/> -->
 	<!-- <SavedItems/> -->
@@ -187,7 +189,7 @@ export default {
 			items: [],
 			user_id: 0,
 			product_name: "",
-			product_image: "/media/product-images",
+			// product_image: "/media/product-images",
 			description: "",
 			start_price: 0,
 			end_of_bid: TODAY.toISOString().slice(0, 10),
@@ -211,6 +213,26 @@ export default {
 			});
 			let data = await response.json();
 			this.items = data.items;
+		},
+
+		async saveNewItem() {
+			let response = await fetch("http://localhost:8000/auctionapp/api/items/" + + this.user_id, {
+				headers: {
+					"Content-Type": "application/json",
+				},
+				method: "POST",
+				body: JSON.stringify({
+					product_name: this.product_name,
+					// product_image: this.product_image,
+					description: this.description,
+					start_price: this.start_price,
+					end_of_bid: this.end_of_bid,
+					// owner: this.owner,
+				}),
+			});
+
+			let data = await response.json();
+			this.items = data.product;
 		},
 	},
 	async mounted() {

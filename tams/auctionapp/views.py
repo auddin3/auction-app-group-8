@@ -139,22 +139,23 @@ def product_details(request, user_id):
     # Ajax request method: POST
     # Add items
     if request.method == 'POST':
-        form = ProductForm(request.POST)
-        # bodyload= json.loads(request.body.decode('utf-8'))
+        newOwner = User.objects.get(id=user_id)
+
+        bodyload= json.loads(request.body)
+        
         add_item = Product.objects.create(
-            product_name = form['product_name'],
-            product_image = form['product_image'],
-            description = form['description'],
-            start_price = form['start_price'],
-            end_of_bid = form['end_of_bid'],
-            owner = form['owner']
+            product_name = bodyload['product_name'],
+            # product_image = form['product_image'],
+            description = bodyload['description'],
+            start_price = bodyload['start_price'],
+            end_of_bid = bodyload['end_of_bid'],
+            owner = newOwner
         )
 
-        if form.is_valid():
-            add_item.save() 
-            messages.success(request, 'Item added successfully')
+        add_item.save() 
+        messages.success(request, 'Item added successfully')
 
-        return JsonResponse({'product': [form]})
+        return JsonResponse({'product': add_item.to_dict()})
 
     # Ajax request method: PUT
     # Edit items
