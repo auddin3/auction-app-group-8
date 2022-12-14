@@ -1,4 +1,4 @@
-from auctionapp.forms import SignUpForm, LogInForm
+from auctionapp.forms import SignUpForm, LogInForm, ProductForm
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
@@ -30,14 +30,24 @@ def logoutUser(request: HttpRequest, user_id: int) -> JsonResponse:
      if request.method == "GET":
         if user is not None:
             logout(request)
-            # return HttpResponseRedirect('http://localhost:8000/auctionapp')
             request.session.clear
+            messages.success(request, ("Successful Logout!"))
             return JsonResponse({"success": 'OK'})
 
 
 def session_api(request : HttpRequest) -> JsonResponse:
     if request.method == "GET":
         return JsonResponse( { 'user_id' : request.session.__getitem__("_auth_user_id") } , safe=False )
+
+
+# def logoutUser(request):
+#     # parse id from front end and backend
+#     # logout, need user
+#     print(request.user.id)
+#     user = get_object_or_404(User, id=request.user.id) 
+#     logout(request,user)
+#     messages.success(request, ("Successful Logout!"))
+#     return HttpResponseRedirect('http://localhost:8000/auctionapp/')
 
 
 def signup(request):
@@ -105,17 +115,79 @@ def fetch_products(request):
                 for product in Product.objects.all()
             ],
         }, status=200)
-
+        
 @csrf_exempt
-def product_details(request, product_id):
+def product_details(request, user_id):
+
+    # Ajax request method: GET
+    # Get items
     if request.method == 'GET':
-        reqProduct = Product.objects.get(id=product_id)
+
+        logged_user = User.objects.get(id=user_id)
+        items = Product.objects.filter(owner=logged_user)
+        bids = Bid.objects.filter(bidder=logged_user)
 
         return JsonResponse({
-            'product': reqProduct.to_dict()
+            'items': [
+                item.to_dict()
+                for item in items
+            ]
         }, status=200)
 
-@csrf_exempt 
+
+    
+    # Ajax request method: POST
+    # Add items
+    if request.method == 'POST':
+        form = ProductForm(request.POST)
+        # bodyload= json.loads(request.body.decode('utf-8'))
+        add_item = Product.objects.create(
+            product_name = form['product_name'],
+            product_image = form['product_image'],
+            description = form['description'],
+            start_price = form['start_price'],
+            end_of_bid = form['end_of_bid'],
+            owner = form['owner']
+        )
+
+        if form.is_valid():
+            add_item.save() 
+            messages.success(request, 'Item added successfully')
+
+        return JsonResponse({'product': [form]})
+
+    # Ajax request method: PUT
+    # Edit items
+    if request.method == 'PUT':
+        bodyload= json.loads(request.body.decode('utf-8'))
+        edit_item = Product.objects.get(id= bodyload['id'])
+        if edit_item:
+            edit_item.product_name= bodyload['product_name']
+            edit_item.description= bodyload['description']
+            edit_item.start_price= bodyload['start_price']
+            edit_item.end_of_bid= bodyload['end_of_bid']
+            edit_item.owner= bodyload['owner']
+
+            edit_item.save()
+
+            if bodyload['product_name'] != edit_item.product_name:
+                try:
+                    item_exists = Product.objects.get(product_name= bodyload["product_name"])
+                    if item_exists:
+                        return HttpResponseNotAllowed("no")
+                except Product.DoesNotExist:
+                    edit_item.product_name= bodyload["product_name"]
+                    edit_item.save()
+        return JsonResponse({'Product': [bodyload]})  
+
+    # Ajax request method: DELETE
+    # Delete items
+    if request.method == 'DELETE':
+        bodyload= json.loads(request.body.decode('utf-8'))
+        Product.objects.get(id = bodyload['id']).delete()
+        return JsonResponse({'Product':[bodyload]})
+            
+
 def comment_api(request, product_id):
     if request.method == 'GET':
         return JsonResponse({

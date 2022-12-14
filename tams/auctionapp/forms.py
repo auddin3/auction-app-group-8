@@ -1,5 +1,5 @@
 from django.forms import ModelForm
-from auctionapp.models import User
+from auctionapp.models import User, Product
 from django import forms
 
 class SignUpForm(ModelForm):
@@ -34,3 +34,9 @@ class LogInForm(ModelForm):
             'email': forms.TextInput(attrs={
             'style': 'padding: 5px; margin: 10px; border-radius: 25px;',}),    
         }
+
+
+class ProductForm(ModelForm):
+    class Meta:
+        model = Product
+        fields = '__all__'

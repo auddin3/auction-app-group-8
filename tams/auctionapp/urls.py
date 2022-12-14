@@ -1,6 +1,6 @@
 from django.urls import path
 
-from . import views, api
+from . import views
 from auctionapp.views import profile_api
 
 app_name = 'auctionapp'
@@ -12,7 +12,7 @@ urlpatterns = [
     path('api/picture/<int:user_id>/', views.picture_api),
     path('api/products/', views.fetch_products, name='fetch_products'),
     ## path('api/products/<int:product_id>/', views.fetch_products_id, name='fetch_product_id'),
-    path('api/items/<int:product_id>', views.product_details, name='product_details'),
+    path('api/items/<int:user_id>', views.product_details, name='product_details'),
     ## path('api/search/', api.api_search, name='api_search'),
     path('api/comments/<int:product_id>', views.comment_api),
     path('api/bids/<int:product_id>', views.bid_api),
