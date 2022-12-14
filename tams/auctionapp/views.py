@@ -6,6 +6,7 @@ from auctionapp.models import User, Product, Bid, FAQ
 from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse, HttpResponseRedirect, JsonResponse, HttpResponseNotAllowed, HttpRequest
 import json
+from django.core.mail import send_mail
 
 def loginUser(request):
     form = LogInForm()
@@ -192,9 +193,10 @@ def bid_api(request, product_id):
                 "Bid": new_entry.to_dict(),
             }, status=200)
 
-def getWinner(request,proudct_id):
+def getWinner(request,product_id):
     if request.method == "GET":
-        winningBid = Bid.objects.filter(id=proudct_id).get(winner=True) #filters the bids where id=product id, then gets the
+        getproduct = Product.objects.get(id=product_id)
+        winningBid = Bid.objects.filter(product=getproduct).get(winner=True) #filters the bids where id=product id, then gets the
         #one where winner is true
         user = winningBid.bidder #gets the user from that winning bid
         useremail = user.email #gets the users email
