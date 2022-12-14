@@ -1,25 +1,29 @@
 <template>
-	
-  <div v-if="filteredItems.length > 0">
-    <div v-for="item in filteredItems">
-      <div>{{item.product_name}}</div>
-    </div>
-  </div>
-	<!-- 
-  <div class="card-group">
-      <div class="card mt-4" style="width: 12rem">
+	<div class="card-group">
+		<!-- <div class="card mt-4" style="width: 12rem">
         <img class="card-img-top product-image" src="/media/product-images" alt="MyItems" />
-      </div>
+      </div> -->
+		<div v-if="filteredItems.length > 0">
+			<div v-for="item in filteredItems">
+				<div class="card mt-4" style="width: 50rem">
+					<div v-if="edit" class="product_name">
+						<input type="text" id="product_name" v-model="product_name" />
+					</div>
+					<div v-else class="card-title">
+						{{ item.product_name }}
+					</div>
+				</div>
+			</div>
 
-      <div class="card mt-4" style="width: 50rem">
-        <div v-if="edit" class="product_name">
-          <input type = "text" id="product_name" v-model="product_name"/>
-        </div>
-        <div v-else class="card-title">
-          {{product_name}}
-        </div>
+			<!-- <div class="card mt-4" style="width: 50rem">
+			<div v-if="edit" class="product_name">
+				<input type="text" id="product_name" v-model="product_name" />
+			</div>
+			<div v-else class="card-title">
+				{{ item.product_name }}
+			</div> -->
 
-        <div v-if="edit" class="description">
+			<!-- <div v-if="edit" class="description">
           <input type = "text" id="description" v-model="description"/>
         </div>
         <div v-else class="card-title">
@@ -65,10 +69,9 @@
 
         <button v-else type="button" v-on:click=editItemOn() class="btn btn-secondary">Change My Items</button>
 
-        <button @click="deleteItem()" type="button" class="btn btn-outline-danger"><b>Delete Item</b></button>
-
-      </div>
-  </div> -->
+        <button @click="deleteItem()" type="button" class="btn btn-outline-danger"><b>Delete Item</b></button> -->
+		</div>
+	</div>
 
 	<!-- 
   <h2>Add your item!</h2>
@@ -192,7 +195,7 @@ export default {
 			edit: false,
 		};
 	},
-  computed: {
+	computed: {
 		filteredItems() {
 			const filteredItems = JSON.parse(JSON.stringify(this.items));
 			return filteredItems;
