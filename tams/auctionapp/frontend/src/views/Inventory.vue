@@ -1,13 +1,11 @@
 <template>
-
-<div v-for="item in filteredItems()">
-  {{item.product_name}}
-
-</div>
-
-
-
-<!-- 
+	
+  <div v-if="filteredItems.length > 0">
+    <div v-for="item in filteredItems">
+      <div>{{item.product_name}}</div>
+    </div>
+  </div>
+	<!-- 
   <div class="card-group">
       <div class="card mt-4" style="width: 12rem">
         <img class="card-img-top product-image" src="/media/product-images" alt="MyItems" />
@@ -72,10 +70,7 @@
       </div>
   </div> -->
 
-  
-
-
-<!-- 
+	<!-- 
   <h2>Add your item!</h2>
   <div>
     <form @submit.prevent="saveNewItem">
@@ -170,79 +165,64 @@
     </form>
   </div> -->
 
-  <!-- <SavedBids/> -->
-  <!-- <SavedItems/> -->
-
+	<!-- <SavedBids/> -->
+	<!-- <SavedItems/> -->
 </template>
 
 <script lang="ts">
 // import SavedBids from './SavedBids.vue'
 // import SavedItems from './SavedItems.vue'
 export default {
-  // components:{
-  //   SavedBids,
-  //   SavedItems,
-  // },
-    data() {
-      let date = new Date();
-      const TODAY = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-      return {
-        items:[],
-        user_id: 0,
-        product_name: "",
-        product_image: "/media/product-images",
-        description: "",
-        start_price: 0,
-        end_of_bid: TODAY.toISOString().slice(0, 10),
-        owner: "",
-        edit:false,
-      }
-  },
-  methods: {
-
-
-    async fetchItems(){
-      let response = await fetch("http://localhost:8000/auctionapp/api/items/" + this.user_id,
-      {
+	// components:{
+	//   SavedBids,
+	//   SavedItems,
+	// },
+	data() {
+		let date = new Date();
+		const TODAY = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+		return {
+			items: [],
+			user_id: 0,
+			product_name: "",
+			product_image: "/media/product-images",
+			description: "",
+			start_price: 0,
+			end_of_bid: TODAY.toISOString().slice(0, 10),
+			owner: "",
+			edit: false,
+		};
+	},
+  computed: {
+		filteredItems() {
+			const filteredItems = JSON.parse(JSON.stringify(this.items));
+			return filteredItems;
+		},
+	},
+	methods: {
+		async fetchItems() {
+			let response = await fetch("http://localhost:8000/auctionapp/api/items/" + this.user_id, {
 				credentials: "include",
 				mode: "cors",
 				referrerPolicy: "no-referrer",
-				method: "GET"
+				method: "GET",
 			});
-      let data = await response.json()
-
-      this.items = data.items
-
-    },
-
-    async mounted() {
-      //Fetch user data
-      let response = await fetch("http://localhost:8000/auctionapp/user",
-        {
-          credentials: "include",
-          mode: "cors",
-          referrerPolicy: "no-referrer",
-          method: "GET"
-        });
-      let data = await response.json()
-      this.user_id = data.user_id
-      this.fetchItems()
-  },
-  
-  computed: {
-        filteredItems() {
-            const filteredItems = JSON.parse(JSON.stringify(this.items));
-            return filteredItems;
-        },
-    },
-
-  }
-}
-
-  
-
-
-
+			let data = await response.json();
+			this.items = data.items;
+		},
+	},
+	async mounted() {
+		//Fetch user data
+		let response = await fetch("http://localhost:8000/auctionapp/user", {
+			credentials: "include",
+			mode: "cors",
+			referrerPolicy: "no-referrer",
+			method: "GET",
+		});
+		let data = await response.json();
+		this.user_id = data.user_id;
+		this.fetchItems();
+	},
+};
 </script>
 
 <style>
@@ -251,27 +231,22 @@ body {
 }
 
 h2 {
-  font-size: 2em;
-  line-height: 1;
+	font-size: 2em;
+	line-height: 1;
 }
 
 button {
-  border-radius: 6px;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
+	border-radius: 6px;
+	font-size: 1em;
+	font-weight: 500;
+	font-family: inherit;
 	background-color: #c59fc9;
-  border: #c59fc9;
-  cursor: pointer;
-  transition: background-color 0.25s;
+	border: #c59fc9;
+	cursor: pointer;
+	transition: background-color 0.25s;
 }
 button:hover {
 	background-color: #c1e0f7;
-  border: #c1e0f7;
+	border: #c1e0f7;
 }
-
-
-
-
-
 </style>
