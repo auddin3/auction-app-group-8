@@ -13,7 +13,7 @@ Database, Profile Page, Comments
 - **Tazmena Hussain** <br>
 Sign Up/Login User Authentication Framework, Item Display, Email Winner, Sessions
 - **Syeda Sadia Taznim** <br>
-Routing, View All Items, Search Bar
+Routing/Navbar, View Bids, Search Bar
 - **Sadia Muna Abedin** <br>
 Add Bids
 
