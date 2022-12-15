@@ -52,7 +52,6 @@
 
 <script lang="ts">
 import router from "../router";
-import Product from "./Product.vue";
 
 export default {
 	data() {
@@ -106,9 +105,7 @@ export default {
     this.products = data.products;
     this.endOfBidFormatted = true
 	},
-	components: {
-		Product,
-	},
+
 };
 </script>
 

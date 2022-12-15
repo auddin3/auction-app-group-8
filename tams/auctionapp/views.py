@@ -281,3 +281,66 @@ def picture_api(request, user_id):
         user.save()
 
         return JsonResponse({"user": user.to_dict()}, safe=False)
+
+@csrf_exempt
+def ownedProducts(request, user_id):
+
+    # Ajax request method: GET
+    # Get items
+    if request.method == 'GET':
+
+        logged_user = User.objects.get(id=user_id)
+        items = Product.objects.filter(owner=logged_user)
+
+        return JsonResponse({
+            'items': [
+                item.to_dict()
+                for item in items
+            ]
+        }, status=200)
+
+    # Ajax request method: POST
+    # Add items
+    if request.method == 'POST':
+        newOwner = User.objects.get(id=user_id)
+
+        bodyload= json.loads(request.body)
+        
+        add_item = Product.objects.create(
+            product_name = bodyload['product_name'],
+            description = bodyload['description'],
+            start_price = bodyload['start_price'],
+            end_of_bid = bodyload['end_of_bid'],
+            owner = newOwner
+        )
+
+        add_item.product_image = bodyload["product_image"]
+
+        add_item.save() 
+        messages.success(request, 'Item added successfully')
+
+        return JsonResponse({'product': add_item.to_dict()})
+
+@csrf_exempt
+def productPicture(request):
+    if request.method == "POST":
+        files = request.FILES  # multivalued dict
+        image = files.get("image")
+        name = request.POST.get("name")
+
+        day = datetime.today().day
+        month = datetime.today().month
+        year = datetime.today().year
+        combinedPath = "/" + str(year) + "/" + str(month) + "/" + str(day) + "/"
+        
+        fss = FileSystemStorage(location="auctionapp/media/product-images" + combinedPath)
+        file = fss.save(name, image)
+    
+        return JsonResponse({"path": "/product-images" + combinedPath + file}, safe=False)
+
+@csrf_exempt
+def deleteProduct (request: HttpRequest, product_id: int) -> JsonResponse:
+    if request.method == "DELETE":
+        item = Product.objects.get(id=product_id)
+        item.delete()
+        return JsonResponse({ 'delete': 'ok' })
