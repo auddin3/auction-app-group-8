@@ -270,11 +270,13 @@ export default {
 				let hours = Math.floor(seconds/3600)
 				seconds = seconds % 3600
 				let minutes = Math.floor(seconds/60)
-				this.endOfBidFormatted = (days+' Days '+hours+' Hours '+minutes+' Minutes ')
+				seconds = seconds % 60
+				let secs = Math.floor(seconds)
+				this.endOfBidFormatted = (days+' Days '+hours+' Hours '+minutes+' Minutes '+secs+' Seconds')
 				return
 			}
 			else{
-				this.endOfBidFormatted = ("0 Days 0 Hours 0 Minutes")
+				this.endOfBidFormatted = ("0 Days 0 Hours 0 Minutes 0 Seconds")
 				//this.getWinner()
 				//this.emailWinner()
 				this.deleteProduct()
