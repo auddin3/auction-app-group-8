@@ -27,7 +27,7 @@ App has not been deployed to OpenShift.
  - Open another terminal window and CD into the Vue/Vite project folder named 'frontend'
  - Run npm install 
  - Run npm run dev
- - **Navigate to localhost:8000/auctionapp/ to login**
+ - **Navigate to 'localhost:8000/auctionapp/' to login**
 
 
 ## Admin Details
