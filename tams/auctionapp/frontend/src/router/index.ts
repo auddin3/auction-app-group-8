@@ -6,11 +6,6 @@ const routes = [
       name: 'Auctions',
       component: () => import('../views/Auctions.vue')
     },
-    // {
-    //   path: '/auctions',
-    //   name: 'Auctions',
-    //   //component: () => import('../views/Auctions.vue')
-    // },
     {
       path: '/search',
       name: 'Search',
@@ -26,11 +21,6 @@ const routes = [
       path: '/profile',
       name: 'Profile',
       component: () => import('../views/Profile.vue')
-    },
-    {
-      path: '/logout',
-      name: 'Logout',
-      component: () => import('../views/Logout.vue')
     },
   ]
 

@@ -330,3 +330,10 @@ def productPicture(request):
         file = fss.save(name, image)
     
         return JsonResponse({"path": "/product-images" + combinedPath + file}, safe=False)
+
+@csrf_exempt
+def deleteProduct (request: HttpRequest, product_id: int) -> JsonResponse:
+    if request.method == "DELETE":
+        item = Product.objects.get(id=product_id)
+        item.delete()
+        return JsonResponse({ 'delete': 'ok' })

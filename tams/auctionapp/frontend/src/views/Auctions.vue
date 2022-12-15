@@ -34,7 +34,6 @@
 
 <script lang="ts">
 import router from '../router';
-import Product from './Product.vue';
 
 export default {
   data() {
@@ -73,9 +72,6 @@ export default {
     let data = await response.json();
     this.products = JSON.parse(JSON.stringify(data.products));
   },
-  components: {
-    Product
-  }
 }
 </script>
 

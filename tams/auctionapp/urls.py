@@ -18,5 +18,6 @@ urlpatterns = [
     path('api/comments/<int:product_id>', views.comment_api),
     path('api/bids/<int:product_id>', views.bid_api),
     path('api/bidCount/<int:product_id>', views.bidCount),
-    path('api/logout/<int:user_id>', views.logoutUser, name="logout")
+    path('api/logout/<int:user_id>', views.logoutUser, name="logout"),
+    path('api/product/<int:product_id>', views.deleteProduct, name="delete"),
 ]
