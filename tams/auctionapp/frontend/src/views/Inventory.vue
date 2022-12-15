@@ -1,23 +1,21 @@
 <template>
-	<div class="card-group">
+	<div class="inventory">
+		<h1 class="">My Inventory</h1>
+	</div>
+
+	<!-- The user can view saved items -->
+	<div class="Saved Items">
+	</div>
+	<div>
 		<div v-if="filteredItems.length > 0">
+			<br>
+			<div>
+				<h3 class="items_title">My Saved Items</h3>
+			</div>
 			<div v-for="item in filteredItems">
-				<div class="card mt-4" style="width: 50rem">
-					<div v-if="edit" class="product_name">
-						<input type="text" id="product_name" v-model="product_name" />
-					</div>
-					<div v-else class="card-title">
-						{{ item.product_name }}
-					</div>
-					<div class="card mt-4" style="width: 12rem">
-						<div v-if="item.product_image.length < 0">
-							<img
-								class="card-img-top product-image"
-								:src="`http://localhost:8000${product_image}`"
-								alt="MyItems"
-							/>
-						</div>
-						<div v-else>
+				<div class="card-group">
+					<div class="card mt-4" style="width: 10rem">
+						<div>
 							<img
 								class="card-img-top product-image"
 								:src="`http://localhost:8000${item.product_image}`"
@@ -25,76 +23,43 @@
 							/>
 						</div>
 					</div>
+
+					<div class="card mt-4" style="width: 60rem">
+					<h4 class="card-title">
+						{{ item.product_name }}
+					</h4>
+
+					<div class="card-title">
+						{{ item.description }}
+					</div>
+
+					<div class="card-title">
+						<p class="card-text price-colour"><strong>Start Price:</strong> £{{ item.start_price }}</p>
+					</div>
+
+					<div class="card-title">
+						<p class="card-text"><strong>End of Bid:</strong> {{ item.end_of_bid.substring(0,10) }} &nbsp; {{ item.end_of_bid.substring(11,19) }}</p>
+
+					</div>
+
+					<div class="owner">
+						<p><strong>Owner: </strong>{{ item.owner}}</p>
+					</div>
+					<br>
+				</div>
 				</div>
 			</div>
-
-			<!-- <div class="card mt-4" style="width: 50rem">
-			<div v-if="edit" class="product_name">
-				<input type="text" id="product_name" v-model="product_name" />
-			</div>
-			<div v-else class="card-title">
-				{{ item.product_name }}
-			</div> -->
-
-			<!-- <div v-if="edit" class="description">
-          <input type = "text" id="description" v-model="description"/>
-        </div>
-        <div v-else class="card-title">
-          {{description}}
-        </div>
-
-        <div v-if="edit" class="description">
-          <input type = "text" id="description" v-model="description"/>
-        </div>
-        <div v-else class="card-text price-colour">
-          <b>Start Price: £{{ start_price }}</b>
-        </div>
-
-        <div v-if="edit" class="start_price">
-          <input type = "number" id="start_price" v-model="start_price"/>
-        </div>
-        <div v-else class="card-text price-colour">
-          <b>Start Price: £{{ start_price }}</b>
-        </div>
-
-        <div v-if="edit" class="end_of_bid">
-          <input type = "date" id="end_of_bid" v-model="end_of_bid"/>
-        </div>
-        <div v-else class="card-text">
-          <b>End of Bid: {{ end_of_bid }}</b>
-        </div>
-
-        <div v-if="edit" class="end_of_bid">
-          <input type = "date" id="end_of_bid" v-model="end_of_bid"/>
-        </div>
-        <div v-else class="card-text">
-          <b>End of Bid: {{ end_of_bid }}</b>
-        </div>
-
-        <div v-if="edit" class="owner">
-          <input type = "text" id="owner" v-model="owner"/>
-        </div>
-        <div v-else class="card-text">
-          <b>Owner:{{ owner }}</b>
-        </div>
-
-        <button v-if="edit" type="button" @click=editItemOff() class="btn btn-secondary">View My Items</button>
-
-        <button v-else type="button" v-on:click=editItemOn() class="btn btn-secondary">Change My Items</button>
-
-        <button @click="deleteItem()" type="button" class="btn btn-outline-danger"><b>Delete Item</b></button> -->
 		</div>
 	</div>
+	<br>
+	<!-- The user can add items to Saved Items -->
 
-	<h2>Add your item!</h2>
+	<div class="card formCard" style="width: 65rem;">
+		<h3 class="items_title">Add your item!</h3>
+	<br>
 	<div>
 		<form @submit.prevent="saveNewItem">
 			<fieldset>
-				<div>
-					<label for="product_name"><b>Item Name</b></label>
-					<input type="text" id="product_name" class="form-control" v-model="product_name" />
-				</div>
-
 				<div class="item-photo-container">
 					<div>
 						<input
@@ -145,16 +110,25 @@
 									/>
 								</g>
 							</svg>
-							<p class="d-inline btn-text">Add item's picture</p>
+							<div>
+								<p class="d-inline btn-text" > &nbsp <strong>Add item's picture</strong></p>
+							</div>
+							
 						</label>
+
 					</div>
 				</div>
-
+				<br>
+				<div>
+					<label for="product_name"><b>Item Name</b></label>
+					<input type="text" id="product_name" class="form-control" v-model="product_name" />
+				</div>
+				<br>
 				<div>
 					<label for="description"><b>Item Description</b></label>
 					<input type="text" id="description" class="form-control" v-model="description" />
 				</div>
-
+				<br>
 				<div>
 					<label for="start_price"><b>Starting Price</b></label>
 					<input
@@ -165,38 +139,30 @@
 						v-model="start_price"
 					/>
 				</div>
-
+				<br>
 				<div>
 					<label for="end_of_bid"><b>End of Bid</b></label>
-					<input type="date" id="end_of_bid" class="form-control" v-model="end_of_bid" />
+					<input type="datetime-local" id="end_of_bid" class="form-control" v-model="end_of_bid" />
 				</div>
-
-				<br />
+				<br>
 				<div>
 					<button type="submit"><b>Submit</b></button>
 				</div>
 			</fieldset>
 		</form>
 	</div>
-
-	<!-- <SavedBids/> -->
-	<!-- <SavedItems/> -->
+	</div>
 </template>
 
 <script lang="ts">
-// import SavedBids from './SavedBids.vue'
-// import SavedItems from './SavedItems.vue'
 export default {
-	// components:{
-	//   SavedBids,
-	//   SavedItems,
-	// },
 	data() {
 		let date = new Date();
-		const TODAY = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+		const TODAY = new Date(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds());
 		return {
 			items: [],
 			user_id: 0,
+			product_id:0,
 			product_name: "",
 			product_image: "/media/product-images/stock-image.png",
 			description: "",
@@ -204,7 +170,7 @@ export default {
 			end_of_bid: TODAY.toISOString().slice(0, 10),
 			owner: "",
 			edit: false,
-      new_product_image: "/media/product-images/stock-image.png"
+      		new_product_image: "/media/product-images/stock-image.png"
 		};
 	},
 	computed: {
@@ -245,7 +211,7 @@ export default {
 			this.fetchItems()
 		},
 
-		async onFileSelected(e: any,) {
+		async onFileSelected(e: any) {
 			const selectedFile = e.target.files[0];
 			const fd = new FormData();
 
@@ -257,9 +223,10 @@ export default {
 				body: fd,
 			})
 			let data = await response.json()
-      this.new_product_image = data.path
+      		this.new_product_image = data.path
 		},
 	},
+
 	async mounted() {
 		//Fetch user data
 		let response = await fetch("http://localhost:8000/auctionapp/user", {
@@ -290,13 +257,62 @@ button {
 	font-size: 1em;
 	font-weight: 500;
 	font-family: inherit;
-	background-color: #c59fc9;
+	background-color: #CFBAE1;
 	border: #c59fc9;
 	cursor: pointer;
 	transition: background-color 0.25s;
+	border-radius: 15px;
 }
 button:hover {
 	background-color: #c1e0f7;
 	border: #c1e0f7;
+}
+
+.inventory {
+  background-color:#C59FC9;
+  padding: 10px;
+  border-radius: 15px;
+  width: 100%;
+  margin:auto;
+  color:white;
+}
+
+.product-image {
+  height:200px;
+  width:200px;
+  margin:auto;
+}
+
+.price-colour {
+  color:#7354B5
+}
+
+.additem{
+	color: #c59fc9;
+}
+
+label{
+	color:white;
+	font-size: 20px;
+	
+}
+
+#product_name,#description,#start_price,#end_of_bid{
+	
+	border-radius: 15px;
+}
+
+.items_title {
+  background-color: #CFBAE1;
+  color:white;
+  padding: 5px;
+  border-radius: 15px;
+  width: 100%;
+  margin:auto;
+}
+
+.formCard{
+	border-radius: 15px;
+	background-color:#C59FC9;
 }
 </style>

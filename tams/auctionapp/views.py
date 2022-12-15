@@ -114,8 +114,8 @@ def fetch_products(request):
                 product.to_dict()
                 for product in Product.objects.all()
             ],
-        }, status=200)
-        
+        }, status=200)     
+
 @csrf_exempt
 def product_details(request, user_id):
 
@@ -125,7 +125,6 @@ def product_details(request, user_id):
 
         logged_user = User.objects.get(id=user_id)
         items = Product.objects.filter(owner=logged_user)
-        bids = Bid.objects.filter(bidder=logged_user)
 
         return JsonResponse({
             'items': [
@@ -134,8 +133,6 @@ def product_details(request, user_id):
             ]
         }, status=200)
 
-
-    
     # Ajax request method: POST
     # Add items
     if request.method == 'POST':
@@ -180,14 +177,15 @@ def product_details(request, user_id):
                 except Product.DoesNotExist:
                     edit_item.product_name= bodyload["product_name"]
                     edit_item.save()
-        return JsonResponse({'Product': [bodyload]})  
+        return JsonResponse({'product': [bodyload]})  
 
     # Ajax request method: DELETE
     # Delete items
+
     if request.method == 'DELETE':
-        bodyload= json.loads(request.body.decode('utf-8'))
-        Product.objects.get(id = bodyload['id']).delete()
-        return JsonResponse({'Product':[bodyload]})
+        bodyload= json.loads(request.body)
+        Product.objects.get(id = bodyload['product_id']).delete()
+        return JsonResponse({'product':[bodyload]})
             
 
 def comment_api(request, product_id):
