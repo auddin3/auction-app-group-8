@@ -9,6 +9,9 @@ import json
 from django.core.files.storage import FileSystemStorage
 from datetime import datetime
 
+def spa_view(request: HttpRequest):
+    return render(request, "auctionapp/spa/index.html", {})
+
 def loginUser(request):
     form = LogInForm()
     if request.method == "POST":

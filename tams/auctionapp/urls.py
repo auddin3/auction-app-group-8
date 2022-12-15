@@ -1,10 +1,11 @@
-from django.urls import path
+from django.urls import path, re_path
 
 from . import views
 from auctionapp.views import profile_api
 
 app_name = 'auctionapp'
 urlpatterns = [
+    re_path(r'^.*', views.spa_view, name='vue SPA'),
     path('', views.loginUser, name='login'),
     path('user', views.session_api, name="get_userid"),
     path('signup', views.signup, name='signup'),
