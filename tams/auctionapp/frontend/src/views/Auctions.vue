@@ -26,10 +26,10 @@
           <p class="card-text">{{ product['description'] }}</p>
           <p class="card-text price-colour"><strong>Start Price: £{{ product['start_price'] }}</strong></p>
           <!-- <p class="card-text">End of Bid: {{ product['end_of_bid'] }}</p> -->
-          <button @click=formatTime(product.end_of_bid) class="btn">Click to view End of Bid deadline</button>
+          <button @click=formatTime(product.end_of_bid) class="btn"><strong>Click to view End of Bid deadline</strong></button>
           <p v-if='endOfBidFormatted != ""'><strong>{{ endOfBidFormatted }} Left</strong></p>
           <p class="card-text mt-4"><strong>Owner:</strong> {{ product['owner'] }}</p>
-          <button @click=view_item_details(product) class="btn btn-secondary">View Item Details</button>
+          <button @click=view_item_details(product) class="btn btn-secondary"><strong>View Item Details</strong></button>
         </div>
       </div>
 
@@ -125,6 +125,8 @@ body {
   background-color: white;
   color: black;
   border-radius: 10px;
+  width: 90%;
+  border: none;
 }
 
 .auctions {
