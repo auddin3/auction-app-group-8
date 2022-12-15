@@ -56,7 +56,7 @@ App has not been deployed to OpenShift.
 <br>
 **Password:** admin
 ### User 5
-**Username:** admin
+**Username:** admin@tams.com
 <br>
 **Password:** admin
 
