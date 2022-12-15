@@ -262,13 +262,26 @@ export default {
 		async formatTime(){
 			let res = await this.getProductData()
 
-			let seconds = this.noOfSecsLeft
-			let days = Math.floor(seconds/(24*3600))
-			seconds = seconds % (24*3600)
-			let hours = Math.floor(seconds/3600)
-			seconds = seconds % 3600
-			let minutes = Math.floor(seconds/60)
-			this.endOfBidFormatted = (days+' Days '+hours+' Hours '+minutes+' Minutes ')
+			console.log("secondss",this.noOfSecsLeft)
+			if (this.noOfSecsLeft > 0){
+				let seconds = this.noOfSecsLeft
+				let days = Math.floor(seconds/(24*3600))
+				seconds = seconds % (24*3600)
+				let hours = Math.floor(seconds/3600)
+				seconds = seconds % 3600
+				let minutes = Math.floor(seconds/60)
+				this.endOfBidFormatted = (days+' Days '+hours+' Hours '+minutes+' Minutes ')
+				return
+			}
+			else{
+				this.endOfBidFormatted = ("0 Days 0 Hours 0 Minutes")
+				this.getWinner()
+				this.emailWinner()
+				return
+			}
+
+
+
 		},
 
 		async getWinner(){
@@ -295,8 +308,8 @@ export default {
 		this.getProductData();
 		this.getBidCount();
 		this.formatTime();
-		this.getWinner();
-		this.emailWinner();
+		//this.getWinner();
+		//this.emailWinner();
 	},
 
 };
