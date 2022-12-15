@@ -1,21 +1,27 @@
 <template>
 	<div class="card item-page-container row g-0">
-    <!-- item section-->
-    <div class="d-flex">
-		<div class="card mt-4 border: 1px solid #e0e0e0" style="width: 40rem; ">
-        	<img class="card-img-top product-image" :src="`http://localhost:8000${imgpath}`" alt="Item image" />
-      	</div>
-		<div class="card mt-4 border: 1px solid #e0e0e0" style="width: 60rem;">
-			<div class="card-body">
-			<h4 class="card-title">{{ product_name}}</h4>
-			<p class="card-text">{{description}}</p>
-			<p class="card-text price-colour"><strong>Start Price: £{{start_price }}</strong></p>
-			<p class="card-text">End of Bid: {{endOfBidFormatted}}</p>
-			<p class="card-text">Owner: {{owner}}</p>
+		<!-- item section-->
+		<div class="d-flex">
+			<div class="card mt-4 border: 1px solid #e0e0e0" style="width: 40rem">
+				<img
+					class="card-img-top product-image"
+					:src="`http://localhost:8000${imgpath}`"
+					alt="Item image"
+				/>
 			</div>
-      	</div>
-    </div>
-		
+			<div class="card mt-4 border: 1px solid #e0e0e0" style="width: 60rem">
+				<div class="card-body">
+					<h4 class="card-title">{{ product_name }}</h4>
+					<p class="card-text">{{ description }}</p>
+					<p class="card-text price-colour"
+						><strong>Start Price: £{{ start_price }}</strong></p
+					>
+					<p class="card-text">End of Bid: {{ endOfBidFormatted }}</p>
+					<p class="card-text">Owner: {{ owner }}</p>
+				</div>
+			</div>
+		</div>
+
 		<!-- bid section (copy into item) -->
 		<div class="row g-0 bid-container p-4">
 			<div class="col-sm-6">
@@ -37,7 +43,9 @@
 			</div>
 			<div class="col-sm-6 d-flex flex-column align-items-end">
 				<small class="text-muted">[{{ bid_total }} bids]</small>
-				<button class="btn btn-primary bid-btn" v-on:click="addBid" min="{{ start_price }}">Submit Bid</button>
+				<button class="btn btn-primary bid-btn" v-on:click="addBid" min="{{ start_price }}"
+					>Submit Bid</button
+				>
 			</div>
 		</div>
 		<!-- comment section-->
@@ -147,21 +155,25 @@ export default {
 	},
 	methods: {
 		async getLoggedInUser() {
-			let response = await fetch("http://localhost:8000/auctionapp/user", {
-				credentials: "include",
-				mode: "cors",
-				referrerPolicy: "no-referrer",
-				method: "GET",
-			});
-			let data = await response.json();
-			const userId = data.user_id;
-			this.loggedUserId = userId;
+			try {
+				let response = await fetch("http://localhost:8000/auctionapp/user", {
+					credentials: "include",
+					mode: "cors",
+					referrerPolicy: "no-referrer",
+					method: "GET",
+				});
+				let data = await response.json();
+				const userId = data.user_id;
+				this.loggedUserId = userId;
 
-			response = await fetch("http://localhost:8000/auctionapp/api/profile/" + userId);
-			let rawData = await response.json();
-			let userData = rawData.user;
-			this.loggedUsername = userData.username;
-			this.loggedUserFullName = userData.fname + " " + userData.lname;
+				response = await fetch("http://localhost:8000/auctionapp/api/profile/" + userId);
+				let rawData = await response.json();
+				let userData = rawData.user;
+				this.loggedUsername = userData.username;
+				this.loggedUserFullName = userData.fname + " " + userData.lname;
+			} catch (e) {
+				window.location.href = "http://localhost:8000/auctionapp";
+			}
 		},
 
 		async getItemComments() {
@@ -223,22 +235,20 @@ export default {
 			this.imgpath = product.product_image;
 
 			var date = new Date();
-			var endDateTime = new Date(this.endOfBid)
-			this.noOfSecsLeft = (endDateTime.valueOf()-date.valueOf())/1000; //should return milliseconds left
-			console.log("no of secs left ",this.noOfSecsLeft,"s")
-
+			var endDateTime = new Date(this.endOfBid);
+			this.noOfSecsLeft = (endDateTime.valueOf() - date.valueOf()) / 1000; //should return milliseconds left
+			console.log("no of secs left ", this.noOfSecsLeft, "s");
 		},
 
 		async getBidCount() {
 			let response = await fetch("http://localhost:8000/auctionapp/api/bidCount/" + this.pid);
 			let data = await response.json();
-			this.bid_total = data.total
-			this.win_price = data.win
-			if (data.win == 0){
-				this.bid_entry = this.start_price
-			}
-			else {
-				this.bid_entry = data.win
+			this.bid_total = data.total;
+			this.win_price = data.win;
+			if (data.win == 0) {
+				this.bid_entry = this.start_price;
+			} else {
+				this.bid_entry = data.win;
 			}
 		},
 
@@ -259,68 +269,64 @@ export default {
 				});
 		},
 
-		async formatTime(){
-			let res = await this.getProductData()
+		async formatTime() {
+			let res = await this.getProductData();
 
-			console.log("secondss",this.noOfSecsLeft)
-			if (this.noOfSecsLeft > 0){
-				let seconds = this.noOfSecsLeft
-				let days = Math.floor(seconds/(24*3600))
-				seconds = seconds % (24*3600)
-				let hours = Math.floor(seconds/3600)
-				seconds = seconds % 3600
-				let minutes = Math.floor(seconds/60)
-				seconds = seconds % 60
-				let secs = Math.floor(seconds)
-				this.endOfBidFormatted = (days+' Days '+hours+' Hours '+minutes+' Minutes '+secs+' Seconds')
-				return
-			}
-			else{
-				this.endOfBidFormatted = ("0 Days 0 Hours 0 Minutes 0 Seconds")
+			console.log("secondss", this.noOfSecsLeft);
+			if (this.noOfSecsLeft > 0) {
+				let seconds = this.noOfSecsLeft;
+				let days = Math.floor(seconds / (24 * 3600));
+				seconds = seconds % (24 * 3600);
+				let hours = Math.floor(seconds / 3600);
+				seconds = seconds % 3600;
+				let minutes = Math.floor(seconds / 60);
+				seconds = seconds % 60;
+				let secs = Math.floor(seconds);
+				this.endOfBidFormatted =
+					days + " Days " + hours + " Hours " + minutes + " Minutes " + secs + " Seconds";
+				return;
+			} else {
+				this.endOfBidFormatted = "0 Days 0 Hours 0 Minutes 0 Seconds";
 				//this.getWinner()
 				//this.emailWinner()
-				this.deleteProduct()
-				return
+				this.deleteProduct();
+				return;
 			}
-
-
-
 		},
 
-		async getWinner(){
-			let response = await fetch("http://localhost:8000/auctionapp/api/getWinner/"+this.pid)
-			let data = await response.json()
-			this.user_id = data.user_id
-			this.user_email = data.user_email
-			console.log("email",this.user_email,this.user_id)
+		async getWinner() {
+			let response = await fetch("http://localhost:8000/auctionapp/api/getWinner/" + this.pid);
+			let data = await response.json();
+			this.user_id = data.user_id;
+			this.user_email = data.user_email;
+			console.log("email", this.user_email, this.user_id);
 		},
 
-		async emailWinner(){
-			await this.getWinner()
-			let response = await fetch("http://localhost:8000/auctionapp/api/emailWinner/"+this.user_id+"/"+this.pid)
-			let data = await response.json()
-			console.log("email sent to",data.useremail)
+		async emailWinner() {
+			await this.getWinner();
+			let response = await fetch(
+				"http://localhost:8000/auctionapp/api/emailWinner/" + this.user_id + "/" + this.pid
+			);
+			let data = await response.json();
+			console.log("email sent to", data.useremail);
 		},
 
-		async deleteProduct(){
-			await this.getWinner()
-			await this.emailWinner()
-			let response = await fetch("http://localhost:8000/auctionapp/api/deleteProduct/"+this.pid, {
-				method:'DELETE'
-			})
-			await this.viewSearch()
+		async deleteProduct() {
+			await this.getWinner();
+			await this.emailWinner();
+			let response = await fetch("http://localhost:8000/auctionapp/api/deleteProduct/" + this.pid, {
+				method: "DELETE",
+			});
+			await this.viewSearch();
 		},
 
 		async viewSearch() {
-		try {
-			this.$router.push({ name: 'Auctions', path: '', params: {} })
-		} catch (e) {
-			console.log(e)
-		}
+			try {
+				this.$router.push({ name: "Auctions", path: "", params: {} });
+			} catch (e) {
+				console.log(e);
+			}
 		},
-
-
-
 	},
 	async mounted() {
 		this.getItemComments();
@@ -331,7 +337,6 @@ export default {
 		//this.getWinner();
 		//this.emailWinner();
 	},
-
 };
 </script>
 
@@ -341,7 +346,7 @@ body {
 	background-color: #a4def9;
 }
 
-.card-title{
+.card-title {
 	color: #c59fc9;
 }
 
@@ -389,7 +394,7 @@ body {
 }
 
 .text-pink {
-	color: #c59fc9
+	color: #c59fc9;
 }
 
 .p-l-1 {

@@ -262,8 +262,8 @@ export default {
 			const selectedFile = e.target.files[0];
 			const fd = new FormData();
 
-			fd.append("image", selectedFile)
-			fd.append("name", selectedFile.name)
+			fd.append("image", selectedFile);
+			fd.append("name", selectedFile.name);
 
 			await fetch("http://localhost:8000/auctionapp/api/picture/" + this.userId + "/", {
 				method: "POST",
@@ -271,7 +271,7 @@ export default {
 			})
 				.then((response) => {
 					this.refreshData();
-					(this.$refs['myFileInput'] as any).value = '';
+					(this.$refs["myFileInput"] as any).value = "";
 				})
 				.catch((e) => {
 					alert(e);
@@ -281,38 +281,37 @@ export default {
 
 	async mounted() {
 		//Fetch user data
-		let response = await fetch("http://localhost:8000/auctionapp/user",
-			{
+		try {
+			let response = await fetch("http://localhost:8000/auctionapp/user", {
 				credentials: "include",
 				mode: "cors",
 				referrerPolicy: "no-referrer",
-				method: "GET"
+				method: "GET",
 			});
-		let data = await response.json()
-		this.userId = data.user_id
-
-		try {
-			let response = await fetch("http://localhost:8000/auctionapp/api/profile/" + this.userId);
-			let rawData = await response.json();
-			let data = rawData.user;
-			this.fullname = data.fname + " " + data.lname;
-			this.fname = data.fname;
-			this.lname = data.lname;
-			this.username = data.username;
-			this.email = data.email;
-			this.dob = new Date(data.dob).toLocaleDateString("en-GB", {
-				day: "numeric",
-				year: "numeric",
-				month: "long",
-			});
-
-			this.imgpath = data.imgpath;
-
-			this.bids = rawData.bids;
-			this.items = rawData.items;
+			let data = await response.json();
+			this.userId = data.user_id;
 		} catch (e) {
-			alert(e);
+			window.location.href = "http://localhost:8000/auctionapp";
 		}
+
+		let response = await fetch("http://localhost:8000/auctionapp/api/profile/" + this.userId);
+		let rawData = await response.json();
+		let data = rawData.user;
+		this.fullname = data.fname + " " + data.lname;
+		this.fname = data.fname;
+		this.lname = data.lname;
+		this.username = data.username;
+		this.email = data.email;
+		this.dob = new Date(data.dob).toLocaleDateString("en-GB", {
+			day: "numeric",
+			year: "numeric",
+			month: "long",
+		});
+
+		this.imgpath = data.imgpath;
+
+		this.bids = rawData.bids;
+		this.items = rawData.items;
 	},
 };
 </script>
