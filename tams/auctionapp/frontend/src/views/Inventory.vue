@@ -197,29 +197,35 @@ export default {
 	},
 	methods: {
 		async fetchItems() {
-			let response = await fetch("http://localhost:8000/auctionapp/api/ownedProducts/items/" + this.user_id, {
-				credentials: "include",
-				mode: "cors",
-				referrerPolicy: "no-referrer",
-				method: "GET",
-			});
+			let response = await fetch(
+				"http://localhost:8000/auctionapp/api/ownedProducts/items/" + this.user_id,
+				{
+					credentials: "include",
+					mode: "cors",
+					referrerPolicy: "no-referrer",
+					method: "GET",
+				}
+			);
 			let data = await response.json();
 			this.items = data.items;
 		},
 		async saveNewItem() {
-			let response = await fetch("http://localhost:8000/auctionapp/api/ownedProducts/items/" + +this.user_id, {
-				headers: {
-					"Content-Type": "application/json",
-				},
-				method: "POST",
-				body: JSON.stringify({
-					product_name: this.product_name,
-					product_image: this.new_product_image,
-					description: this.description,
-					start_price: this.start_price,
-					end_of_bid: this.end_of_bid,
-				}),
-			});
+			let response = await fetch(
+				"http://localhost:8000/auctionapp/api/ownedProducts/items/" + +this.user_id,
+				{
+					headers: {
+						"Content-Type": "application/json",
+					},
+					method: "POST",
+					body: JSON.stringify({
+						product_name: this.product_name,
+						product_image: this.new_product_image,
+						description: this.description,
+						start_price: this.start_price,
+						end_of_bid: this.end_of_bid,
+					}),
+				}
+			);
 			let data = await response.json();
 			this.fetchItems();
 		},
@@ -249,15 +255,19 @@ export default {
 	},
 	async mounted() {
 		//Fetch user data
-		let response = await fetch("http://localhost:8000/auctionapp/user", {
-			credentials: "include",
-			mode: "cors",
-			referrerPolicy: "no-referrer",
-			method: "GET",
-		});
-		let data = await response.json();
-		this.user_id = data.user_id;
-		this.fetchItems();
+		try {
+			let response = await fetch("http://localhost:8000/auctionapp/user", {
+				credentials: "include",
+				mode: "cors",
+				referrerPolicy: "no-referrer",
+				method: "GET",
+			});
+			let data = await response.json();
+			this.user_id = data.user_id;
+			this.fetchItems();
+		} catch (e) {
+			window.location.href = "http://localhost:8000/auctionapp";
+		}
 	},
 };
 </script>

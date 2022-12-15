@@ -3,7 +3,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from auctionapp.models import User, Product, Bid, FAQ
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import JsonResponse, HttpResponseRedirect, JsonResponse, HttpResponseNotAllowed, HttpRequest
 import json
 from django.core.mail import send_mail
@@ -37,9 +37,12 @@ def logoutUser(request: HttpRequest, user_id: int) -> JsonResponse:
 
 
 def session_api(request : HttpRequest) -> JsonResponse:
+    form = LogInForm()
     if request.method == "GET":
-        return JsonResponse( { 'user_id' : request.session.__getitem__("_auth_user_id") } , safe=False )
-
+        try:
+            return JsonResponse( { 'user_id' : request.session.__getitem__("_auth_user_id") } , safe=False )
+        except:
+            return HttpResponseNotAllowed
 
 def signup(request):
     form = SignUpForm()
