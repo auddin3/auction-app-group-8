@@ -60,4 +60,12 @@ App has not been deployed to OpenShift.
 <br>
 **Password:** admin
 
+Testing Advice
+- Signup and Login: Sign up with the correct details and login with those details, a session will be created.
+- Profile page: Should display default image with user's current details. Allow's user to change image, email, date of birth etc.
+- Inventory page: Allows users to view items they've posted, and add new items.
+- Auctions page: Users can seearch based off a given keyword, and return a list of items with that keyword.
+- Items page: After searching on auctions page, click on an item to see more information and place bids, a user can only place one bid, before the end date/time. Users can ask questions to the owner about the item, and the owner can send responses.
+- Email Winner: At the end of an auction's time, the user who placed the highest bid will receive an email. In order to test this, place the highest bid with the given gmails so you can view the emails that are sent. Due to our program, you must be in the item's page and refresh when time becomes 0, only then will the email be send, item deleted and redirected back to search page.
+
 
