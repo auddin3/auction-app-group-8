@@ -4,9 +4,9 @@
   </div>
 
   <div id="search">
-    <div class="search-box p-4 mt-4">
-      <h3 class="search-heading">Search</h3>
-      <input type="text" v-model="search" class="input-box" />
+    <div class="search-box p-3 mt-4">
+      <!-- <h3 class="search-heading">Search</h3> -->
+      <input type="text" v-model="search" class="input-box p-2" placeholder=" Search Upcoming Bids"/>
     </div>
   </div>
 
@@ -124,6 +124,7 @@ body {
 .input-box {
   background-color: white;
   color: black;
+  border-radius: 10px;
 }
 
 .auctions {
