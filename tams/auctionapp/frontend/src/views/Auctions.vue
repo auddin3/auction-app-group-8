@@ -5,7 +5,6 @@
 
 	<div id="search">
 		<div class="search-box p-3 mt-4">
-			<!-- <h3 class="search-heading">Search</h3> -->
 			<input
 				type="text"
 				v-model="search"
@@ -40,12 +39,10 @@
 					<p class="card-text price-colour"
 						><strong>Start Price: £{{ product["start_price"] }}</strong></p
 					>
-					<!-- <p class="card-text">End of Bid: {{ product['end_of_bid'] }}</p> -->
-					<!-- <button @click=formatTime(product.end_of_bid) class="btn"><strong>Click to view End of Bid deadline</strong></button> -->
 					<p v-if="endOfBidFormatted == true"><strong>{{ product.end_of_bid }} Left</strong></p>
 					<p class="card-text mt-4"><strong>Owner:</strong> {{ product["owner"] }}</p>
 					<button @click="view_item_details(product)" class="btn btn-secondary"
-						><strong>View Item Details</strong></button
+						><strong>View Item</strong></button
 					>
 				</div>
 			</div>
@@ -79,11 +76,6 @@ export default {
 		},
 	},
 	methods: {
-		// async fetch_products() {
-		//   let response = await fetch("http://127.0.0.1:8000/auctionapp/api/products/");
-		//   let data = await response.json();
-		//   this.products = data.products;
-		// },
 		view_item_details(product: any) {
 			try {
 				this.$router.push({ name: "Items", path: "/items/:pid", params: { pid: product.id } });
