@@ -275,8 +275,9 @@ export default {
 			}
 			else{
 				this.endOfBidFormatted = ("0 Days 0 Hours 0 Minutes")
-				this.getWinner()
-				this.emailWinner()
+				//this.getWinner()
+				//this.emailWinner()
+				this.deleteProduct()
 				return
 			}
 
@@ -297,7 +298,24 @@ export default {
 			let response = await fetch("http://localhost:8000/auctionapp/api/emailWinner/"+this.user_id+"/"+this.pid)
 			let data = await response.json()
 			console.log("email sent to",data.useremail)
+		},
+
+		async deleteProduct(){
+			await this.getWinner()
+			await this.emailWinner()
+			let response = await fetch("http://localhost:8000/auctionapp/api/deleteProduct/"+this.pid, {
+				method:'DELETE'
+			})
+			await this.viewSearch()
+		},
+
+		async viewSearch() {
+		try {
+			this.$router.push({ name: 'Auctions', path: '', params: {} })
+		} catch (e) {
+			console.log(e)
 		}
+		},
 
 
 

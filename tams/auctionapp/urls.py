@@ -18,4 +18,5 @@ urlpatterns = [
     path('api/bidCount/<int:product_id>', views.bidCount),
     path('api/getWinner/<int:product_id>',views.getWinner),
     path('api/emailWinner/<int:user_id>/<int:product_id>',views.emailWinner),
+    path('api/deleteProduct/<int:product_id>',views.deleteProduct)
 ]

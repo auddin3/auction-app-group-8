@@ -95,6 +95,17 @@ def fetch_products(request):
         }, status=200)
 
 @csrf_exempt
+def deleteProduct(request, product_id):
+    if request.method == 'DELETE':
+        delProduct = Product.objects.get(id=product_id)
+        bids = Bid.objects.filter(product=delProduct)
+        bids.delete()
+        delProduct.delete()
+        return JsonResponse({
+            'product_id':product_id
+        }, status=200)
+
+@csrf_exempt
 def product_details(request, product_id):
     if request.method == 'GET':
         reqProduct = Product.objects.get(id=product_id)
