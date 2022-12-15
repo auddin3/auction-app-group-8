@@ -6,6 +6,10 @@ const routes = [
       name: 'Auctions',
       component: () => import('../views/Auctions.vue')
     },
+    // {
+    //   path: '/auctions',
+    //   name: 'Auctions',
+    // },
     {
       path: '/search',
       name: 'Search',
