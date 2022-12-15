@@ -152,3 +152,9 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, "auctionapp/media")
 
 AUTH_USER_MODEL = 'auctionapp.User'
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'tams2022group8@gmail.com'
+EMAIL_HOST_PASSWORD = 'pgcjvzoefcawzwxs'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True

@@ -10,7 +10,7 @@
 			<h4 class="card-title">{{ product_name}}</h4>
 			<p class="card-text">{{description}}</p>
 			<p class="card-text price-colour"><strong>Start Price: £{{start_price }}</strong></p>
-			<p class="card-text">End of Bid: {{endOfBid}}</p>
+			<p class="card-text">End of Bid: {{endOfBidFormatted}}</p>
 			<p class="card-text">Owner: {{owner}}</p>
 			</div>
       	</div>
@@ -127,12 +127,16 @@ export default {
 			start_price: 0,
 			owner: "",
 			endOfBid: "",
+			noOfSecsLeft: 5,
+			endOfBidFormatted: "",
 			period: 0,
 			imgpath: "/media/product-images/stock-image.png",
 
 			bid_entry: 0,
 			bid_total: 0,
 			win_price: 0,
+			user_id: 0,
+			user_email: "",
 		};
 	},
 	computed: {
@@ -217,6 +221,12 @@ export default {
 			this.owner = product.owner;
 			this.endOfBid = product.end_of_bid;
 			this.imgpath = product.product_image;
+
+			var date = new Date();
+			var endDateTime = new Date(this.endOfBid)
+			this.noOfSecsLeft = (endDateTime.valueOf()-date.valueOf())/1000; //should return milliseconds left
+			console.log("no of secs left ",this.noOfSecsLeft,"s")
+
 		},
 
 		async getBidCount() {
@@ -248,13 +258,80 @@ export default {
 					alert(e);
 				});
 		},
+
+		async formatTime(){
+			let res = await this.getProductData()
+
+			console.log("secondss",this.noOfSecsLeft)
+			if (this.noOfSecsLeft > 0){
+				let seconds = this.noOfSecsLeft
+				let days = Math.floor(seconds/(24*3600))
+				seconds = seconds % (24*3600)
+				let hours = Math.floor(seconds/3600)
+				seconds = seconds % 3600
+				let minutes = Math.floor(seconds/60)
+				seconds = seconds % 60
+				let secs = Math.floor(seconds)
+				this.endOfBidFormatted = (days+' Days '+hours+' Hours '+minutes+' Minutes '+secs+' Seconds')
+				return
+			}
+			else{
+				this.endOfBidFormatted = ("0 Days 0 Hours 0 Minutes 0 Seconds")
+				//this.getWinner()
+				//this.emailWinner()
+				this.deleteProduct()
+				return
+			}
+
+
+
+		},
+
+		async getWinner(){
+			let response = await fetch("http://localhost:8000/auctionapp/api/getWinner/"+this.pid)
+			let data = await response.json()
+			this.user_id = data.user_id
+			this.user_email = data.user_email
+			console.log("email",this.user_email,this.user_id)
+		},
+
+		async emailWinner(){
+			await this.getWinner()
+			let response = await fetch("http://localhost:8000/auctionapp/api/emailWinner/"+this.user_id+"/"+this.pid)
+			let data = await response.json()
+			console.log("email sent to",data.useremail)
+		},
+
+		async deleteProduct(){
+			await this.getWinner()
+			await this.emailWinner()
+			let response = await fetch("http://localhost:8000/auctionapp/api/deleteProduct/"+this.pid, {
+				method:'DELETE'
+			})
+			await this.viewSearch()
+		},
+
+		async viewSearch() {
+		try {
+			this.$router.push({ name: 'Auctions', path: '', params: {} })
+		} catch (e) {
+			console.log(e)
+		}
+		},
+
+
+
 	},
 	async mounted() {
 		this.getItemComments();
 		this.getLoggedInUser();
 		this.getProductData();
 		this.getBidCount();
+		this.formatTime();
+		//this.getWinner();
+		//this.emailWinner();
 	},
+
 };
 </script>
 
