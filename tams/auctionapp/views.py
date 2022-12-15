@@ -9,7 +9,7 @@ import json
 from django.core.files.storage import FileSystemStorage
 from datetime import datetime
 
-def loginUser(request):
+def loginUser(request: HttpRequest) -> JsonResponse:
     form = LogInForm()
     if request.method == "POST":
         form = LogInForm(data=request.POST)
@@ -40,7 +40,7 @@ def session_api(request : HttpRequest) -> JsonResponse:
         return JsonResponse( { 'user_id' : request.session.__getitem__("_auth_user_id") } , safe=False )
 
 
-def signup(request):
+def signup(request: HttpRequest) -> JsonResponse:
     form = SignUpForm()
     if request.method == "POST":
         form = SignUpForm(request.POST)
@@ -58,7 +58,7 @@ def signup(request):
     return render(request, 'auctionapp/signup.html', {'form': form})
 
 @csrf_exempt
-def profile_api(request, user_id):
+def profile_api(request: HttpRequest, user_id: int) -> JsonResponse:
 
     user = get_object_or_404(User, id=user_id)
 
@@ -97,7 +97,7 @@ def profile_api(request, user_id):
 
         return JsonResponse(user.to_dict(), status=200)
 
-def fetch_products(request):
+def fetch_products(request: HttpRequest) -> JsonResponse:
     if request.method == 'GET':
         return JsonResponse({
             'products': [
@@ -107,7 +107,7 @@ def fetch_products(request):
         }, status=200)
 
 @csrf_exempt
-def product_details(request, product_id):
+def product_details(request: HttpRequest, product_id: int) -> JsonResponse:
     if request.method == 'GET':
         reqProduct = Product.objects.get(id=product_id)
 
@@ -116,7 +116,7 @@ def product_details(request, product_id):
         }, status=200)
 
 @csrf_exempt 
-def comment_api(request, product_id):
+def comment_api(request: HttpRequest, product_id: int) -> JsonResponse:
     if request.method == 'GET':
         return JsonResponse({
             'comments': [
@@ -159,7 +159,7 @@ def comment_api(request, product_id):
         }, status=200)
 
 @csrf_exempt 
-def bid_api(request, product_id):
+def bid_api(request: HttpRequest, product_id: int) -> JsonResponse:
     if request.method == 'POST':
         bid_details = json.loads(request.body)
         newProduct = Product.objects.get(id=product_id)
@@ -205,7 +205,7 @@ def bid_api(request, product_id):
                 "Bid": new_entry.to_dict(),
             }, status=200)
 
-def bidCount(request, product_id):
+def bidCount(request: HttpRequest, product_id: int) -> JsonResponse:
     if request.method == "GET":
         newProduct = Product.objects.get(id=product_id)
         try:
@@ -222,7 +222,7 @@ def bidCount(request, product_id):
         }, status=200)
 
 @csrf_exempt
-def picture_api(request, user_id):
+def picture_api(request: HttpRequest, user_id: int) -> JsonResponse:
     if request.method == "POST":
         files = request.FILES  # multivalued dict
         image = files.get("image")
