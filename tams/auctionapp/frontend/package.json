@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vue-tsc && vite build",
+    "build": "vue-tsc && vite build; mv ../static/auctionapp/vue/index.html ../templates/auctionapp/spa/.",
     "preview": "vite preview"
   },
   "dependencies": {

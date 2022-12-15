@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, re_path
 
 from . import views
 from auctionapp.views import profile_api
@@ -6,6 +6,7 @@ from auctionapp.views import profile_api
 app_name = 'auctionapp'
 urlpatterns = [
     path('', views.loginUser, name='login'),
+    re_path(r'^.*', views.spa_view, name='vue_SPA'),
     path('user', views.session_api, name="get_userid"),
     path('signup', views.signup, name='signup'),
     path('api/profile/<int:user_id>/', profile_api, name="profile api"),
