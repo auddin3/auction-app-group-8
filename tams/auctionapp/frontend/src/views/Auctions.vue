@@ -139,7 +139,7 @@ body {
 }
 
 .search-box {
-  background-color: #CFBAE1;
+  background-color: #c1e0f7;
   width: 60%;
   margin: auto;
   border-radius: 10px;
