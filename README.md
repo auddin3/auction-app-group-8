@@ -18,9 +18,20 @@ Routing/Navbar, View Bids, Search Bar
 Add Bids, Logout, Inventory
 
 ## Deployment URL
+App has not been deployed to OpenShift.
+
+**To run the app, complete the following steps:** 
+ - Open a terminal window and CD into the Django project folder named 'tams'
+ - Run pip install -r requirements.txt
+ - Run python manage.py runserver
+ - Open another terminal window and CD into the Vue/Vite project folder named 'frontend'
+ - Run npm install 
+ - Run npm run dev
+ - **Navigate to localhost:8000 to login**
+
 
 ## Admin Details
-**Username:** admin
+**Username:** admin@tams.com
 <br>
 **Password:** admin
 
