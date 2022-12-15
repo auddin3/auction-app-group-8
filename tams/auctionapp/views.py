@@ -1,12 +1,14 @@
 from auctionapp.forms import SignUpForm, LogInForm
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib import messages
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from auctionapp.models import User, Product, Bid, FAQ
 from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse, HttpResponseRedirect, JsonResponse, HttpResponseNotAllowed, HttpRequest
 import json
 from django.core.mail import send_mail
+from django.core.files.storage import FileSystemStorage
+from datetime import datetime
 
 def loginUser(request):
     form = LogInForm()
@@ -22,6 +24,17 @@ def loginUser(request):
         else:
             messages.error(request,'Login failed. Please try again')
     return render(request, 'auctionapp/login.html', {'form':form})
+
+def logoutUser(request: HttpRequest, user_id: int) -> JsonResponse:
+     user = get_object_or_404(User, id=user_id)
+
+     if request.method == "GET":
+        if user is not None:
+            logout(request)
+            # return HttpResponseRedirect('http://localhost:8000/auctionapp')
+            request.session.clear
+            return JsonResponse({"success": 'OK'})
+
 
 def session_api(request : HttpRequest) -> JsonResponse:
     if request.method == "GET":
@@ -114,7 +127,7 @@ def product_details(request, product_id):
             'product': reqProduct.to_dict()
         }, status=200)
 
-@csrf_exempt 
+@csrf_exempt
 def comment_api(request, product_id):
     if request.method == 'GET':
         return JsonResponse({
@@ -131,7 +144,7 @@ def comment_api(request, product_id):
         newSender = User.objects.get(id=comment_details["sender"])
         defaultRecipient = User.objects.get(id=newProduct.owner.id)
 
-        new_entry = FAQ.objects.create(product=newProduct, 
+        new_entry = FAQ.objects.create(product=newProduct,
         recipient = defaultRecipient,
         sender = newSender,
         )
@@ -152,12 +165,12 @@ def comment_api(request, product_id):
         comment.answer = comment_details["answer"]
         comment.recipient = recip
         comment.save()
-        
+
         return JsonResponse({
             "comment": comment.to_dict()
         }, status=200)
 
-@csrf_exempt 
+@csrf_exempt
 def bid_api(request, product_id):
     if request.method == 'POST':
         bid_details = json.loads(request.body)
@@ -173,14 +186,14 @@ def bid_api(request, product_id):
                 "Bid": existingBid.to_dict(),
             }, status=200)
         except:
-        
+
             new_entry = Bid.objects.create(bid_price = bid_details["bid_price"],
             product = newProduct,
             bidder = newBidder,)
-        
+
             new_entry.end_of_bid = newProduct.end_of_bid
             new_entry.is_active = True
-            
+
             new_entry.save()
 
             try:
@@ -247,3 +260,24 @@ def bidCount(request, product_id):
             "total": Bid.objects.filter(product=newProduct).count(),
             "win": winner.bid_price,
         }, status=200)
+
+@csrf_exempt
+def picture_api(request, user_id):
+    if request.method == "POST":
+        files = request.FILES  # multivalued dict
+        image = files.get("image")
+        name = request.POST.get("name")
+
+        user = get_object_or_404(User, id=user_id)
+        day = datetime.today().day
+        month = datetime.today().month
+        year = datetime.today().year
+        combinedPath = "/" + str(year) + "/" + str(month) + "/" + str(day) + ""
+
+        fss = FileSystemStorage(location="auctionapp/media/profile-photos" + combinedPath)
+        file = fss.save(name, image)
+
+        user.profile_photo = "/profile-photos" + combinedPath + "/" + file
+        user.save()
+
+        return JsonResponse({"user": user.to_dict()}, safe=False)

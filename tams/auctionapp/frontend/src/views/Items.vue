@@ -20,7 +20,7 @@
 		<div class="row g-0 bid-container p-4">
 			<div class="col-sm-6">
 				<div class="row g-1">
-					<h5 class="col-sm-5">Best offer: </h5>
+					<h5 class="col-sm-5 text-pink">Best offer: </h5>
 					<div class="col-sm-1"></div>
 					<div class="col-sm-6 d-flex flex-column align-items-start">
 						<h3>£{{ win_price }}</h3>
@@ -346,6 +346,8 @@ body {
 .bid-container {
 	border-bottom: 1px solid #e0e0e0;
 	border-top: 1px solid #e0e0e0;
+	background-color: rgb(248, 249, 250);
+	margin-top: 30px;
 }
 
 .bid-input {
@@ -382,6 +384,10 @@ body {
 
 .w-full {
 	width: 100%;
+}
+
+.text-pink {
+	color: #c59fc9
 }
 
 .p-l-1 {
