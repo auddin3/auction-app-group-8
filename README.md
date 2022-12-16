@@ -20,6 +20,7 @@ Add Bids, Logout, Inventory
 ## Deployment URL
 App has not been deployed to OpenShift.
 
+## Installation Instructions
 **To run the app, complete the following steps:** 
  - Open a terminal window and CD into the Django project folder named 'tams'
  - Run pip install -r requirements.txt
