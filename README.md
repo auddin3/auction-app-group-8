@@ -36,7 +36,7 @@ App has not been deployed to OpenShift.
 <br>
 **Password:** admin
 
-## 5 Test User Details
+## 7 Test User Details
 ### *User 1*
 **Username:** aysha@tams.com
 <br>
