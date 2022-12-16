@@ -342,7 +342,7 @@ def productPicture(request):
         return JsonResponse({"path": "/product-images" + combinedPath + file}, safe=False)
 
 @csrf_exempt
-def deleteProduct (request: HttpRequest, product_id: int) -> JsonResponse:
+def deleteItem (request: HttpRequest, product_id: int) -> JsonResponse:
     if request.method == "DELETE":
         item = Product.objects.get(id=product_id)
         item.delete()

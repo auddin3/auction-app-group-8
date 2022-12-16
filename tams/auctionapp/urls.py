@@ -21,7 +21,7 @@ urlpatterns = [
     path('api/emailWinner/<int:user_id>/<int:product_id>',views.emailWinner),
     path('api/deleteProduct/<int:product_id>',views.deleteProduct),
     path('api/logout/<int:user_id>', views.logoutUser, name="logout"),
-    path('api/product/<int:product_id>', views.deleteProduct, name="delete"),
+    path('api/product/<int:product_id>', views.deleteItem, name="delete"),
     path('api/productPic/', views.productPicture),
 
 
