@@ -77,7 +77,7 @@ export default {
 		},
 	},
 	methods: {
-		view_item_details(product: any) {
+		view_item_details(product: { id: number }) {
 			try {
 				this.$router.push({ name: "Items", path: "/items/:pid", params: { pid: product.id } });
 			} catch (e) {
