@@ -41,26 +41,30 @@ App has not been deployed to OpenShift.
 <br>
 **Password:** admin
 <br>
-### User 2
+### *User 2*
 **Username:** tazmena@tams.com
 <br>
 **Password:** admin
 <br>
-### User 3
+### *User 3*
+**Username:** paulogroup8@gmail.com
+<br>
+**Password:** admin2022
+### *User 4*
 **Username:** sadia@tams.com
 <br>
 **Password:** admin
 <br>
-### User 4
+### *User 5*
 **Username:** muna@tams.com
 <br>
 **Password:** admin
-### User 5
+### *User 6*
 **Username:** admin@tams.com
 <br>
 **Password:** admin
 
-Testing Advice
+## Testing Advice
 - Signup and Login: Sign up with the correct details and login with those details, a session will be created.
 - Profile page: Should display default image with user's current details. Allow's user to change image, email, date of birth etc.
 - Inventory page: Allows users to view items they've posted, add new items and delete their items.
