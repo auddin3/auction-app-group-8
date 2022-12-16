@@ -64,6 +64,10 @@ App has not been deployed to OpenShift.
 **Username:** admin@tams.com
 <br>
 **Password:** admin
+### *User 7*
+**Username:** tams2022group8@gmail.com
+<br>
+**Password:** admin2022
 
 ## Testing Advice
 - Signup and Login: Sign up with the correct details and login with those details, a session will be created.
