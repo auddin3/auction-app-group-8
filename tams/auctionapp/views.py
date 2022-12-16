@@ -3,16 +3,17 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from auctionapp.models import User, Product, Bid, FAQ
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import JsonResponse, HttpResponseRedirect, JsonResponse, HttpResponseNotAllowed, HttpRequest
 import json
+from django.core.mail import send_mail
 from django.core.files.storage import FileSystemStorage
 from datetime import datetime
 
 def spa_view(request: HttpRequest):
     return render(request, "auctionapp/spa/index.html", {})
 
-def loginUser(request):
+def loginUser(request: HttpRequest) -> JsonResponse:
     form = LogInForm()
     if request.method == "POST":
         form = LogInForm(data=request.POST)
@@ -39,11 +40,14 @@ def logoutUser(request: HttpRequest, user_id: int) -> JsonResponse:
 
 
 def session_api(request : HttpRequest) -> JsonResponse:
+    form = LogInForm()
     if request.method == "GET":
-        return JsonResponse( { 'user_id' : request.session.__getitem__("_auth_user_id") } , safe=False )
+        try:
+            return JsonResponse( { 'user_id' : request.session.__getitem__("_auth_user_id") } , safe=False )
+        except:
+            return HttpResponseNotAllowed
 
-
-def signup(request):
+def signup(request: HttpRequest) -> JsonResponse:
     form = SignUpForm()
     if request.method == "POST":
         form = SignUpForm(request.POST)
@@ -61,7 +65,7 @@ def signup(request):
     return render(request, 'auctionapp/signup.html', {'form': form})
 
 @csrf_exempt
-def profile_api(request, user_id):
+def profile_api(request: HttpRequest, user_id: int) -> JsonResponse:
 
     user = get_object_or_404(User, id=user_id)
 
@@ -100,7 +104,7 @@ def profile_api(request, user_id):
 
         return JsonResponse(user.to_dict(), status=200)
 
-def fetch_products(request):
+def fetch_products(request: HttpRequest) -> JsonResponse:
     if request.method == 'GET':
         return JsonResponse({
             'products': [
@@ -110,7 +114,18 @@ def fetch_products(request):
         }, status=200)
 
 @csrf_exempt
-def product_details(request, product_id):
+def deleteProduct(request: HttpRequest, product_id: int) -> JsonResponse:
+    if request.method == 'DELETE':
+        delProduct = Product.objects.get(id=product_id)
+        bids = Bid.objects.filter(product=delProduct)
+        bids.delete()
+        delProduct.delete()
+        return JsonResponse({
+            'product_id':product_id
+        }, status=200)
+
+@csrf_exempt
+def product_details(request: HttpRequest, product_id: int) -> JsonResponse:
     if request.method == 'GET':
         reqProduct = Product.objects.get(id=product_id)
 
@@ -118,8 +133,8 @@ def product_details(request, product_id):
             'product': reqProduct.to_dict()
         }, status=200)
 
-@csrf_exempt 
-def comment_api(request, product_id):
+@csrf_exempt
+def comment_api(request: HttpRequest, product_id: int) -> JsonResponse:
     if request.method == 'GET':
         return JsonResponse({
             'comments': [
@@ -135,7 +150,7 @@ def comment_api(request, product_id):
         newSender = User.objects.get(id=comment_details["sender"])
         defaultRecipient = User.objects.get(id=newProduct.owner.id)
 
-        new_entry = FAQ.objects.create(product=newProduct, 
+        new_entry = FAQ.objects.create(product=newProduct,
         recipient = defaultRecipient,
         sender = newSender,
         )
@@ -156,13 +171,13 @@ def comment_api(request, product_id):
         comment.answer = comment_details["answer"]
         comment.recipient = recip
         comment.save()
-        
+
         return JsonResponse({
             "comment": comment.to_dict()
         }, status=200)
 
-@csrf_exempt 
-def bid_api(request, product_id):
+@csrf_exempt
+def bid_api(request: HttpRequest, product_id: int) -> JsonResponse:
     if request.method == 'POST':
         bid_details = json.loads(request.body)
         newProduct = Product.objects.get(id=product_id)
@@ -177,14 +192,14 @@ def bid_api(request, product_id):
                 "Bid": existingBid.to_dict(),
             }, status=200)
         except:
-        
+
             new_entry = Bid.objects.create(bid_price = bid_details["bid_price"],
             product = newProduct,
             bidder = newBidder,)
-        
+
             new_entry.end_of_bid = newProduct.end_of_bid
             new_entry.is_active = True
-            
+
             new_entry.save()
 
             try:
@@ -208,7 +223,35 @@ def bid_api(request, product_id):
                 "Bid": new_entry.to_dict(),
             }, status=200)
 
-def bidCount(request, product_id):
+def getWinner(request: HttpRequest,product_id: int) -> JsonResponse:
+    if request.method == "GET":
+        getproduct = Product.objects.get(id=product_id)
+        winningBid = Bid.objects.filter(product=getproduct).get(winner=True) #filters the bids where id=product id, then gets the
+        #one where winner is true
+        user = winningBid.bidder #gets the user from that winning bid
+        useremail = user.email #gets the users email
+        return JsonResponse({
+            'user_id': user.id,
+            'user_email':useremail,
+        },status=200)
+
+def emailWinner(request: HttpRequest,user_id: int,product_id: int) -> JsonResponse:
+    user = get_object_or_404(User, id=user_id)
+    product = get_object_or_404(Product, id=product_id)
+    useremail = user.email
+    productname = product.product_name
+    productowner = product.owner.email
+    send_mail(
+    'Bid Winner',
+    ('Hi, you have won '+productname+". Please contact "+productowner+" for more information."),
+    'tams2022group8@gmail.com',
+    [useremail],
+    fail_silently=False,)
+    return JsonResponse({
+        'useremail':useremail
+    })
+
+def bidCount(request: HttpRequest, product_id: int) -> JsonResponse:
     if request.method == "GET":
         newProduct = Product.objects.get(id=product_id)
         try:
@@ -225,7 +268,7 @@ def bidCount(request, product_id):
         }, status=200)
 
 @csrf_exempt
-def picture_api(request, user_id):
+def picture_api(request: HttpRequest, user_id: int) -> JsonResponse:
     if request.method == "POST":
         files = request.FILES  # multivalued dict
         image = files.get("image")
@@ -236,11 +279,74 @@ def picture_api(request, user_id):
         month = datetime.today().month
         year = datetime.today().year
         combinedPath = "/" + str(year) + "/" + str(month) + "/" + str(day) + ""
-        
+
         fss = FileSystemStorage(location="auctionapp/media/profile-photos" + combinedPath)
         file = fss.save(name, image)
 
         user.profile_photo = "/profile-photos" + combinedPath + "/" + file
         user.save()
-    
+
         return JsonResponse({"user": user.to_dict()}, safe=False)
+
+@csrf_exempt
+def ownedProducts(request, user_id):
+
+    # Ajax request method: GET
+    # Get items
+    if request.method == 'GET':
+
+        logged_user = User.objects.get(id=user_id)
+        items = Product.objects.filter(owner=logged_user)
+
+        return JsonResponse({
+            'items': [
+                item.to_dict()
+                for item in items
+            ]
+        }, status=200)
+
+    # Ajax request method: POST
+    # Add items
+    if request.method == 'POST':
+        newOwner = User.objects.get(id=user_id)
+
+        bodyload= json.loads(request.body)
+        
+        add_item = Product.objects.create(
+            product_name = bodyload['product_name'],
+            description = bodyload['description'],
+            start_price = bodyload['start_price'],
+            end_of_bid = bodyload['end_of_bid'],
+            owner = newOwner
+        )
+
+        add_item.product_image = bodyload["product_image"]
+
+        add_item.save() 
+        messages.success(request, 'Item added successfully')
+
+        return JsonResponse({'product': add_item.to_dict()})
+
+@csrf_exempt
+def productPicture(request):
+    if request.method == "POST":
+        files = request.FILES  # multivalued dict
+        image = files.get("image")
+        name = request.POST.get("name")
+
+        day = datetime.today().day
+        month = datetime.today().month
+        year = datetime.today().year
+        combinedPath = "/" + str(year) + "/" + str(month) + "/" + str(day) + "/"
+        
+        fss = FileSystemStorage(location="auctionapp/media/product-images" + combinedPath)
+        file = fss.save(name, image)
+    
+        return JsonResponse({"path": "/product-images" + combinedPath + file}, safe=False)
+
+@csrf_exempt
+def deleteItem (request: HttpRequest, product_id: int) -> JsonResponse:
+    if request.method == "DELETE":
+        item = Product.objects.get(id=product_id)
+        item.delete()
+        return JsonResponse({ 'delete': 'ok' })

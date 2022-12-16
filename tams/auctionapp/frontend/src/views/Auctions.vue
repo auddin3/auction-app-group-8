@@ -39,7 +39,9 @@
 					<p class="card-text price-colour"
 						><strong>Start Price: £{{ product["start_price"] }}</strong></p
 					>
-					<p v-if="endOfBidFormatted == true"><strong>{{ product.end_of_bid }} Left</strong></p>
+					<p v-if="endOfBidFormatted == true"
+						><strong>{{ product.end_of_bid }} Left</strong></p
+					>
 					<p class="card-text mt-4"><strong>Owner:</strong> {{ product["owner"] }}</p>
 					<button @click="view_item_details(product)" class="btn btn-secondary"
 						><strong>View Item</strong></button
@@ -52,7 +54,6 @@
 
 <script lang="ts">
 import router from "../router";
-import Product from "./Product.vue";
 
 export default {
 	data() {
@@ -76,7 +77,7 @@ export default {
 		},
 	},
 	methods: {
-		view_item_details(product: any) {
+		view_item_details(product: { id: number }) {
 			try {
 				this.$router.push({ name: "Items", path: "/items/:pid", params: { pid: product.id } });
 			} catch (e) {
@@ -100,15 +101,25 @@ export default {
 	},
 
 	async mounted() {
+		try {
+			let response = await fetch("http://localhost:8000/auctionapp/user", {
+				credentials: "include",
+				mode: "cors",
+				referrerPolicy: "no-referrer",
+				method: "GET",
+			});
+			let data = await response.json();
+		} catch (e) {
+			window.location.href = "http://localhost:8000/auctionapp";
+		}
+
 		const response = await fetch("http://127.0.0.1:8000/auctionapp/api/products/");
-		let data = await response.json()
-		data.products.forEach((el: { end_of_bid: any }) => (el.end_of_bid = this.formatTime((el))));
-    this.products = data.products;
-    this.endOfBidFormatted = true
+		let data = await response.json();
+		data.products.forEach((el: { end_of_bid: any }) => (el.end_of_bid = this.formatTime(el)));
+		this.products = data.products;
+		this.endOfBidFormatted = true;
 	},
-	components: {
-		Product,
-	},
+
 };
 </script>
 
