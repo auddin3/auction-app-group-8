@@ -110,7 +110,7 @@ export default {
 			});
 			let data = await response.json();
 		} catch (e) {
-			window.location.href = "http://localhost:8000/auctionapp";
+			// window.location.href = "http://localhost:8000/auctionapp";
 		}
 
 		const response = await fetch("http://127.0.0.1:8000/auctionapp/api/products/");

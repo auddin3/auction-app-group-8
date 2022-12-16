@@ -1,7 +1,7 @@
-from django.urls import path
+from django.urls import path, re_path
 
 from . import views
-from auctionapp.views import profile_api
+from auctionapp.views import profile_api, spa_view
 
 app_name = 'auctionapp'
 urlpatterns = [
@@ -23,6 +23,5 @@ urlpatterns = [
     path('api/logout/<int:user_id>', views.logoutUser, name="logout"),
     path('api/product/<int:product_id>', views.deleteItem, name="delete"),
     path('api/productPic/', views.productPicture),
-
-
+    re_path(r'^.*', spa_view, name='vue SPA'),
 ]

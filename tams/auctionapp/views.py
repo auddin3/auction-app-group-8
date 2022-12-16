@@ -10,6 +10,9 @@ from django.core.mail import send_mail
 from django.core.files.storage import FileSystemStorage
 from datetime import datetime
 
+def spa_view(request):
+    return render(request, "auctionapp/spa/login.html", {})
+
 def loginUser(request: HttpRequest) -> JsonResponse:
     form = LogInForm()
     if request.method == "POST":
@@ -20,7 +23,8 @@ def loginUser(request: HttpRequest) -> JsonResponse:
         if user is not None:
             login(request,user)
             ## return HttpResponseRedirect('http://127.0.0.1:5173')
-            return HttpResponseRedirect('http://localhost:5173')
+            # return HttpResponseRedirect('http://localhost:5173')
+            return render(request, "auctionapp/spa/login.html", {})
         else:
             messages.error(request,'Login failed. Please try again')
     return render(request, 'auctionapp/login.html', {'form':form})
