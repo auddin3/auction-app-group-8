@@ -1,7 +1,7 @@
 # TAMS - Group 8 Auction App
 
 ## Group Members
-- Aysha Anita Uddin
+- Aysha Uddin
 - Tazmena Hussain
 - Syeda Sadia Taznim
 - Sadia Muna Abedin
