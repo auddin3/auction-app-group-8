@@ -1,4 +1,5 @@
-# TAMS - Group 8 Auction App
+# TAMS - Auction App (Group 8 for Web Programming Module)
+An auction application similar to eBay which allows users to create an account, upload items they'd like to sell along with a description, price, image, and more. Also allows users to search through these items, place a bid, view their inventory, comment on items such as to ask questions, and receive an email once the bid has expired if they are the highest bidder. 
 
 ## Group Members
 - Aysha Uddin
